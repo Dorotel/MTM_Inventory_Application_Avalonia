@@ -11,6 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="References\Visual Highlighted Screenshots\InventoryTransferHighights.png" />
+    <None Remove="References\Visual Highlighted Screenshots\InventoryTransferIncompletePartID.png" />
+    <None Remove="References\Visual Highlighted Screenshots\InventoryTransferLocationScreen.png" />
+    <None Remove="References\Visual Highlighted Screenshots\WorkOrderScreenshotHighlighted.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.4" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.4" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.4" />
@@ -18,5 +25,20 @@
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="References\Visual Highlighted Screenshots\InventoryTransferHighights.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Page>
+    <Content Include="References\Visual Highlighted Screenshots\InventoryTransferIncompletePartID.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="References\Visual Highlighted Screenshots\InventoryTransferLocationScreen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="References\Visual Highlighted Screenshots\WorkOrderScreenshotHighlighted.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

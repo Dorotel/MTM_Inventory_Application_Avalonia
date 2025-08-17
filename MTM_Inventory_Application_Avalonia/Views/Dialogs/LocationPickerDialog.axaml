@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels.Dialogs"
+             mc:Ignorable="d"
+             x:Class="MTM_Inventory_Application_Avalonia.Views.Dialogs.LocationPickerDialog"
+             x:DataType="vm:LocationPickerDialogViewModel">
+  <Design.DataContext>
+    <vm:LocationPickerDialogViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="16" RowDefinitions="Auto,Auto,* ,Auto">
+    <TextBlock Grid.Row="0" Text="{Binding HeaderText}" FontSize="16"/>
+
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+      <TextBox Width="240" Watermark="Filter locations" Text="{Binding Filters_Text}"/>
+      <CheckBox Content="Non-zero OnHand" IsChecked="{Binding Filters_NonZeroOnly}"/>
+      <CheckBox Content="Current Warehouse" IsChecked="{Binding Filters_CurrentWarehouseOnly}"/>
+      <CheckBox Content="Current Site" IsChecked="{Binding Filters_CurrentSiteOnly}"/>
+    </StackPanel>
+
+    <DataGrid Grid.Row="2" ItemsSource="{Binding Results}" AutoGenerateColumns="False" IsReadOnly="True">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Location" Binding="{Binding Location}"/>
+        <DataGridTextColumn Header="OnHand" Binding="{Binding OnHand}"/>
+        <DataGridTextColumn Header="Allocated" Binding="{Binding Allocated}"/>
+        <DataGridTextColumn Header="Available" Binding="{Binding Available}"/>
+        <DataGridTextColumn Header="Warehouse" Binding="{Binding Warehouse}"/>
+        <DataGridTextColumn Header="Site" Binding="{Binding Site}"/>
+        <DataGridTextColumn Header="BinType" Binding="{Binding BinType}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Select" Command="{Binding LocationPickerDialog_Button_SelectCommand}"/>
+      <Button Content="Cancel" Command="{Binding LocationPickerDialog_Button_CancelCommand}"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

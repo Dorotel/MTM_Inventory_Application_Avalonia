@@ -1,0 +1,216 @@
+﻿# MTM Inventory Application (Avalonia, .NET 8)
+
+Purpose: summarize the solution structure, governing rules, reference guide, configuration, and run/build instructions for this Avalonia/.NET 8 application.
+
+## Global Rule — Visual license lifecycle
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short‑lived, per‑request scope to acquire and dispose the license.
+
+## Screenshot color highlighting (reference only)
+- Colors shown on screenshots in References/Visual Highlighted Screenshots are illustrative callouts only to identify field roles and sections. They do not define application theming. Implement standard app styling while following the functional groupings indicated by the highlights.
+
+## Scope
+- Desktop application using Avalonia 11 on .NET 8.
+- Functional/technical specs in Copilot Files reference artifacts in References via relative paths.
+- Features include: Login, Work Order transactions, Inventory Transfer, centralized Exception Handling, and app-owned database schema (MAMP).
+- Note: UOM (unit of measure) is not used in production; all UOM fields and references have been removed from the UI and planning documents.
+
+## Platform
+- Avalonia 11 on .NET 8; Desktop lifetime.
+- Projects:
+  - MTM_Inventory_Application_Avalonia (core app)
+  - MTM_Inventory_Application_Avalonia.Desktop (desktop target)
+
+## Shell wiring
+- Specs drive the feature View/ViewModel scaffolding; map ViewModels to Views via DataTemplates in App.axaml when applicable.
+- On app start, the desktop shell opens MainWindow and shows MainView hosting a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See Copilot Files/MVVM Definitions/LoginScreen.md and ExceptionHandling.md.
+
+## Code Naming and Error Handling Rules
+- File naming: {Type}_{Parent}_{Name}
+- Methods: {Class}_{ControlType}_{Name}
+- Variables: {Method}_{Type(Int|string|exc)}_{Name}
+- All methods must have error handling and must use the same centralized error handling (IExceptionHandler).
+
+## New Rule — VISUAL business logic placeholders (Views and ViewModels)
+- When creating or updating Views and ViewModels, only incorporate placeholders for business logic that refers to VISUAL.
+- Do not call Vmfg*.dll assemblies or Dbms.OpenLocal/OpenLocalSSO directly from UI layers; instead depend on interfaces (e.g., IInventoryService, IAuthenticationService) with stubbed placeholder implementations.
+- Keep try/catch in all UI-invoked methods and route errors through the centralized IExceptionHandler; mark real VISUAL calls with TODOs to be implemented in service adapters later.
+- Visual API specifics remain documented in the UI Planning .md files and will be implemented in service layers, not in Views/ViewModels.
+
+### Development login
+- In Development environment, the placeholder AuthenticationService accepts Username: Admin and Password: Admin for testing. This path sets a demo session and navigates to MainView. In Production, replace with VISUAL-backed authentication per LoginScreen.md.
+
+## Planning documents index (Copilot Files/MVVM Definitions)
+- LoginScreen.md — startup login/authentication flow and UX spec; navigation to MainView.
+- MainView.md — home hub and navigation to feature forms; session summary and logout.
+- InventoryTransfer.md — location-to-location transfer form spec; dialogs and validations; reporting hooks.
+- WorkOrderTransaction.md — WO Issue/Receipt spec; validations, exceptions and reporting hooks.
+- LocationPickerDialog.md — modal locations browser used by InventoryTransfer.
+- IncompletePartDialog.md — resolve incomplete/invalid Part IDs.
+- ExceptionHandling.md — centralized error handling form and service model.
+- ExceptionDialog.md — modal dialog UI spec for blocking errors.
+- MAMPDatabase.md — app-owned database schema (settings, audits, exception logs).
+- Settings.md — in-app Settings view spec (environment, WarehouseId, app DB testing).
+
+## Citation Rule (applies to all specs)
+- When a statement needs a reference, look through:
+  - Text files under References/Visual PDF Files/Text Conversion/*.txt
+  - CSVs under References/Visual CSV Database Dumps/*.csv
+  - Files under References/Visual DLL & Config Files/* (e.g., Database.config, listed DLLs)
+- Include Page (from the .txt footer) and quote or paraphrase the exact line.
+- Prefer the most specific section (class, table, or property) relevant to the task.
+
+## Reference File Guide (detailed)
+- Always select sources using this guide. Cite file + page and, when practical, the exact line text.
+  - Intro - Development Guide.txt
+    - Purpose: High‑level overview of the API Toolkit, coding model, connection patterns, samples.
+    - Use for: environment/setup, connectivity, object patterns (Documents/Collections/Transactions/Services).
+    - Notable pages/lines:
+      - Toolkit layers and object types: p.9–10 (“The toolkit has four distinct layers…”, diagram and narrative).
+      - Coding with the Toolkit namespaces and required DLLs: p.11–12 (“LsaCore.DLL … LsaShared.DLL … add references …”).
+      - Database connections via Dbms.OpenLocal: p.13 (“Connection information is obtained from the Database.Config file.”).
+      - Single sign‑on: p.14 (OpenLocalSSO parameters: username, userSID, domain, domainSID).
+      - GeneralQuery usage: p.17 (“General Query will return an ADO.NET Data Table … Prepare/Parameters/Execute”).
+      - Transactions/Services samples: p.27–32 (ENTRY_NO usage; service header/results tables).
+  - Reference - Core.txt
+    - Purpose: Core Lsa.Data.Dbms API (open/close, settings, next‑number control) in LsaCore.dll.
+    - Use for: exact method signatures, parameters, and behavior of Dbms and core helpers.
+    - Notable pages/lines:
+      - Dbms overview: p.5–11.
+      - DatabaseName/ServerName: p.16/p.42.
+      - OpenDirect overloads: p.28–32.
+      - OpenLocal overloads (recommended): p.33–37 (“Connection information is obtained from the Database.Config file.”).
+      - GetSetting/SetSetting: p.25 / p.45 (settings stored in DB, up to 2GB strings).
+      - Next number APIs: p.17, 20–24, 43 (auto numbering behavior and remarks).
+  - Reference - Inventory.txt
+    - Purpose: Inventory class library (VmfgInventory.dll): InventoryTransaction, reasons, locations, IBT.
+    - Use for: Issue/Receipt/Transfer/Adjust field requirements, defaults, TRACE requirements, reason codes.
+    - Notable pages/lines:
+      - InventoryTransaction table: p.110–113 — includes “TRANSACTION_DATE … Defaults to current date.” and required WORKORDER_*, QTY, TO_/FROM_ WAREHOUSE/LOCATION; TRACE sub‑table rules on p.112–113.
+      - IssueReasons/HoldReasons: p.114–136 (browse/load/save patterns).
+      - IBT and Ship/Receipt transactions: p.44–85; Location and other entities follow.
+  - Reference - Shop Floor.txt
+    - Purpose: Shop Floor class library (VmfgShopFloor.dll): Work Orders, Labor Tickets, status changes, summaries.
+    - Use for: Closed/Released status rules, WO status change transaction, labor ticket fields, WO summary service.
+    - Notable pages/lines:
+      - ChangeWorkOrderStatus: p.15 — NEW_STATUS values U,F,R,C,X; SITE_ID required.
+      - GetWorkOrderSummary service: p.98–100 (header keys; WORK_ORDER_SUMMARY result layout).
+      - LaborTicket transaction schema: p.114–118 (ENTRY_NO key; required fields; TRACE constraints for RUN only).
+  - Reference - VMFG Shared Library.txt
+    - Purpose: Shared business library (VmfgShared.dll): ApplGlobal environment flags, site, unit conversions, shared masters.
+    - Use for: SiteID/MultiSite, IssueNegative, StandardCosting, SystemCurrencyID, and other runtime/global flags; shared entities/services.
+    - Notable pages/lines:
+      - Class index includes UnitofMeasureConversion, ServiceUnitofMeasureConv, GetPartDefaultWhseLoc: p.5–6.
+      - ApplGlobal properties: p.47–56 (flags like MultiSite, IssueNegative, SystemCurrencyID; DataObjectType override).
+      - SiteID property: p.84; MultiSite: p.78; StandardCosting: p.85.
+  - Reference - Shared Library.txt
+    - Purpose: LsaShared.dll BusinessService utilities (GeneralQuery) and parameterized execution model.
+    - Use for: parameterized queries under data object control when no business object entry point exists.
+    - Notable pages/lines:
+      - GeneralQuery class/methods: p.5–24 (Prepare(tableName, sql), Parameters[], Execute overloads, result tables).
+  - Visual CSV Database Dumps (MTMFG *.csv)
+    - Purpose: Relational context for entities and procedures in your VISUAL database sample.
+    - MTMFG Tables.csv / MTMFG Relationships.csv: entity names, keys, and join hints to validate read models.
+    - MTMFG Procedure List.csv: list of database triggers/procedures used to align with posting flows.
+  - Visual DLL & Config Files
+    - Database.config: XML registration of VISUAL instances and owner credentials used by Dbms.OpenLocal.
+    - DLLs: LsaCore.dll, LsaShared.dll, Vmfg*.dll.
+
+## New Rule — Reevaluate a Markdown spec (triggered by: “Reevaluate <file>.md”)
+- Reverify sources for the specified .md using the Reference File Guide.
+- Prefer better, more authoritative sources if found; replace inferior citations.
+- Update citations to include File + Page (from Text Conversion footer) and quote or paraphrase the exact line where practical.
+- Keep all links relative to the .md file’s location.
+- Ensure the doc follows the UI Planning file format (when applicable) and includes Visual API Commands by scenario.
+
+## New Rule — UI Planning file format
+- Applies to: Copilot Files/MVVM Definitions/WorkOrderTransaction.md, InventoryTransfer.md, LoginScreen.md.
+- Required sections (in order):
+  - Title with short reference list in brackets.
+  - Purpose (inline line after title).
+  - Global Rule — Visual license lifecycle (standard text).
+  - Scope (one line summary of feature coverage).
+  - Platform and Shell wiring (binding, lifetime, where it opens in app).
+  - Code Naming and Error Handling Rules (file/method/variable naming; centralized IExceptionHandler usage).
+  - Screenshot highlighting (reference only) note.
+  - Fields and Validation Rules.
+  - Visual API Commands (by scenario) — exact toolkit/services/queries used with citations.
+  - Business Rules and Exceptions.
+  - Workflows (happy paths and exception paths).
+  - ViewModel, Commands, and Role Gating.
+  - Integration Approach.
+  - Local Storage and Reporting (if applicable).
+  - Keyboard and Scanner UX (if applicable).
+  - UI Scaffolding (Views, ViewModels, Commands/Shortcuts, Services/DI, DataTemplates, Navigation).
+  - Testing and Acceptance Criteria.
+  - References (artifacts used by this document).
+
+## New Rule — Creating a UI Planning file (triggered by: “Create a UI Planning file for <FeatureName>”))
+- Location and name: place under Copilot Files/MVVM Definitions; name the file descriptively (e.g., FeatureName.md). Follow {Type}_{Parent}_{Name} for any companion files.
+- Start from the required section list above; keep headings and order consistent.
+- Include at least one reference image under References/Visual Highlighted Screenshots and cite it in the Title bracket.
+- Add “Visual API Commands (by scenario)” with concrete calls (Dbms.OpenLocal/OpenLocalSSO, GeneralQuery, InventoryTransaction, Shop Floor services, VMFG Shared conversion/defaults) and page-cited sources.
+- Add “Code Naming and Error Handling Rules” and state: ALL methods implement try/catch and route errors through IExceptionHandler with the same normalization routine.
+- Use relative links and maintain the Citation Rule with page references.
+- End with clear Testing and Acceptance Criteria to validate the feature end-to-end.
+
+## Folder layout (key)
+- Copilot Files/
+  - MVVM Definitions/
+    - WorkOrderTransaction.md (form spec)
+    - InventoryTransfer.md (form spec)
+    - LoginScreen.md (startup login/auth spec)
+    - ExceptionHandling.md (centralized error handling form spec)
+    - MAMPDatabase.md (app-owned database schema and usage)
+- References/
+  - Visual CSV Database Dumps/ (MTMFG Tables.csv, MTMFG Relationships.csv, MTMFG Procedure List.csv)
+  - Visual DLL & Config Files/ (Database.config, Vmfg*.dll, Lsa*.dll, VmfgTrace.dll)
+  - Visual Highlighted Screenshots/ (WorkOrderScreenshotHighlighted.png, InventoryTransfer*.png)
+  - Visual PDF Files/
+    - Text Conversion/ (Intro - Development Guide.txt; Reference - Core.txt; Reference - Inventory.txt; Reference - Shared Library.txt; Reference - Shop Floor.txt; Reference - VMFG Shared Library.txt)
+
+## New Rule — Code Map sync for .cs files
+- A new document “Copilot Files/CodeMap_CS_Files.md” lists every .cs file with purpose and key members.
+- Whenever a .cs file is updated, you must update its section in that CodeMap file in the same change set.
+- Additions/removals/renames must be reflected as well (move removed entries to a “Removed” appendix with date).
+
+## New Rule — Update All .md Files (triggered by: “Update All .md Files”)
+- Trigger: “Update All .md Files”.
+- Action: Systematically review each .md listed in “Planning documents index” above.
+- For each .md, read the associated .cs files (Views, ViewModels, Services) it references and ensure consistency with current code:
+  - Navigation flow and hosting (MainWindow/MainView, overlays, DataTemplates)
+  - Commands/properties naming and existence
+  - Service interfaces used by the ViewModels
+  - Startup/Shutdown behavior
+- If inconsistencies exist, update the .md to match the implemented code in the same change set.
+- Keep citations intact and adjust only the narrative/spec to reflect implementation.
+
+## Startup behavior
+- At startup, MainWindow hosts MainView. A Login overlay (Views/Dialogs/LoginView) is shown inside MainView. After successful verification against the Visual server, the overlay is hidden and the app continues in MainView. See Copilot Files/MVVM Definitions/LoginScreen.md. All errors should be routed through Copilot Files/MVVM Definitions/ExceptionHandling.md.
+
+## Work Order Transaction spec (summary)
+- See Copilot Files/MVVM Definitions/WorkOrderTransaction.md. For app-owned database tables used by this feature (exception logs, local history, app settings), see Copilot Files/MVVM Definitions/MAMPDatabase.md.
+
+## Configuration (Database.config keys and app DB)
+- Environment = Development | Production
+- ConnectionStrings:AppDb → mtm_visual_application (prod)
+- ConnectionStrings:AppDbTest → mtm_visual_application_test (dev)
+- Optional environment overrides: INVENTORY__ENVIRONMENT, INVENTORY__CONNECTIONSTRINGS__APPDB, INVENTORY__CONNECTIONSTRINGS__APPDBTEST, INVENTORY__WAREHOUSEID
+- Connection behavior: Dbms.OpenLocal obtains connection info from Database.config; OpenLocalSSO supported. See Text Conversion sources for citations.
+- App-owned tables and seeding: see Copilot Files/MVVM Definitions/MAMPDatabase.md.
+
+## Build
+- dotnet build
+
+## Run (desktop)
+- dotnet run --project MTM_Inventory_Application_Avalonia.Desktop
+
+## Reevaluation (latest)
+- This README was reverified against the Text Conversion sources and CSV/Config folders.
+- Changes from previous version:
+  - Added precise citations (file + page) for connection behavior, SSO, inventory transactions, shop‑floor statuses, shared globals, and GeneralQuery.
+  - Expanded “Reference File Guide (detailed)” to include CSVs and the DLL & Config folder (Database.config, required DLLs).
+  - Clarified the “Reevaluate a Markdown spec” rule and kept relative links.
+  - Added a centralized Exception Handling Form spec and linked from Login/WO specs.
+  - Centralized MAMP database details into MAMPDatabase.md and referenced it from specs.
+  - Clarified shell wiring and startup behavior to reflect Login overlay inside MainView.
+  - Added the “Update All .md Files” rule.

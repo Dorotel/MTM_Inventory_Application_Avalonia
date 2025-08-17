@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 
 using MTM_Inventory_Application_Avalonia.ViewModels;
 using MTM_Inventory_Application_Avalonia.Views;
+using MTM_Inventory_Application_Avalonia.Services;
 
 namespace MTM_Inventory_Application_Avalonia;
 
@@ -17,16 +18,17 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        // Line below is needed to remove Avalonia data validation.
-        // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainViewModel()
-            };
+            var nav = new NavigationService();
+            var mainWindow = new MainWindow();
+            desktop.MainWindow = mainWindow;
+            nav.Configure(mainWindow);
+
+            // Start with login overlay hosted inside MainView in a small frame
+            nav.NavigateToLogin();
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {

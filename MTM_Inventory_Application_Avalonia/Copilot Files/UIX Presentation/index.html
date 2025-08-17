@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MTM Inventory Application — UI Guide and Planning Overview</title>
+  <style>
+    :root {
+      /* Black + White with Gold accents ("streamers") */
+      --bg: #000000;
+      /* black */
+      --panel: #0b0b0b;
+      /* near-black */
+      --text: #f5f5f5;
+      /* soft white */
+      --muted: #bdbdbd;
+      /* gray */
+      --accent: #d4af37;
+      /* gold */
+      --accent-2: #ffffff;
+      /* white */
+      --warn: #eab308;
+      /* amber */
+      --danger: #ef4444;
+      /* red */
+      --link: #f1c40f;
+      /* gold-ish */
+      --code: #111111;
+      /* deep gray */
+      --gold-20: rgba(212, 175, 55, 0.2);
+      --gold-35: rgba(212, 175, 55, 0.35);
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Segoe UI, Roboto, system-ui, -apple-system, Arial, sans-serif;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      padding: 1.5rem 1.25rem;
+      color: var(--text);
+      background:
+        linear-gradient(115deg, transparent 0%, var(--gold-20) 30%, transparent 60%),
+        linear-gradient(90deg, #000 0%, var(--accent) 100%);
+      border-bottom: 1px solid var(--gold-35);
+    }
+
+    .header-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+      filter: none;
+    }
+
+    header .title {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    header .subtitle {
+      opacity: 0.9;
+      margin-top: .25rem;
+      font-size: 0.95rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--gold-35);
+    }
+
+    .toc {
+      columns: 2;
+      column-gap: 2rem;
+    }
+
+    .toc li {
+      margin: .3rem 0;
+    }
+
+    h2 {
+      margin: 1rem 0 .75rem;
+      font-size: 1.3rem;
+      border-bottom: 1px solid var(--gold-35);
+      padding-bottom: .4rem;
+    }
+
+    h3 {
+      margin: 1rem 0 .5rem;
+      font-size: 1.05rem;
+      color: var(--accent);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: .75rem;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      border: 1px solid var(--gold-35);
+      color: var(--muted);
+      margin-left: .5rem;
+    }
+
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: var(--code);
+      border: 1px solid #222;
+      padding: .1rem .35rem;
+      border-radius: 6px;
+      font-size: .8rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    ul {
+      margin: .3rem 0 .7rem 1.2rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      background: #0b0b0b;
+      border: 1px solid var(--gold-35);
+      color: var(--text);
+      font-size: .75rem;
+    }
+
+    .foot {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    /* Image figure styles */
+    .fig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    figure {
+      margin: 0;
+      background: #000;
+      border: 1px solid var(--gold-35);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    figure figcaption {
+      font-size: .85rem;
+      color: var(--muted);
+      padding: .5rem .75rem;
+      border-top: 1px solid var(--gold-35);
+    }
+
+    /* Small caption under Overview to emphasize design status */
+    .design-status {
+      background: #050505;
+      border: 1px dashed var(--gold-35);
+      padding: .75rem;
+      border-radius: 8px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container header-wrap">
+      <img src="./Images/MTM_Logo.png" alt="MTM Logo" class="logo" />
+      <div>
+        <div class="title">MTM Inventory Application — UI Guide and Planning Overview</div>
+        <div class="subtitle">Avalonia 11 on .NET 8 • Desktop • Plain-English tour of the UI, features, and planning docs
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel" id="visual-db-interactions">
+      <h2>How this app talks to the VISUAL database (what, where, and how it stays safe)</h2>
+      <p class="note">Source: the API Toolkit references in “References/Visual PDF Files/Text Conversion/”. Summarized in plain English for the specific interactions this app performs.</p>
+      <h3>Connection and authentication</h3>
+      <ul>
+        <li>Opens a short-lived client connection to the registered VISUAL instance using <span class="pill">Lsa.Data.Dbms.OpenLocal</span> (username/password) or <span class="pill">OpenLocalSSO</span> (Windows SSO). Connection info comes from <span class="pill">DATABASE.CONFIG</span>.</li>
+        <li><strong>Database affected</strong>: the operational VISUAL database you registered (SQL Server or Oracle). It is commonly the VMFG schema on SQL Server.</li>
+        <li><strong>Safety</strong>: the API owns the connection and credentials flow; you do not use raw ADO.NET connections here. If the user changes or an error occurs, the connection is closed with <span class="pill">Dbms.Close</span>. No direct SQL writes are allowed through this path.</li>
+      </ul>
+
+      <h3>Read-only lookups used by the UI</h3>
+      <ul>
+        <li><strong>Part validation</strong>: uses <span class="pill">Lsa.Vmfg.Inventory.Part</span> <em>Exists/Find/Load</em> to verify a part ID and read top-level details.</li>
+        <li><strong>Location picker</strong>: uses <span class="pill">Lsa.Vmfg.Inventory.Location</span> <em>Browse/Load</em> for locations; availability by location can be read with <span class="pill">Lsa.Shared.GeneralQuery</span> (parameterized, read-only).</li>
+        <li><strong>Work order checks</strong>: uses <span class="pill">Lsa.Vmfg.ShopFloor.WorkOrder</span> <em>Exists/Find</em> and/or the <span class="pill">GetWorkOrderSummary</span> service to summarize status and remaining quantities.</li>
+        <li><strong>UM conversions</strong> (when needed): uses <span class="pill">UnitofMeasureConversion</span> service (<span class="pill">Prepare</span> + <span class="pill">Execute</span>).</li>
+        <li><strong>Database affected</strong>: VISUAL only; these calls do not touch your app DB.</li>
+        <li><strong>Safety</strong>: the Toolkit returns disconnected DataSets; they cannot be written back directly. Services and GeneralQuery are execution-controlled by the API and GeneralQuery is read-only, preventing ad‑hoc updates.</li>
+      </ul>
+
+      <h3>Inventory Transfer</h3>
+      <ul>
+        <li><strong>What happens</strong>: builds one row in <span class="pill">Lsa.Vmfg.Inventory.InventoryTransaction</span> input via <em>Prepare → NewInputRow → Save</em> with <span class="pill">TRANSACTION_TYPE = TRANSFER</span>, setting at minimum <span class="pill">ENTRY_NO</span>, <span class="pill">PART_ID</span>, <span class="pill">SITE_ID</span>, <span class="pill">FROM_WAREHOUSE_ID/LOCATION_ID</span>, <span class="pill">TO_WAREHOUSE_ID/LOCATION_ID</span>, and <span class="pill">QTY</span> (or piece fields when applicable).</li>
+        <li><strong>Databases affected</strong>: VISUAL’s inventory tables; your app’s MAMP database is updated separately only for client-side audit/history (not via the VISUAL APIs).</li>
+        <li><strong>Server safety</strong>: the Toolkit enforces business rules and runs the transfer inside a single database transaction. If validation fails, it rolls back. The UI cannot bypass rules with direct SQL.</li>
+      </ul>
+
+      <h3>Work Order Issue (material issue to WO)</h3>
+      <ul>
+        <li><strong>What happens</strong>: same transaction object (<span class="pill">InventoryTransaction</span>) with <span class="pill">TRANSACTION_TYPE = ISSUE</span>. Must supply the WO keys: <span class="pill">WORKORDER_TYPE/BASE_ID/LOT_ID/SPLIT_ID/SUB_ID</span> and <span class="pill">OPERATION_SEQ_NO</span> where required, plus <span class="pill">FROM_*</span> and <span class="pill">QTY</span>.</li>
+        <li><strong>Databases affected</strong>: VISUAL WIP/inventory; your app DB only records the outcome for audit if configured.</li>
+        <li><strong>Server safety</strong>: the API validates work order state, traceability, quantities, and site/warehouse rules before commit. All changes occur in one atomic save; failures return structured errors to the UI.</li>
+      </ul>
+
+      <h3>Work Order Receipt (receive completed qty)</h3>
+      <ul>
+        <li><strong>What happens</strong>: again <span class="pill">InventoryTransaction</span> with <span class="pill">TRANSACTION_TYPE = RECEIPT</span>, supplying the target warehouse/location and the same WO keys. Trace details are sent in the <span class="pill">TRACE</span> sub-table when the part requires it.</li>
+        <li><strong>Databases affected</strong>: VISUAL finished-goods/inventory; app DB only for local audit/exception logging.</li>
+        <li><strong>Server safety</strong>: transaction-level validation (including over‑receipt checks where applicable). The Toolkit rejects invalid rows and rolls back the unit of work.</li>
+      </ul>
+
+      <h3>Other inventory operations (not primary in this app but available)</h3>
+      <ul>
+        <li><span class="pill">ADJUST_IN/ADJUST_OUT</span> and <span class="pill">TRANSFER</span> are supported by the same <span class="pill">InventoryTransaction</span> contract; interbranch transfers are available via <span class="pill">IbtShipment/IbtReceipt</span> if needed.</li>
+        <li><strong>Safety</strong>: identical transactional guarantees and rule enforcement.</li>
+      </ul>
+
+      <h3>Settings and environment</h3>
+      <ul>
+        <li>The Settings screen in this app does <em>not</em> write to VISUAL. It only stores app-owned values (like default WarehouseId, environment) in the app database (MAMP). It may read VISUAL global flags using <span class="pill">Lsa.Vmfg.Shared.ApplGlobal</span> if needed, but no VISUAL writes occur here.</li>
+        <li><strong>Databases affected</strong>: app DB (MAMP) for settings; VISUAL remains untouched by this screen.</li>
+      </ul>
+
+      <h3>Central safety mechanisms provided by the VISUAL API</h3>
+      <ul>
+        <li><strong>Disconnected data</strong>: Loads and services return DataSets you cannot commit directly; all writes go through <span class="pill">Save</span> on business objects.</li>
+        <li><strong>Transactional saves</strong>: <span class="pill">Save</span> wraps validation and persistence in a single DB transaction (commit/rollback). Trace detail and numbering are handled as part of the same unit of work.</li>
+        <li><strong>Numbering without races</strong>: auto-numbering uses an internal <em>next number</em> control that is locked during <span class="pill">Save</span> so duplicates cannot be issued.</li>
+        <li><strong>Read-only queries</strong>: <span class="pill">GeneralQuery</span> is intentionally read-only and limited to one active instance per connection; parameters are passed separately from SQL text.</li>
+        <li><strong>Scope and permissions</strong>: connections open under a VISUAL user or SSO identity, so database permissions and site/entity rules are enforced by the server.</li>
+        <li><strong>Short-lived licensing</strong>: the app follows a <em>per-request</em> pattern—open, do the work, close—reducing exposure and holding locks only as long as needed.</li>
+      </ul>
+
+      <h3>Databases in play (quick map)</h3>
+      <ul>
+        <li><strong>VISUAL operational DB</strong> (SQL Server/Oracle; VMFG schema): all business reads/writes for parts, locations, inventory, and work orders go here via the Toolkit.</li>
+        <li><strong>App database (MAMP)</strong>: app-owned settings, local transaction history, and exception/reporting tables. Never modified through VISUAL APIs.</li>
+      </ul>
+    </section>
+    <section class="panel">
+      <h2 id="overview">Overview</h2>
+      <p>
+        This guide explains the UI and behavior of the MTM Inventory Application. It summarizes each planning document
+        (.md files) and describes what the screens and commands do in plain English.
+      </p>
+      <div class="design-status">
+        Design status: visual design is not final. Final styling will be completed after the controls and behaviors are implemented and verified. Design is one of the last steps.
+      </div>
+      <ul>
+        <li>Shell: MainWindow hosts MainView. A Login overlay appears first. After successful login, the overlay hides and the app stays in MainView.</li>
+        <li>Features: Login, Inventory Transfer, Work Order Transactions (Issue/Receipt), Settings, and supporting dialogs.</li>
+        <li>Error handling: a centralized Exception Handling Form shows friendly messages and details for any errors.</li>
+        <li>Integration rule: UI layers do not call VISUAL APIs directly. They depend on service interfaces with dev placeholders. Production connections are done in service adapters.</li>
+      </ul>
+      <p class="note">Rule of thumb: any operation that needs a VISUAL license opens it briefly for that call, then closes it immediately.</p>
+      <p>
+        Repository entry points and specs:
+        <a href="../../README.md">README.md</a>,
+        <a href="../MVVM Definitions/App.md">App.md</a>,
+        <a href="../MVVM Definitions/MainView.md">MainView.md</a>
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2 id="toc">Table of Contents</h2>
+      <ol class="toc">
+        <li><a href="#rules">Global Rules and Platform</a></li>
+        <li><a href="#login">Login Screen</a></li>
+        <li><a href="#mainview">Main View (Home)</a></li>
+        <li><a href="#inventory-transfer">Inventory Transfer</a></li>
+        <li><a href="#workorder">Work Order Transactions (Issue/Receipt)</a></li>
+        <li><a href="#dialogs">Supporting Dialogs</a>
+          <ul>
+            <li><a href="#dialog-location">Location Picker Dialog</a></li>
+            <li><a href="#dialog-part">Incomplete Part Dialog</a></li>
+            <li><a href="#dialog-exception">Exception Dialog</a></li>
+          </ul>
+        </li>
+        <li><a href="#errors">Centralized Exception Handling</a></li>
+        <li><a href="#settings">Settings</a></li>
+        <li><a href="#mamp">Application Database (MAMP)</a></li>
+        <li><a href="#config">Configuration & Running</a></li>
+        <li><a href="#links">Source Planning Docs</a></li>
+      </ol>
+    </section>
+
+    <section class="panel" id="rules">
+      <h2>Global Rules and Platform</h2>
+      <div class="grid">
+        <div>
+          <h3>Visual License Lifecycle</h3>
+          <ul>
+            <li>Use short-lived, per-request licenses for VISUAL operations.</li>
+            <li>Always release/close the license right after the operation (success or failure).</li>
+          </ul>
+        </div>
+        <div>
+          <h3>UI and Services</h3>
+          <ul>
+            <li>Views/ViewModels contain no VISUAL calls. They depend on interfaces like <span class="pill">IAuthenticationService</span>, <span class="pill">IInventoryService</span>, etc.</li>
+            <li>Development uses placeholders (e.g., Admin/Admin login). Production adapters will implement real VISUAL calls.</li>
+            <li>All UI-invoked methods use try/catch and send errors to the Exception Handling Form.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Platform</h3>
+          <ul>
+            <li>Avalonia 11 on .NET 8, Desktop lifetime.</li>
+            <li>MainWindow → MainView. Login overlay shown first; hides after successful login.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="login">
+      <h2>Login Screen <span class="badge"><a href="../MVVM Definitions/LoginScreen.md">spec</a></span></h2>
+      <p>Purpose: authenticate a user before the app becomes fully available.</p>
+      <div class="fig-grid">
+        <figure>
+          <img src="./Images/LoginView.png" alt="Login View mockup" />
+          <figcaption>LoginView.png</figcaption>
+        </figure>
+      </div>
+      <h3>What the user does</h3>
+      <ul>
+        <li>Enter Username and Password (optional Site/Domain depending on environment).</li>
+        <li>Press <span class="kbd">Enter</span> or click Login.</li>
+      </ul>
+      <h3>What the app does</h3>
+      <ul>
+        <li>Calls <span class="pill">IAuthenticationService.AuthenticateAsync</span>. In Development, accepts Admin/Admin and creates a demo session.</li>
+        <li>On success: updates the session and hides the Login overlay, staying on MainView.</li>
+        <li>On failure: opens the Exception Dialog with a friendly message and technical details expandable.</li>
+      </ul>
+      <h3>Commands</h3>
+      <ul>
+        <li><strong>Login</strong>: attempts authentication; disables inputs while in progress.</li>
+        <li><strong>Cancel/Exit</strong>: closes the app or returns to a safe state (configurable).</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="mainview">
+      <h2>Main View (Home) <span class="badge"><a href="../MVVM Definitions/MainView.md">spec</a></span></h2>
+      <p>Purpose: a simple home hub with session info and navigation to features.</p>
+      <div class="fig-grid">
+        <figure>
+          <img src="./Images/MainView Collapsed Menu.png" alt="Main View with collapsed menu" />
+          <figcaption>MainView Collapsed Menu.png</figcaption>
+        </figure>
+      </div>
+      <h3>What the user sees</h3>
+      <ul>
+        <li>Session summary labels (User, Site, Warehouse).</li>
+        <li>Buttons or menu entries for Inventory Transfer, Work Order Transactions, and Settings.</li>
+      </ul>
+      <h3>What the app does</h3>
+      <ul>
+        <li>Hosts feature screens in a content region.</li>
+        <li>Shows the Login overlay until the user is authenticated.</li>
+        <li>Adjusts window size when the overlay is visible/hidden for a smooth transition.</li>
+      </ul>
+      <h3>Commands</h3>
+      <ul>
+        <li><strong>Open Inventory Transfer</strong>: navigates to the Inventory Transfer screen.</li>
+        <li><strong>Open Work Order Transaction</strong>: navigates to the WO Issue/Receipt screen.</li>
+        <li><strong>Open Settings</strong>: opens app settings.</li>
+        <li><strong>Logout</strong>: clears session and shows the Login overlay again.</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="inventory-transfer">
+      <h2>Inventory Transfer <span class="badge"><a href="../MVVM Definitions/InventoryTransfer.md">spec</a></span></h2>
+      <p>Purpose: move on-hand inventory for a Part from one location to another within the same warehouse.</p>
+      <div class="fig-grid">
+        <figure>
+          <img src="./Images/InventoryTransferView.png" alt="Inventory Transfer View mockup" />
+          <figcaption>InventoryTransferView.png</figcaption>
+        </figure>
+      </div>
+      <h3>What the user does</h3>
+      <ul>
+        <li>Enter Part (Item) ID, Quantity, From Location, and To Location.</li>
+        <li>Use the Location Picker dialog to find a location, if needed.</li>
+        <li>Post the transfer.</li>
+      </ul>
+      <h3>What the app does</h3>
+      <ul>
+        <li>Validates fields (required, positive quantity, different From/To, same warehouse).</li>
+        <li>Checks available quantity at the From Location.</li>
+        <li>Posts a transfer using a service adapter (VISUAL call in production), then records a local audit entry.</li>
+        <li>On any error, opens the Exception Dialog with context and details.</li>
+      </ul>
+      <h3>Commands</h3>
+      <ul>
+        <li><strong>Validate Item</strong>: verifies the Part exists and is active.</li>
+        <li><strong>Check Availability (From)</strong>: reads On-hand/Allocated/Available for the Part at the From Location.</li>
+        <li><strong>Show Location Modal</strong>: opens the Location Picker dialog to select a location.</li>
+        <li><strong>Post Transfer</strong>: posts the transfer via IInventoryService.</li>
+        <li><strong>Reset</strong>: clears inputs and returns to a clean state.</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="workorder">
+      <h2>Work Order Transactions (Issue/Receipt) <span class="badge"><a href="../MVVM Definitions/WorkOrderTransaction.md">spec</a></span></h2>
+      <p>Purpose: issue material to a Work Order or receive completed quantity to stock.</p>
+      <div class="fig-grid">
+        <figure>
+          <img src="./Images/WorkOrderTransactionView.png" alt="Work Order Transaction View mockup" />
+          <figcaption>WorkOrderTransactionView.png</figcaption>
+        </figure>
+      </div>
+      <h3>What the user does</h3>
+      <ul>
+        <li>Choose a transaction type: Issue to WO or Receipt by WO.</li>
+        <li>Enter the Work Order ID, Quantity, and Location (From for Issue, To for Receipt).</li>
+        <li>Post the transaction.</li>
+      </ul>
+      <h3>What the app does</h3>
+      <ul>
+        <li>Validates the Work Order (status open/eligible, remaining qty, etc.).</li>
+        <li>Checks inventory availability for Issue, detects over-receipts for Receipt.</li>
+        <li>Posts the transaction via service adapters (VISUAL in production) and writes local exception/audit entries when applicable.</li>
+        <li>On errors (Closed WO, Not Enough @ From, Over Receipt), prompts via the Exception Dialog and logs to the app DB when appropriate.</li>
+      </ul>
+      <h3>Commands</h3>
+      <ul>
+        <li><strong>Validate Work Order</strong>: loads/validates WO status and remaining quantities.</li>
+        <li><strong>Check Availability</strong>: reads On-hand/Allocated/Available for Issue scenarios.</li>
+        <li><strong>Post Transaction</strong>: executes Issue/Receipt via services.</li>
+        <li><strong>Reset</strong>: clears inputs and returns to a clean state.</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="dialogs">
+      <h2>Supporting Dialogs</h2>
+      <div class="grid">
+        <div id="dialog-location">
+          <h3>Location Picker <span class="badge"><a href="../MVVM Definitions/LocationPickerDialog.md">spec</a></span></h3>
+          <p>Browse and filter locations with balances. Select a location to apply it to the From/To field in the main form.</p>
+          <ul>
+            <li><strong>Select</strong>: applies the highlighted location and closes the dialog.</li>
+            <li><strong>Cancel</strong>: closes without changes.</li>
+          </ul>
+        </div>
+        <div id="dialog-part">
+          <h3>Incomplete Part <span class="badge"><a href="../MVVM Definitions/IncompletePartDialog.md">spec</a></span></h3>
+          <p>Resolve incomplete or invalid Part IDs by searching (prefix/contains) and selecting a valid Part.</p>
+          <ul>
+            <li><strong>Select</strong>: returns the chosen Part to the caller.</li>
+            <li><strong>Cancel</strong>: closes without changes.</li>
+          </ul>
+        </div>
+        <div id="dialog-exception">
+          <h3>Exception Dialog <span class="badge"><a href="../MVVM Definitions/ExceptionDialog.md">spec</a></span></h3>
+          <p>Shows friendly error messages with an optional details expander. Returns user choice to the caller.</p>
+          <ul>
+            <li><strong>Retry</strong>: indicates the caller may attempt the operation again.</li>
+            <li><strong>Cancel</strong>: returns to the prior state without action.</li>
+            <li><strong>Help</strong>: optional link to documentation.</li>
+            <li><strong>Copy Details</strong>: copies message + details to the clipboard.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="errors">
+      <h2>Centralized Exception Handling <span class="badge"><a href="../MVVM Definitions/ExceptionHandling.md">spec</a></span></h2>
+      <p>Any error in the app is routed through a single Exception Handling service. It decides how to present the message (dialog now; toasts later) and can log entries to the app database.</p>
+      <ul>
+        <li>Shows a modal Exception Dialog with a concise title and message, plus full technical details under an expander.</li>
+        <li>Supports keyboard: <span class="kbd">Enter</span> (default action), <span class="kbd">Esc</span> (cancel), <span class="kbd">Ctrl</span>+<span class="kbd">C</span> (copy), <span class="kbd">F1</span> (help).</li>
+        <li>Planned: normalization of categories, and logging closed WOs, over-receipts, and “not enough @ location” to the app DB.</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="settings">
+      <h2>Settings <span class="badge"><a href="../MVVM Definitions/Settings.md">spec</a></span> <span class="badge"><a href="../MVVM Definitions/SettingsView.md">notes</a></span></h2>
+      <p>Manage app-owned settings and show environment context. No VISUAL calls originate here.</p>
+      <div class="fig-grid">
+        <figure>
+          <img src="./Images/Settings.png" alt="Settings View mockup" />
+          <figcaption>Settings.png</figcaption>
+        </figure>
+      </div>
+      <ul>
+        <li><strong>Environment</strong> (Development/Production): affects behaviors like Dev login and which DB to use for app-owned data. Changing may require a restart.</li>
+        <li><strong>WarehouseId</strong>: default warehouse for forms (e.g., “002”).</li>
+        <li><strong>Test App DB</strong>: checks connectivity to the application database and shows success/failure.</li>
+        <li><strong>Session</strong>: shows current User and Site from the authenticated session.</li>
+      </ul>
+      <h3>Commands</h3>
+      <ul>
+        <li><strong>Save</strong>: persists settings to the app DB/config (service adapter).</li>
+        <li><strong>Cancel</strong>: discards changes.</li>
+        <li><strong>Test App DB</strong>: runs a non-VISUAL connectivity test and reports status.</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="mamp">
+      <h2>Application Database (MAMP) <span class="badge"><a href="../MVVM Definitions/MAMPDatabase.md">spec</a></span></h2>
+      <p>Stores only app-owned data that doesn’t belong in VISUAL. Examples:</p>
+      <ul>
+        <li><strong>app_settings</strong>: Environment/WarehouseId and similar app values.</li>
+        <li><strong>local_tx_history</strong>: client-side history of posted transfers/transactions.</li>
+        <li><strong>closed_work_orders</strong>, <strong>over_receipts</strong>, <strong>not_enough_location</strong>: exception/reporting tables for audit and analysis.</li>
+      </ul>
+      <p class="note">This does not change VISUAL data. It supplements the UI experience and reporting.</p>
+    </section>
+
+    <section class="panel" id="config">
+      <h2>Configuration & Running</h2>
+      <div class="grid">
+        <div>
+          <h3>Environment</h3>
+          <ul>
+            <li><strong>Development</strong>: Dev login (Admin/Admin) enabled; app DB = mtm_visual_application_test.</li>
+            <li><strong>Production</strong>: VISUAL-backed authentication; app DB = mtm_visual_application.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>How to Run</h3>
+          <ul>
+            <li><span class="kbd">dotnet build</span></li>
+            <li><span class="kbd">dotnet run --project MTM_Inventory_Application_Avalonia.Desktop</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Where things are</h3>
+          <ul>
+            <li><a href="../../README.md">README.md</a> — global rules, references, and configuration.</li>
+            <li>Specs in <span class="pill">Copilot Files/MVVM Definitions</span>.</li>
+            <li>UI Views/ViewModels in the main project folders (Views/, ViewModels/).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="links">
+      <h2>Source Planning Docs</h2>
+      <div class="grid">
+        <div>
+          <h3>Shell & Navigation</h3>
+          <ul>
+            <li><a href="../MVVM Definitions/App.md">App.md</a></li>
+            <li><a href="../MVVM Definitions/MainView.md">MainView.md</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Core Features</h3>
+          <ul>
+            <li><a href="../MVVM Definitions/LoginScreen.md">LoginScreen.md</a></li>
+            <li><a href="../MVVM Definitions/InventoryTransfer.md">InventoryTransfer.md</a></li>
+            <li><a href="../MVVM Definitions/WorkOrderTransaction.md">WorkOrderTransaction.md</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Dialogs</h3>
+          <ul>
+            <li><a href="../MVVM Definitions/LocationPickerDialog.md">LocationPickerDialog.md</a></li>
+            <li><a href="../MVVM Definitions/IncompletePartDialog.md">IncompletePartDialog.md</a></li>
+            <li><a href="../MVVM Definitions/ExceptionDialog.md">ExceptionDialog.md</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Cross-cutting</h3>
+          <ul>
+            <li><a href="../MVVM Definitions/ExceptionHandling.md">ExceptionHandling.md</a></li>
+            <li><a href="../MVVM Definitions/MAMPDatabase.md">MAMPDatabase.md</a></li>
+            <li><a href="../MVVM Definitions/Settings.md">Settings.md</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="foot">All links are relative to this documentation page inside “Copilot Files/UIX Presentation/”.</p>
+    </section>
+  </main>
+</body>
+
+</html>

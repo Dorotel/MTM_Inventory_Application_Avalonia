@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels.Dialogs"
+             mc:Ignorable="d"
+             x:Class="MTM_Inventory_Application_Avalonia.Views.Dialogs.ExceptionDialog"
+             x:DataType="vm:ExceptionDialogViewModel">
+  <Design.DataContext>
+    <vm:ExceptionDialogViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="16" RowDefinitions="Auto,*,Auto">
+    <TextBlock Grid.Row="0" Text="{Binding Title}" FontSize="18" FontWeight="SemiBold"/>
+
+    <StackPanel Grid.Row="1" Spacing="8">
+      <TextBlock Text="{Binding Message}" TextWrapping="Wrap"/>
+      <Expander Header="Details" IsExpanded="{Binding IsDetailsOpen}">
+        <TextBox Text="{Binding Details}" AcceptsReturn="True" IsReadOnly="True" Height="160"/>
+      </Expander>
+      <!-- Context grid placeholder -->
+    </StackPanel>
+
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Retry" Command="{Binding ExceptionDialog_Button_RetryCommand}"/>
+      <Button Content="Help" Command="{Binding ExceptionDialog_Button_HelpCommand}"/>
+      <Button Content="Copy Details" Command="{Binding ExceptionDialog_Button_CopyDetailsCommand}"/>
+      <Button Content="Close" Command="{Binding ExceptionDialog_Button_CancelCommand}"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

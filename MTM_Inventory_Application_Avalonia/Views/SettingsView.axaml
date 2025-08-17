@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels"
+             mc:Ignorable="d"
+             x:Class="MTM_Inventory_Application_Avalonia.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+  <Design.DataContext>
+    <vm:SettingsViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="16" RowDefinitions="Auto,Auto,*,Auto">
+    <TextBlock Grid.Row="0" Text="Settings" FontSize="20" FontWeight="SemiBold"/>
+
+    <Grid Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="0,12,0,12">
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="Environment" VerticalAlignment="Center"/>
+      <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="{Binding Settings_Combo_EnvironmentIndex}">
+        <ComboBoxItem Content="Development"/>
+        <ComboBoxItem Content="Production"/>
+      </ComboBox>
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="WarehouseId" VerticalAlignment="Center"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Settings_Text_WarehouseId}"/>
+
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="AppDb" VerticalAlignment="Center"/>
+      <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="8">
+        <TextBlock Text="{Binding Settings_Label_AppDbName}"/>
+        <Button Content="Test" Command="{Binding Settings_Button_TestAppDbCommand}"/>
+      </StackPanel>
+
+      <TextBlock Grid.Row="3" Grid.Column="0" Text="Session" VerticalAlignment="Center"/>
+      <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="16">
+        <TextBlock Text="User:"/>
+        <TextBlock Text="{Binding Settings_Label_SessionUser}"/>
+        <TextBlock Text="Site:" Margin="16,0,0,0"/>
+        <TextBlock Text="{Binding Settings_Label_SiteId}"/>
+      </StackPanel>
+
+      <CheckBox Grid.Row="4" Grid.Column="1" IsVisible="{Binding Settings_Toggle_IsDevVisible}" IsChecked="{Binding Settings_Toggle_DevLoginEnabled}" Content="Enable Dev Login (Admin/Admin)"/>
+    </Grid>
+
+    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Save" Command="{Binding Settings_Button_SaveCommand}"/>
+      <Button Content="Cancel" Command="{Binding Settings_Button_CancelCommand}"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

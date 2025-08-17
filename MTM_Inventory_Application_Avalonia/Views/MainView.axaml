@@ -3,14 +3,65 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:dialogs="clr-namespace:MTM_Inventory_Application_Avalonia.Views.Dialogs"
+             xmlns:conv="clr-namespace:MTM_Inventory_Application_Avalonia.Converters"
+             mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="600"
              x:Class="MTM_Inventory_Application_Avalonia.Views.MainView"
              x:DataType="vm:MainViewModel">
   <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <Grid>
+    <!-- Main layout (side panel + content) -->
+    <Grid x:Name="MainLayoutRoot"
+          IsVisible="{Binding IsLoginVisible, Converter={x:Static conv:InverseBooleanConverter.Instance}}"
+          Margin="16" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+      <!-- Header / Greeting -->
+      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+        <TextBlock Grid.Column="0" Text="{Binding Greeting}" FontSize="24" FontWeight="SemiBold"/>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" HorizontalAlignment="Right" VerticalAlignment="Center">
+          <TextBlock Text="User:" Opacity="0.7"/>
+          <TextBlock Text="{Binding SessionUser}"/>
+          <TextBlock Text="Site:" Opacity="0.7" Margin="12,0,0,0"/>
+          <TextBlock Text="{Binding SiteId}"/>
+          <TextBlock Text="Warehouse:" Opacity="0.7" Margin="12,0,0,0"/>
+          <TextBlock Text="{Binding WarehouseId}"/>
+        </StackPanel>
+      </Grid>
+
+      <!-- Main area: Left collapsible side panel + Right content host -->
+      <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+        <!-- Side panel -->
+        <Border Background="{DynamicResource ThemeBackgroundBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="0,1,1,1">
+          <StackPanel Width="220" IsVisible="{Binding IsMenuOpen}" Margin="0,8,8,8" Spacing="8">
+            <Button Content="Settings" Command="{Binding MainView_Button_OpenSettingsCommand}"/>
+            <Button Content="Inventory Transfer (Alt+I)" Command="{Binding MainView_Button_OpenInventoryTransferCommand}" IsEnabled="{Binding CanOpenInventoryTransfer}"/>
+            <Button Content="Work Order Transaction (Alt+W)" Command="{Binding MainView_Button_OpenWorkOrderTransactionCommand}" IsEnabled="{Binding CanOpenWorkOrderTransaction}"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Right: content host -->
+        <Grid Grid.Column="1" Margin="8,8,0,8">
+          <ContentControl Content="{Binding CurrentView}"/>
+        </Grid>
+      </Grid>
+
+      <!-- Footer: menu toggle and logout -->
+      <Grid Grid.Row="2" ColumnDefinitions="Auto,*">
+        <ToggleButton Grid.Column="0" Content="Toggle Menu" IsChecked="{Binding IsMenuOpen}"/>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+          <Button Content="Logout (Alt+L)" Command="{Binding MainView_Button_LogoutCommand}"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
+
+    <!-- Full overlay login screen -->
+    <Border Background="#FFFFFFFF" IsVisible="{Binding IsLoginVisible}">
+      <!-- Center the login view; when main layout is hidden, window can size to this content -->
+      <Grid>
+        <dialogs:LoginView DataContext="{Binding LoginVm}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Grid>
+    </Border>
+  </Grid>
 </UserControl>
