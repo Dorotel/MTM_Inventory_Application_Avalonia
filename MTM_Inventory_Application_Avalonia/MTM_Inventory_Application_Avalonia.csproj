@@ -41,4 +41,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Copilot Files\UIX Presentation\" />
+  </ItemGroup>
 </Project>
