@@ -1,4 +1,4 @@
-# Code Map — C# Files Index
+# Code Map - C# Files Index
 
 Purpose: Centralized, detailed reference for every .cs file in the application. Keep this document in sync with the code. See README rule: any .cs file change must update its section here.
 
@@ -244,5 +244,5 @@ Conventions used below
 
 Maintenance Rule
 - Whenever any .cs file is added, removed, renamed, or edited, update the corresponding section here in the same change set.
-- If a file is removed, keep its section under a “Removed” appendix with the date and replacement file, if any.
+- If a file is removed, keep its section under a "Removed" appendix with the date and replacement file, if any.
 - Validate that paths and types match the codebase after each change.

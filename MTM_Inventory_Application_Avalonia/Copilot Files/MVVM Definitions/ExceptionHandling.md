@@ -1,9 +1,9 @@
-# Exception Handling Form — Functional and Technical Specification
+# Exception Handling Form - Functional and Technical Specification
 
 Purpose: centralize all error handling UX and logic across the app. All forms route errors to this Form via the IExceptionHandler service.
 
-Global Rule — Visual license lifecycle
-- Anytime an operation against the Visual server requires a license, acquire it in a short-lived scope and release/close it in a finally block regardless of success/failure. [Intro - Development Guide.txt, p.13–14; Reference - Core.txt, p.33–37]
+Global Rule - Visual license lifecycle
+- Anytime an operation against the Visual server requires a license, acquire it in a short-lived scope and release/close it in a finally block regardless of success/failure. [Intro - Development Guide.txt, p.13-14; Reference - Core.txt, p.33-37]
 
 Screenshot note (reference only)
 - Any colors shown in screenshots are highlights to indicate field roles/sections and do not define application theming. Implement standard app styling; follow functional groupings only.
@@ -20,16 +20,16 @@ Platform/Shell wiring
 1) Configuration/Registration
    - Missing Database.config, wrong location, or instance not registered. [Intro - Development Guide.txt, p.13; p.15]
 2) Connection/Authentication
-   - Dbms.OpenLocal failure due to invalid credentials or unreachable database. [Reference - Core.txt, p.33–37]
+   - Dbms.OpenLocal failure due to invalid credentials or unreachable database. [Reference - Core.txt, p.33-37]
    - Single sign-on errors (OpenLocalSSO) such as SSO not enabled, missing domain/user SIDs, or user not mapped. [Intro - Development Guide.txt, p.14]
 3) Environment/Runtime Preconditions
    - Architecture mismatch or DLL reference issues (toolkit is 32-bit x86; applications must also be built as x86). [Intro - Development Guide.txt, p.8]
-   - Missing required DLL references (LsaCore.dll, LsaShared.dll, Vmfg*.dll). [Intro - Development Guide.txt, p.11–12]
+   - Missing required DLL references (LsaCore.dll, LsaShared.dll, Vmfg*.dll). [Intro - Development Guide.txt, p.11-12]
 4) API/Business Validation
-   - InventoryTransaction schema/required fields (WORKORDER_*, QTY, TRANSACTION_DATE default), lot/serial policy violations. [Reference - Inventory.txt, p.110–113]
+   - InventoryTransaction schema/required fields (WORKORDER_*, QTY, TRANSACTION_DATE default), lot/serial policy violations. [Reference - Inventory.txt, p.110-113]
    - Closed/invalid Work Order status when attempting status-dependent actions. [Reference - Shop Floor.txt, p.15]
 5) Service Execution
-   - GeneralQuery misuse (unprepared/parameters missing) or multiple active queries without disposing previous instance. [Intro - Development Guide.txt, p.17; Reference - Shared Library.txt, p.5–24]
+   - GeneralQuery misuse (unprepared/parameters missing) or multiple active queries without disposing previous instance. [Intro - Development Guide.txt, p.17; Reference - Shared Library.txt, p.5-24]
 
 ## Exception Handling Model
 - UI Surface (this Form):
@@ -66,7 +66,7 @@ Platform/Shell wiring
 
 ## User Experience Guidelines
 - Keep messages concise; include the operation and key context (e.g., WO 12345, Part ABC, Qty 10, From LOC1).
-- Provide a “View details” expander for raw server/procedure text and a “Copy details” action.
+- Provide a "View details" expander for raw server/procedure text and a "Copy details" action.
 - Ensure keyboard-first access and default focus on the safest action.
 
 Non-Visual Data Persistence (planned)
@@ -74,19 +74,19 @@ Non-Visual Data Persistence (planned)
 
 Citations (file and page)
 - Intro - Development Guide.txt
-  - p.13 — OpenLocal reads Database.config.
-  - p.14 — OpenLocalSSO and GetSingleSignOnData (domain/user SIDs).
-  - p.15 — Co-locate code, API DLLs, and Database.config.
-  - p.8 — Toolkit DLLs are 32-bit (x86); apps must be built as x86.
+  - p.13 - OpenLocal reads Database.config.
+  - p.14 - OpenLocalSSO and GetSingleSignOnData (domain/user SIDs).
+  - p.15 - Co-locate code, API DLLs, and Database.config.
+  - p.8 - Toolkit DLLs are 32-bit (x86); apps must be built as x86.
 - Reference - Core.txt
-  - p.33–37 — Dbms.OpenLocal overloads.
-  - p.48 — Dbms.UserID returns the connected user ID.
+  - p.33-37 - Dbms.OpenLocal overloads.
+  - p.48 - Dbms.UserID returns the connected user ID.
 - Reference - Shared Library.txt
-  - p.5–24 — GeneralQuery Prepare/Parameters/Execute result sets.
+  - p.5-24 - GeneralQuery Prepare/Parameters/Execute result sets.
 - Reference - Inventory.txt
-  - p.110–113 — InventoryTransaction fields and defaults (TRANSACTION_DATE default, required fields, TRACE rules).
+  - p.110-113 - InventoryTransaction fields and defaults (TRANSACTION_DATE default, required fields, TRACE rules).
 - Reference - Shop Floor.txt
-  - p.15 — ChangeWorkOrderStatus NEW_STATUS values (Closed/Released relevance).
+  - p.15 - ChangeWorkOrderStatus NEW_STATUS values (Closed/Released relevance).
 
 ## UI Scaffolding (Avalonia 11)
 - Views

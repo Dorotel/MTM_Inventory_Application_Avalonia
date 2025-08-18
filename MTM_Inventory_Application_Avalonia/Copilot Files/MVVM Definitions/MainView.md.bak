@@ -1,8 +1,8 @@
-# Main View - Shell and Navigation [Ref: ../UIX Presentation/mainview.html]
+# Main View — Shell and Navigation [Ref: ../UIX Presentation/mainview.html]
 
 Purpose: central hub hosting feature views; shows login overlay first, then content.
 
-Global Rule - Visual license lifecycle
+Global Rule — Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Shell wiring
@@ -27,11 +27,11 @@ Testing
 
 
 
-# Main View (Home) - UI Planning Specification [Ref: ../MVVM Definitions/InventoryTransfer.md; ../MVVM Definitions/WorkOrderTransaction.md; ../MVVM Definitions/LoginScreen.md]
+# Main View (Home) — UI Planning Specification [Ref: ../MVVM Definitions/InventoryTransfer.md; ../MVVM Definitions/WorkOrderTransaction.md; ../MVVM Definitions/LoginScreen.md]
 
 Purpose: define the home screen that users see after a successful login, providing clear entry points to Inventory Transfer and Work Order Transaction features.
 
-Global Rule - Visual license lifecycle
+Global Rule — Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
@@ -63,8 +63,8 @@ Platform and Shell wiring
 
 ## Visual API Commands (by scenario)
 - MainView does not call VISUAL APIs directly. Feature navigation routes to:
-  - Inventory Transfer - see InventoryTransfer.md (Dbms.OpenLocal/OpenLocalSSO, GeneralQuery, InventoryTransaction, TRACE, UOM conv).
-  - Work Order Transaction - see WorkOrderTransaction.md (Dbms.OpenLocal/OpenLocalSSO, GetWorkOrderSummary, GeneralQuery, InventoryTransaction, TRACE, UOM conv).
+  - Inventory Transfer — see InventoryTransfer.md (Dbms.OpenLocal/OpenLocalSSO, GeneralQuery, InventoryTransaction, TRACE, UOM conv).
+  - Work Order Transaction — see WorkOrderTransaction.md (Dbms.OpenLocal/OpenLocalSSO, GetWorkOrderSummary, GeneralQuery, InventoryTransaction, TRACE, UOM conv).
 
 ## Business Rules and Exceptions
 - If session context is missing/expired, show the Login overlay.
@@ -77,11 +77,11 @@ Platform and Shell wiring
 
 ## ViewModel, Commands, and Role Gating
 - MainViewModel properties
-  - Greeting (string) - optional welcome text.
-  - SessionUser (string), SiteId (string), WarehouseId (string) - read-only, from ISessionContext.
-  - CanOpenInventoryTransfer (bool), CanOpenWorkOrderTransaction (bool) - derived from roles.
-  - IsLoginVisible (bool) - whether the Login overlay is shown.
-  - CurrentView (object?) - host for feature views.
+  - Greeting (string) — optional welcome text.
+  - SessionUser (string), SiteId (string), WarehouseId (string) — read-only, from ISessionContext.
+  - CanOpenInventoryTransfer (bool), CanOpenWorkOrderTransaction (bool) — derived from roles.
+  - IsLoginVisible (bool) — whether the Login overlay is shown.
+  - CurrentView (object?) — host for feature views.
 - Commands
   - MainView_Button_OpenInventoryTransfer
   - MainView_Button_OpenWorkOrderTransaction

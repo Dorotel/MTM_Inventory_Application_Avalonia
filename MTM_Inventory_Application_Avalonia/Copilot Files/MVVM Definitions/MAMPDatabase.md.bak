@@ -1,4 +1,4 @@
-# MAMP Database - Application-owned schema for non-Visual data
+# MAMP Database — Application-owned schema for non-Visual data
 
 Purpose
 - Define the app-owned database used to store data that cannot or should not be written to the VISUAL (MTMFG) database: exception logs, app settings, and optional local history to support UX.
@@ -30,7 +30,7 @@ Tables (dialect-agnostic DDL illustrated)
 - Indexes: ix_nel_loc (from_location), ix_nel_time (occurred_utc)
 
 4) local_tx_history
-- Columns: id (PK, bigint auto), tx_type (Issue|Receipt|Transfer|â€¦), wo_no (nullable), item_no, qty (decimal 18,6), site_id, warehouse_id, from_location (nullable), to_location (nullable), user_id, tx_utc (datetime), source_ref (nullable), extra_json (JSON/null)
+- Columns: id (PK, bigint auto), tx_type (Issue|Receipt|Transfer|…), wo_no (nullable), item_no, qty (decimal 18,6), site_id, warehouse_id, from_location (nullable), to_location (nullable), user_id, tx_utc (datetime), source_ref (nullable), extra_json (JSON/null)
 - Indexes: ix_lth_time (tx_utc), ix_lth_wo (wo_no)
 
 5) app_settings

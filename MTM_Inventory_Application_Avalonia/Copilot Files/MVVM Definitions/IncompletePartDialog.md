@@ -1,13 +1,13 @@
-# Incomplete Part Dialog — UI Planning Specification [Ref: ../../References/Visual Highlighted Screenshots/InventoryTransferIncompletePartID.png; ./InventoryTransfer.md]
+# Incomplete Part Dialog - UI Planning Specification [Ref: ../../References/Visual Highlighted Screenshots/InventoryTransferIncompletePartID.png; ./InventoryTransfer.md]
 
-Purpose: provide a dialog to resolve incomplete/invalid Item/Part IDs by searching and selecting a valid Part. The view mimics the Visual “Parts” window layout for familiarity.
+Purpose: provide a dialog to resolve incomplete/invalid Item/Part IDs by searching and selecting a valid Part. The view mimics the Visual "Parts" window layout for familiarity.
 
-Global Rule — Visual license lifecycle
+Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
 - Opens automatically when the entered Item/Part is invalid or incomplete (configurable); can also be opened explicitly from Inventory Transfer and Work Order flows.
-- Seeds the search box with the caller’s text (e.g., "21-28841-") and shows suggested/like matches.
+- Seeds the search box with the caller's text (e.g., "21-28841-") and shows suggested/like matches.
 
 Behavior toggle (setting)
 - Settings.General.ResolveIncompletePartEnabled (bool, default: true)
@@ -37,15 +37,15 @@ Platform and Shell wiring
 
 ## Visual API Commands (by scenario)
 - Authenticate/Connect
-  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13–14; Reference - Core.txt, p.33–37]
+  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13-14; Reference - Core.txt, p.33-37]
 - Search Parts
-  - Use GeneralQuery with parameterized LIKE to find parts by prefix/contains; include status/UOM flags as needed. [Reference - Shared Library.txt, p.5–24]
+  - Use GeneralQuery with parameterized LIKE to find parts by prefix/contains; include status/UOM flags as needed. [Reference - Shared Library.txt, p.5-24]
 
 All methods must use centralized error handling (IExceptionHandler). Implement VISUAL calls in IPartService adapters; ViewModels remain UI?only per README rules.
 
 ## Business Rules and Exceptions
 - Inactive parts are not selectable unless policy permits (disable Select if Status != Active).
-- Selecting a part populates the calling view’s Item/Part field and refocuses Quantity.
+- Selecting a part populates the calling view's Item/Part field and refocuses Quantity.
 
 ## Workflows
 - Caller sets seed ? dialog opens with seed ? type to refine ? pick row ? Select ? dialog closes and returns Part ID to caller which updates its textbox.

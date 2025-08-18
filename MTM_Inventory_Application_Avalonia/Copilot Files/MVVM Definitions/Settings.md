@@ -1,8 +1,8 @@
-# Settings View — UI Planning Specification [Ref: ../../README.md; ./MAMPDatabase.md; ../MVVM Definitions/MainView.md]
+# Settings View - UI Planning Specification [Ref: ../../README.md; ./MAMPDatabase.md; ../MVVM Definitions/MainView.md]
 
 Purpose: define an in-app Settings UI for environment and app-owned configuration (warehouse, environment mode, non-Visual DB connection), with placeholders for any VISUAL-dependent reads.
 
-Global Rule — Visual license lifecycle
+Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
@@ -68,9 +68,9 @@ Environment/Configuration keys (from README)
   - Settings_Toggle_IsDevVisible (bool)
   - Settings_Toggle_DevLoginEnabled (bool)
 - Commands
-  - Settings_Button_Save — persists changes (placeholder); prompts restart if Environment changed.
-  - Settings_Button_Cancel — discards changes.
-  - Settings_Button_TestAppDb — tests app DB connectivity (placeholder) and reports result.
+  - Settings_Button_Save - persists changes (placeholder); prompts restart if Environment changed.
+  - Settings_Button_Cancel - discards changes.
+  - Settings_Button_TestAppDb - tests app DB connectivity (placeholder) and reports result.
 - Role gating
   - Only users with appropriate role (e.g., Lead/Admin) can change settings; others read-only.
 

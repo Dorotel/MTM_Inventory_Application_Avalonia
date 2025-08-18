@@ -1,0 +1,14 @@
+# Editor configuration for this repository
+# Ensure consistent UTF-8 encoding and ASCII punctuation in docs to avoid Jekyll build errors
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+
+[*.{md,markdown,html,htm}]
+charset = utf-8
+# Optional: encourage plain ASCII punctuation to avoid smart quotes/dashes
+spelling_locale = en-US
+

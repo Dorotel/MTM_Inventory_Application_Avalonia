@@ -1,4 +1,4 @@
-# SettingsView - Planning and Functional Notes
+# SettingsView — Planning and Functional Notes
 
 Purpose
 - Display application/environment settings and allow safe modifications (non-Visual data only).

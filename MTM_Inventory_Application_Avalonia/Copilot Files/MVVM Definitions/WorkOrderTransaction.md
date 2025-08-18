@@ -1,8 +1,8 @@
-﻿# Work Order Transaction Form — Functional and Technical Specification [Ref: ../../References/Visual Highlighted Screenshots/WorkOrderScreenshotHighlighted.png; ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
+# Work Order Transaction Form - Functional and Technical Specification [Ref: ../../References/Visual Highlighted Screenshots/WorkOrderScreenshotHighlighted.png; ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 
 Purpose: define UI, validations, workflow, role gating, integration, storage, and configuration to implement Work Order (WO) transactions for Infor Visual (VMFG) in this Avalonia/.NET 8 application. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt]
 
-Global Rule — Visual license lifecycle
+Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short‑lived, per‑request scope to acquire and dispose the license.
 
 Scope: supports Receipt by WO (completion to stock) and Issue to WO; detects Over Receipts; blocks Closed WOs while logging them; enforces availability checks; and writes non-Visual data to the application database. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
@@ -52,19 +52,19 @@ Warehouse ID policy: green and read-only; initialized to the value shown in the 
 
 ## Visual API Commands (by scenario)
 - Authenticate/Connect
-  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13–14; Reference - Core.txt, p.33–37]
+  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13-14; Reference - Core.txt, p.33-37]
   - Confirm identity: Dbms.UserID(instance). [Reference - Core.txt, p.48]
 - Validate Work Order
-  - GetWorkOrderSummary header/status/remaining via Shop Floor service to validate open/eligible status and remaining qty. [Reference - Shop Floor.txt, p.98–100]
+  - GetWorkOrderSummary header/status/remaining via Shop Floor service to validate open/eligible status and remaining qty. [Reference - Shop Floor.txt, p.98-100]
 - Check Availability (Issue)
-  - Use GeneralQuery to read On-hand/Allocated/Available for Part at From Warehouse/Location (parameterized). [Reference - Shared Library.txt, p.5–24]
-  - Optional defaulting: VmfgShared.GetPartDefaultWhseLoc(part) for warehouse/location defaults. [Reference - VMFG Shared Library.txt, p.5–6]
+  - Use GeneralQuery to read On-hand/Allocated/Available for Part at From Warehouse/Location (parameterized). [Reference - Shared Library.txt, p.5-24]
+  - Optional defaulting: VmfgShared.GetPartDefaultWhseLoc(part) for warehouse/location defaults. [Reference - VMFG Shared Library.txt, p.5-6]
 - Post Issue to WO
-  - InventoryTransaction: populate required header fields (TRANSACTION_DATE, QTY, WORK_ORDER keys, FROM_WAREHOUSE/LOCATION, ITEM_NO, REASON if required) and TRACE rows for lot/serial control; execute/save transaction. [Reference - Inventory.txt, p.110–113]
+  - InventoryTransaction: populate required header fields (TRANSACTION_DATE, QTY, WORK_ORDER keys, FROM_WAREHOUSE/LOCATION, ITEM_NO, REASON if required) and TRACE rows for lot/serial control; execute/save transaction. [Reference - Inventory.txt, p.110-113]
 - Post Receipt by WO
-  - InventoryTransaction: populate TRANSACTION_DATE, QTY, TO_WAREHOUSE/LOCATION, WORK_ORDER keys, ITEM_NO; enforce over-receipt policy; include TRACE when required; execute/save. [Reference - Inventory.txt, p.110–113]
+  - InventoryTransaction: populate TRANSACTION_DATE, QTY, TO_WAREHOUSE/LOCATION, WORK_ORDER keys, ITEM_NO; enforce over-receipt policy; include TRACE when required; execute/save. [Reference - Inventory.txt, p.110-113]
 - Lot/Serial Capture
-  - Populate TRACE sub-table entries per lot/serial control before executing the InventoryTransaction. [Reference - Inventory.txt, p.112–113]
+  - Populate TRACE sub-table entries per lot/serial control before executing the InventoryTransaction. [Reference - Inventory.txt, p.112-113]
 
 All methods must use centralized error handling (IExceptionHandler): wrap each of the calls above in try/catch and normalize via ExceptionHandler. VISUAL interactions belong in service adapters, not in ViewModels/Views, per README rules.
 

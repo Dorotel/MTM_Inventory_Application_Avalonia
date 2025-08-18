@@ -1,13 +1,13 @@
-# Exception Dialog - UI Planning Specification [Ref: ./ExceptionHandling.md]
+# Exception Dialog — UI Planning Specification [Ref: ./ExceptionHandling.md]
 
 Purpose: define the modal dialog UI that surfaces blocking errors normalized by IExceptionHandler, including details and user actions.
 
-Global Rule - Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
+Global Rule — Visual license lifecycle
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
 
 Scope
 - Modal dialog shown for blocking errors (connection/auth, closed WO, insufficient inventory, etc.).
-- Non-modal toast handles low-severity validations (planned in ExceptionHandling.md).
+- Non?modal toast handles low?severity validations (planned in ExceptionHandling.md).
 
 Platform and Shell wiring
 - View: Views/Dialogs/ExceptionDialog.axaml (UserControl hosted in a modal Window). DataContext: ExceptionDialogViewModel.
@@ -31,10 +31,10 @@ Platform and Shell wiring
 
 ## Business Rules and Exceptions
 - Always display available server/procedure message text when present.
-- Provide a "View details" expander and a "Copy details" action.
+- Provide a “View details” expander and a “Copy details” action.
 
 ## Workflows
-- Exception raised -> IExceptionHandler.Handle constructs ExceptionDialogViewModel -> modal Window hosting ExceptionDialog is shown -> user selects action -> window closes.
+- Exception raised ? IExceptionHandler.Handle constructs ExceptionDialogViewModel ? modal Window hosting ExceptionDialog is shown ? user selects action ? window closes.
 
 ## ViewModel, Commands, and Role Gating
 - ExceptionDialogViewModel properties: Title, Message, Details, IsDetailsOpen.

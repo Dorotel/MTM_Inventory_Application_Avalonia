@@ -1,8 +1,8 @@
-# Exception Dialog — UI Planning Specification [Ref: ./ExceptionHandling.md]
+# Exception Dialog - UI Planning Specification [Ref: ./ExceptionHandling.md]
 
 Purpose: define the modal dialog UI that surfaces blocking errors normalized by IExceptionHandler, including details and user actions.
 
-Global Rule — Visual license lifecycle
+Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
 
 Scope
@@ -31,7 +31,7 @@ Platform and Shell wiring
 
 ## Business Rules and Exceptions
 - Always display available server/procedure message text when present.
-- Provide a “View details” expander and a “Copy details” action.
+- Provide a "View details" expander and a "Copy details" action.
 
 ## Workflows
 - Exception raised ? IExceptionHandler.Handle constructs ExceptionDialogViewModel ? modal Window hosting ExceptionDialog is shown ? user selects action ? window closes.

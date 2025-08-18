@@ -1,8 +1,8 @@
-# Location Picker Dialog — UI Planning Specification [Ref: ../../References/Visual Highlighted Screenshots/InventoryTransferLocationScreen.png; ./InventoryTransfer.md]
+# Location Picker Dialog - UI Planning Specification [Ref: ../../References/Visual Highlighted Screenshots/InventoryTransferLocationScreen.png; ./InventoryTransfer.md]
 
 Purpose: provide a modal dialog to browse/filter/select a location for the current Item/Part during Inventory Transfer, with live header/footer descriptions.
 
-Global Rule — Visual license lifecycle
+Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
@@ -33,9 +33,9 @@ Platform and Shell wiring
 
 ## Visual API Commands (by scenario)
 - Authenticate/Connect
-  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13–14; Reference - Core.txt, p.33–37]
+  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13-14; Reference - Core.txt, p.33-37]
 - Load locations for Item/Part
-  - Use GeneralQuery to retrieve location balances scoped by Item, Warehouse/Site (parameterized). Apply filters client-side. [Reference - Shared Library.txt, p.5–24]
+  - Use GeneralQuery to retrieve location balances scoped by Item, Warehouse/Site (parameterized). Apply filters client-side. [Reference - Shared Library.txt, p.5-24]
 
 All methods must use centralized error handling (IExceptionHandler): wrap calls in try/catch and normalize via ExceptionHandler. Implement VISUAL calls in service adapters (IInventoryService/ILocationService), not in ViewModels/Views.
 
@@ -67,7 +67,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap calls 
 - Use DI to provide IInventoryService/IExceptionHandler; run GeneralQuery in a service layer.
 
 ## Keyboard and Scanner UX
-- Enter — select selected row; Esc — cancel; F2 pressed in main screen opens this dialog.
+- Enter - select selected row; Esc - cancel; F2 pressed in main screen opens this dialog.
 
 ## UI Scaffolding (Avalonia 11)
 - Views

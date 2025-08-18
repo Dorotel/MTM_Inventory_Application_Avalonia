@@ -1,8 +1,8 @@
-# Inventory Transfer (Location-to-Location) Form — Functional and Technical Specification [Ref: ../../References/Visual Highlighted Screenshots/InventoryTransferHighights.png; ../../References/Visual Highlighted Screenshots/InventoryTransferLocationScreen.png; ../../References/Visual Highlighted Screenshots/InventoryTransferIncompletePartID.png]
+# Inventory Transfer (Location-to-Location) Form - Functional and Technical Specification [Ref: ../../References/Visual Highlighted Screenshots/InventoryTransferHighights.png; ../../References/Visual Highlighted Screenshots/InventoryTransferLocationScreen.png; ../../References/Visual Highlighted Screenshots/InventoryTransferIncompletePartID.png]
 
 Purpose: define UI, validations, workflow, role gating, integration, storage, and configuration to implement Location-to-Location inventory transfers within the same warehouse in this Avalonia/.NET 8 application.
 
-Global Rule — Visual license lifecycle
+Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope: transfers on-hand quantity for an Item/Part from a From Location to a To Location in the same warehouse; optimized for keyboard/barcode workflows; centralized exception handling and local reporting/logging.
@@ -43,17 +43,17 @@ Shell wiring: open from MainView via NavigationService.OpenInventoryTransfer(); 
 
 ## Visual API Commands (by scenario)
 - Authenticate/Connect
-  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13–14; Reference - Core.txt, p.33–37]
+  - Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID); always Close/Dispose after use. [Intro - Development Guide.txt, p.13-14; Reference - Core.txt, p.33-37]
   - Confirm identity: Dbms.UserID(instance). [Reference - Core.txt, p.48]
 - Validate Item/Part
-  - Use GeneralQuery to verify Part exists/active (parameterized query). [Reference - Shared Library.txt, p.5–24]
-  - Optional defaulting: VmfgShared.GetPartDefaultWhseLoc(part) to suggest warehouse/location. [Reference - VMFG Shared Library.txt, p.5–6]
+  - Use GeneralQuery to verify Part exists/active (parameterized query). [Reference - Shared Library.txt, p.5-24]
+  - Optional defaulting: VmfgShared.GetPartDefaultWhseLoc(part) to suggest warehouse/location. [Reference - VMFG Shared Library.txt, p.5-6]
 - Check Availability at From Location
-  - Use GeneralQuery to read On-hand/Allocated/Available for Part at From Warehouse/Location (parameterized). [Reference - Shared Library.txt, p.5–24]
+  - Use GeneralQuery to read On-hand/Allocated/Available for Part at From Warehouse/Location (parameterized). [Reference - Shared Library.txt, p.5-24]
 - Post Location-to-Location Transfer
-  - InventoryTransaction: populate required fields (TRANSACTION_DATE, QTY, ITEM_NO, FROM_WAREHOUSE/LOCATION, TO_WAREHOUSE/LOCATION; include TRACE rows for lot/serial when required) and execute/save. [Reference - Inventory.txt, p.110–113]
+  - InventoryTransaction: populate required fields (TRANSACTION_DATE, QTY, ITEM_NO, FROM_WAREHOUSE/LOCATION, TO_WAREHOUSE/LOCATION; include TRACE rows for lot/serial when required) and execute/save. [Reference - Inventory.txt, p.110-113]
 - Lot/Serial Capture
-  - Populate TRACE sub-table entries per lot/serial control before executing the InventoryTransaction. [Reference - Inventory.txt, p.112–113]
+  - Populate TRACE sub-table entries per lot/serial control before executing the InventoryTransaction. [Reference - Inventory.txt, p.112-113]
 
 All methods must use centralized error handling (IExceptionHandler): wrap each of the calls above in try/catch and normalize via ExceptionHandler. Production VISUAL calls are implemented in service adapters, not in ViewModels/Views.
 
