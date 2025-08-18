@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VISUAL DB Interactions — MTM Inventory Application</title>
+  <title>VISUAL DB Interactions ï¿½ MTM Inventory Application</title>
   <link rel="stylesheet" href="../UIX Template/assets/css/fontawesome-all.min.css" />
   <link rel="stylesheet" href="../UIX Template/assets/css/main.css" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="is-preload with-sidebar">
   <aside class="toc-sidebar">
-    <a class="logo" href="index.html"><img src="./Images/MTM_Logo.png" alt="MTM Logo" style="height:28px;width:auto;" /> <span>MTM Inventory App</span></a>
+    <a class="logo" href="index.html"><img src="./Images/MTM_Logo.png" alt="MTM Logo" style="height:initial;width:initial;" /> <span>MTM Inventory App</span></a>
     <h3>Contents</h3>
     <nav>
       <ul>
@@ -37,7 +37,7 @@
     <article id="top" class="wrapper style1"><div class="container"><header><h1>How this app talks to the VISUAL database</h1><p>what, where, and how it stays safe</p></header></div></article>
     <main class="container">
       <section class="panel" id="visual-db-interactions">
-        <p class="note">Source: the API Toolkit references in “References/Visual PDF Files/Text Conversion/”. Summarized for this app’s interactions.</p>
+        <p class="note">Source: the API Toolkit references in ï¿½References/Visual PDF Files/Text Conversion/ï¿½. Summarized for this appï¿½s interactions.</p>
         <h3>Connection and authentication</h3>
         <ul>
           <li>Opens a short-lived client connection using <span class="pill">Lsa.Data.Dbms.OpenLocal</span> (username/password) or <span class="pill">OpenLocalSSO</span> (Windows SSO). Connection info comes from <span class="pill">Database.config</span>.</li>
