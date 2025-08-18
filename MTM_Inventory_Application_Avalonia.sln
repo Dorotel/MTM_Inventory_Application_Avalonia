@@ -7,6 +7,57 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTM_Inventory_Application_A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTM_Inventory_Application_Avalonia.Desktop", "MTM_Inventory_Application_Avalonia.Desktop\MTM_Inventory_Application_Avalonia.Desktop.csproj", "{FF31DA51-AF94-A0E5-DEFD-1139F11D0827}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\advanced.html = docs\advanced.html
+		docs\CodeMap_CS_Files.md = docs\CodeMap_CS_Files.md
+		docs\config.html = docs\config.html
+		docs\dialogs.html = docs\dialogs.html
+		docs\errors.html = docs\errors.html
+		docs\future-updates.html = docs\future-updates.html
+		docs\index.html = docs\index.html
+		docs\inventory-transfer.html = docs\inventory-transfer.html
+		docs\links.html = docs\links.html
+		docs\login.html = docs\login.html
+		docs\mainview.html = docs\mainview.html
+		docs\mamp.html = docs\mamp.html
+		docs\Planned_Implementations.md = docs\Planned_Implementations.md
+		docs\platforms.html = docs\platforms.html
+		docs\rules.html = docs\rules.html
+		docs\settings.html = docs\settings.html
+		docs\styles.css = docs\styles.css
+		docs\visual-db-interactions.html = docs\visual-db-interactions.html
+		docs\workorder.html = docs\workorder.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVVM Definitions", "MVVM Definitions", "{13A0B660-9FE9-4354-849E-278E1FD78F12}"
+	ProjectSection(SolutionItems) = preProject
+		docs\MVVM Definitions\App.md = docs\MVVM Definitions\App.md
+		docs\MVVM Definitions\ExceptionDialog.md = docs\MVVM Definitions\ExceptionDialog.md
+		docs\MVVM Definitions\ExceptionHandling.md = docs\MVVM Definitions\ExceptionHandling.md
+		docs\MVVM Definitions\Icons.md = docs\MVVM Definitions\Icons.md
+		docs\MVVM Definitions\IncompletePartDialog.md = docs\MVVM Definitions\IncompletePartDialog.md
+		docs\MVVM Definitions\InventoryTransfer.md = docs\MVVM Definitions\InventoryTransfer.md
+		docs\MVVM Definitions\LocationPickerDialog.md = docs\MVVM Definitions\LocationPickerDialog.md
+		docs\MVVM Definitions\LoginScreen.md = docs\MVVM Definitions\LoginScreen.md
+		docs\MVVM Definitions\MainView.md = docs\MVVM Definitions\MainView.md
+		docs\MVVM Definitions\MAMPDatabase.md = docs\MVVM Definitions\MAMPDatabase.md
+		docs\MVVM Definitions\Settings.md = docs\MVVM Definitions\Settings.md
+		docs\MVVM Definitions\SettingsView.md = docs\MVVM Definitions\SettingsView.md
+		docs\MVVM Definitions\WorkOrderTransaction.md = docs\MVVM Definitions\WorkOrderTransaction.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{4AECAA9A-8C18-47DE-B57E-BAB0E4BFFD33}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Images\ErrorMessage.png = docs\Images\ErrorMessage.png
+		docs\Images\InventoryTransferView.png = docs\Images\InventoryTransferView.png
+		docs\Images\LoginView.png = docs\Images\LoginView.png
+		docs\Images\MainView Collapsed Menu.png = docs\Images\MainView Collapsed Menu.png
+		docs\Images\MTM_Logo.png = docs\Images\MTM_Logo.png
+		docs\Images\Settings.png = docs\Images\Settings.png
+		docs\Images\WorkOrderTransactionView.png = docs\Images\WorkOrderTransactionView.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +75,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{13A0B660-9FE9-4354-849E-278E1FD78F12} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4AECAA9A-8C18-47DE-B57E-BAB0E4BFFD33} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E31D73E4-6C62-4103-B369-43DB8EF8D447}
