@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VISUAL DB Interactions — MTM Inventory Application</title>
+  <link rel="stylesheet" href="../UIX Template/assets/css/fontawesome-all.min.css" />
+  <link rel="stylesheet" href="../UIX Template/assets/css/main.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="is-preload with-sidebar">
+  <aside class="toc-sidebar">
+    <a class="logo" href="index.html"><img src="./Images/MTM_Logo.png" alt="MTM Logo" style="height:28px;width:auto;" /> <span>MTM Inventory App</span></a>
+    <h3>Contents</h3>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="platforms.html">Platforms</a></li>
+        <li><a href="visual-db-interactions.html">VISUAL DB Interactions</a></li>
+        <li><a href="rules.html">Global Rules and Platform</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="mainview.html">Main View</a></li>
+        <li><a href="inventory-transfer.html">Inventory Transfer</a></li>
+        <li><a href="workorder.html">Work Order Transactions</a></li>
+        <li><a href="dialogs.html">Supporting Dialogs</a></li>
+        <li><a href="errors.html">Exception Handling</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="mamp.html">App Database (MAMP)</a></li>
+        <li><a href="config.html">Configuration & Run</a></li>
+        <li><a href="advanced.html">Advanced</a></li>
+        <li><a href="future-updates.html">Future Updates</a></li>
+        <li><a href="links.html">Source Planning Docs</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <div id="page-wrap">
+    <article id="top" class="wrapper style1"><div class="container"><header><h1>How this app talks to the VISUAL database</h1><p>what, where, and how it stays safe</p></header></div></article>
+    <main class="container">
+      <section class="panel" id="visual-db-interactions">
+        <p class="note">Source: the API Toolkit references in “References/Visual PDF Files/Text Conversion/”. Summarized for this app’s interactions.</p>
+        <h3>Connection and authentication</h3>
+        <ul>
+          <li>Opens a short-lived client connection using <span class="pill">Lsa.Data.Dbms.OpenLocal</span> (username/password) or <span class="pill">OpenLocalSSO</span> (Windows SSO). Connection info comes from <span class="pill">Database.config</span>.</li>
+          <li><strong>Database</strong>: the operational VISUAL database you registered (SQL Server or Oracle), commonly the VMFG schema.</li>
+          <li><strong>Safety</strong>: the API owns the connection/credentials; on user switch or error the connection is closed with <span class="pill">Dbms.Close</span>. No direct SQL writes through this path.</li>
+        </ul>
+        <h3>Read-only lookups used by the UI</h3>
+        <ul>
+          <li><strong>Part validation</strong>: <span class="pill">Lsa.Vmfg.Inventory.Part</span> <em>Exists/Find/Load</em> to verify a part ID and read details.</li>
+          <li><strong>Location picker</strong>: <span class="pill">Lsa.Vmfg.Inventory.Location</span> <em>Browse/Load</em>; availability by location via <span class="pill">Lsa.Shared.GeneralQuery</span> (parameterized, read-only).</li>
+          <li><strong>Work order checks</strong>: <span class="pill">Lsa.Vmfg.ShopFloor.WorkOrder</span> <em>Exists/Find</em> and <span class="pill">GetWorkOrderSummary</span> for status and remaining quantities.</li>
+          <li><strong>Safety</strong>: results are disconnected DataSets; writes occur only via controlled <span class="pill">Save</span> on business objects.</li>
+        </ul>
+        <h3>Inventory Transfer</h3>
+        <ul>
+          <li><strong>What happens</strong>: build one row in <span class="pill">Lsa.Vmfg.Inventory.InventoryTransaction</span> via <em>Prepare ? NewInputRow ? Save</em> with <span class="pill">TRANSACTION_TYPE = TRANSFER</span>, setting at minimum <span class="pill">ENTRY_NO</span>, <span class="pill">PART_ID</span>, <span class="pill">SITE_ID</span>, <span class="pill">FROM_*</span>, <span class="pill">TO_*</span>, and <span class="pill">QTY</span>.</li>
+          <li><strong>Databases</strong>: VISUAL inventory; app MAMP DB updated separately for client-side audit/history.</li>
+          <li><strong>Safety</strong>: Toolkit enforces rules and wraps in a single DB transaction with rollback on validation failures.</li>
+        </ul>
+        <h3>Work Order Issue/Receipt</h3>
+        <ul>
+          <li><strong>Issue</strong>: <span class="pill">TRANSACTION_TYPE = ISSUE</span>; supply WO keys (<span class="pill">WORKORDER_TYPE/BASE_ID/LOT_ID/SPLIT_ID/SUB_ID</span>) and <span class="pill">OPERATION_SEQ_NO</span> when required, plus <span class="pill">FROM_*</span> and <span class="pill">QTY</span>.</li>
+          <li><strong>Receipt</strong>: <span class="pill">TRANSACTION_TYPE = RECEIPT</span>; supply target warehouse/location and same WO keys; TRACE sub-table included when required.</li>
+          <li><strong>Safety</strong>: same transactional guarantees; validation rejects invalid rows and rolls back the unit of work.</li>
+        </ul>
+        <h3>Other operations</h3>
+        <ul>
+          <li><span class="pill">ADJUST_IN/ADJUST_OUT</span> and interbranch via <span class="pill">IbtShipment/IbtReceipt</span> exist but are not primary in this app.</li>
+        </ul>
+        <h3>Central safety mechanisms</h3>
+        <ul>
+          <li><strong>Disconnected data</strong>; <strong>Transactional saves</strong> with commit/rollback; <strong>Auto-numbering</strong> without races; <strong>Read-only GeneralQuery</strong>; <strong>Scope/permissions</strong> by VISUAL identity; <strong>Short-lived licensing</strong>.</li>
+        </ul>
+        <h3>Databases in play</h3>
+        <ul>
+          <li><strong>VISUAL</strong> (SQL Server/Oracle; VMFG schema): business reads/writes via Toolkit.</li>
+          <li><strong>MAMP (app DB)</strong>: app-owned settings, local history, and exception/reporting tables. Never modified through VISUAL APIs.</li>
+        </ul>
+      </section>
+    </main>
+    <article class="wrapper style4"><div class="container medium"><footer><ul id="copyright"><li>&copy; MTM Inventory Application.</li><li>Design base: HTML5 UP Template</li></ul></footer></div></article>
+  </div>
+  <script src="../UIX Template/assets/js/jquery.min.js"></script>
+  <script src="../UIX Template/assets/js/jquery.scrolly.min.js"></script>
+  <script src="../UIX Template/assets/js/browser.min.js"></script>
+  <script src="../UIX Template/assets/js/breakpoints.min.js"></script>
+  <script src="../UIX Template/assets/js/util.js"></script>
+  <script src="../UIX Template/assets/js/main.js"></script>
+  <script>(function(){var p=location.pathname.split('/').pop()||'visual-db-interactions.html';document.querySelectorAll('.toc-sidebar nav a').forEach(function(a){var t=(a.getAttribute('href')||'').split('/').pop();if(t===p)a.classList.add('active');});})();</script>
+</body>
+</html>

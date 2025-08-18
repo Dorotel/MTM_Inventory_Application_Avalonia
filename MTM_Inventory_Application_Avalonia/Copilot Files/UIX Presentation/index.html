@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MTM Inventory Application — Overview</title>
+  <!-- UIX Template styles -->
+  <link rel="stylesheet" href="../UIX Template/assets/css/fontawesome-all.min.css" />
+  <link rel="stylesheet" href="../UIX Template/assets/css/main.css" />
+  <!-- Local overrides -->
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body class="is-preload with-sidebar">
+  <!-- Fixed TOC Sidebar (links to individual pages) -->
+  <aside class="toc-sidebar">
+    <a class="logo" href="index.html" title="MTM Inventory Application">
+      <img src="./Images/MTM_Logo.png" alt="MTM Logo" style="height:initial;width:initial;" />
+      <span>MTM Inventory App</span>
+    </a>
+    <h3>Contents</h3>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="platforms.html">Platforms</a></li>
+        <li><a href="visual-db-interactions.html">VISUAL DB Interactions</a></li>
+        <li><a href="rules.html">Global Rules and Platform</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="mainview.html">Main View</a></li>
+        <li><a href="inventory-transfer.html">Inventory Transfer</a></li>
+        <li><a href="workorder.html">Work Order Transactions</a></li>
+        <li><a href="dialogs.html">Supporting Dialogs</a></li>
+        <li><a href="errors.html">Exception Handling</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="mamp.html">App Database (MAMP)</a></li>
+        <li><a href="config.html">Configuration & Run</a></li>
+        <li><a href="advanced.html">Advanced</a></li>
+        <li><a href="future-updates.html">Future Updates</a></li>
+        <li><a href="links.html">Source Planning Docs</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Page content wrapper (pushed right by sidebar) -->
+  <div id="page-wrap">
+    <!-- Header -->
+    <article id="top" class="wrapper style1">
+      <div class="container">
+        <header>
+          <h1>MTM Inventory Application</h1>
+          <p>Avalonia 11 on .NET 8 • Desktop • Overview</p>
+        </header>
+      </div>
+    </article>
+
+    <main class="container">
+      <section class="panel" id="overview">
+        <h2>Overview</h2>
+        <p>This guide explains the UI and behavior of the MTM Inventory Application. It summarizes each planning document (.md files) and describes the screens and commands in plain English.</p>
+        <ul>
+          <li>Shell: MainWindow hosts MainView. A Login overlay appears first; after successful login, the overlay hides and the app stays in MainView.</li>
+          <li>Features: Login, Inventory Transfer, Work Order Transactions (Issue/Receipt), Settings, and supporting dialogs.</li>
+          <li>Error handling: a centralized Exception Handling Form shows friendly messages and details for any errors.</li>
+          <li>Integration rule: UI layers do not call VISUAL APIs directly. They depend on service interfaces with dev placeholders. Production connections are done in service adapters.</li>
+        </ul>
+        <p class="note">Rule of thumb: any operation that needs a VISUAL license opens it briefly for that call, then closes it immediately.</p>
+        <p>Repository entry points and specs: <a href="../../README.md">README.md</a>, <a href="../MVVM Definitions/App.md">App.md</a>, <a href="../MVVM Definitions/MainView.md">MainView.md</a></p>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <article class="wrapper style4">
+      <div class="container medium">
+        <footer>
+          <ul id="copyright">
+            <li>&copy; MTM Inventory Application. All rights reserved.</li>
+            <li>Design base: HTML5 UP Template</li>
+          </ul>
+        </footer>
+      </div>
+    </article>
+  </div>
+
+  <!-- Template Scripts -->
+  <script src="../UIX Template/assets/js/jquery.min.js"></script>
+  <script src="../UIX Template/assets/js/jquery.scrolly.min.js"></script>
+  <script src="../UIX Template/assets/js/browser.min.js"></script>
+  <script src="../UIX Template/assets/js/breakpoints.min.js"></script>
+  <script src="../UIX Template/assets/js/util.js"></script>
+  <script src="../UIX Template/assets/js/main.js"></script>
+  <script>
+    (function(){
+      var path = location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.toc-sidebar nav a').forEach(function(a){
+        var href = a.getAttribute('href');
+        if(!href) return;
+        var target = href.split('/').pop();
+        if (target === path) a.classList.add('active');
+      });
+    })();
+  </script>
+</body>
+
+</html>

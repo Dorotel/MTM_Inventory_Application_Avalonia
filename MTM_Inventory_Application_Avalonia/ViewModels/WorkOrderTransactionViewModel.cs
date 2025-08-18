@@ -2,12 +2,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MTM_Inventory_Application_Avalonia.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace MTM_Inventory_Application_Avalonia.ViewModels;
 
 public partial class WorkOrderTransactionViewModel : ObservableObject
 {
     private readonly IExceptionHandler _exceptionHandler;
+
+    public IPartDialogService? PartDialog { get; set; }
 
     public WorkOrderTransactionViewModel() : this(new ExceptionHandler()) {}
 
@@ -59,5 +62,23 @@ public partial class WorkOrderTransactionViewModel : ObservableObject
             WorkOrder_TextBox_ToLocation = string.Empty;
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(WorkOrder_Button_Reset)); }
+    }
+
+    [RelayCommand]
+    private async Task WorkOrder_Button_ResolveIncompletePartId()
+    {
+        try
+        {
+            // Seed could come from a part field in WO context in future. Using WorkOrderId as placeholder seed.
+            var seed = WorkOrder_TextBox_WorkOrderId;
+            if (PartDialog is null) return;
+            var picked = await PartDialog.PickPartAsync(seed);
+            if (!string.IsNullOrWhiteSpace(picked))
+            {
+                // In a real WO form, set the Part field. Here we reuse WorkOrderId placeholder for demo.
+                WorkOrder_TextBox_WorkOrderId = picked!;
+            }
+        }
+        catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(WorkOrder_Button_ResolveIncompletePartId)); }
     }
 }

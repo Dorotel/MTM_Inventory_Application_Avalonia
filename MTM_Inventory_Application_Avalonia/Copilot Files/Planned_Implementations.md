@@ -31,7 +31,7 @@ Cross-cutting backlog
   - Acceptance: any thrown exception from UI commands shows modal dialog with details expander; shortcuts work; Copy copies.
   - References: ExceptionHandling.md, ExceptionDialog.md.
 - Services and DI seams
-  - Define and register service interfaces: IVisualConnectionService, IAuthenticationService (prod), IInventoryService, IShopFloorService, IPartService, ILocationService, ISettingsStore, IAppDb.
+  - Define and register service interfaces: IVisualConnectionService, IAuthenticationService (prod), IInventoryService, IShopFloorService, IPartService, ILocationService, ISettingsStore, IAppDb, IPartDialogService.
   - Move VISUAL-specific logic to service adapters; keep ViewModels UI-only.
   - Acceptance: ViewModels depend only on interfaces; service adapters stubbed for dev; production TODO markers present.
   - References: README.md (New Rule — VISUAL business logic placeholders).
@@ -82,7 +82,8 @@ Feature backlogs
   - References: LocationPickerDialog.md.
 - Incomplete Part Dialog
   - Implement part search (by ID/description) via IPartService; selection returns Part.
-  - Acceptance: Result list populates; double-click/Enter selects; Esc cancels.
+  - Current dev wiring uses IPartDialogService with seed text and a placeholder suggestion list.
+  - Acceptance: Result list populates; Enter/double-click selects; Esc cancels; Inventory Transfer/WO views receive the selected PartId and update their textbox.
   - References: IncompletePartDialog.md.
 - Settings View
   - Bind and validate fields; implement Save/Cancel/Test; role gating if needed.
@@ -98,7 +99,7 @@ Technical tasks
 Phased delivery plan (order and dependencies)
 - Phase 1: Exception handling completion (IExceptionHandler + ExceptionDialog commands); Shell and Navigation polish.
 - Phase 2: Settings + MAMP DB (schema, persistence, Test App DB command); service abstractions defined.
-- Phase 3: Dialogs enabling flows (LocationPickerDialog, IncompletePartDialog).
+- Phase 3: Dialogs enabling flows (LocationPickerDialog, IncompletePartDialog) including IPartDialogService.
 - Phase 4: Inventory Transfer implementation via service layer.
 - Phase 5: Work Order Issue/Receipt implementation via service layer.
 - Phase 6: Production authentication via VISUAL.

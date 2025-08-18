@@ -1,9 +1,38 @@
+# Main View — Shell and Navigation [Ref: ../UIX Presentation/mainview.html]
+
+Purpose: central hub hosting feature views; shows login overlay first, then content.
+
+Global Rule — Visual license lifecycle
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
+
+Shell wiring
+- MainWindow hosts MainView. On startup, LoginView overlays MainView; after login, overlay hides and MainView shows feature content in its content region.
+- Auto sizing: MainView monitors IsLoginVisible and adjusts the Window SizeToContent (WidthAndHeight) to fit the active child (login or main content). When hiding login, it restores the previous window size if it was concrete; otherwise it keeps WidthAndHeight until the user resizes. See Views/MainView.axaml.cs ApplyLoginSizing.
+
+Navigation
+- Feature views are hosted in the main content region: InventoryTransferView, WorkOrderTransactionView, SettingsView.
+- Current implementation assigns CurrentView directly from MainViewModel commands. NavigationService also exposes OpenInventoryTransfer/OpenWorkOrderTransaction helpers that create the views and inject dialog services.
+
+UX rules
+- Keyboard/Scanner flows bubble to active feature view.
+- Button content must remain inside buttons (no overflow into panel areas); keep horizontal stacks for icon+text.
+
+Error handling
+- All UI methods use try/catch and route through IExceptionHandler.
+
+Testing
+- Login overlay sizes the window to content; on login success window restores prior size or remains size-to-content if prior was NaN.
+- Replacing child views keeps the window sized to its active content region.
+
+
+
+
 # Main View (Home) — UI Planning Specification [Ref: ../MVVM Definitions/InventoryTransfer.md; ../MVVM Definitions/WorkOrderTransaction.md; ../MVVM Definitions/LoginScreen.md]
 
 Purpose: define the home screen that users see after a successful login, providing clear entry points to Inventory Transfer and Work Order Transaction features.
 
 Global Rule — Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
 - Acts as the hub after Login: opens Inventory Transfer and Work Order Transaction UI flows.
@@ -14,7 +43,7 @@ Scope
 Platform and Shell wiring
 - View: Views/MainView.axaml (UserControl). DataContext: MainViewModel.
 - Host: MainWindow displays MainView as its content at startup. A Login overlay (Views/Dialogs/LoginView) is centered inside MainView while unauthenticated.
-- Navigation: MainViewModel exposes commands to open features in the MainView content host (CurrentView) via INavigationService or direct View assignment.
+- Navigation: MainViewModel exposes commands to open features in the MainView content host (CurrentView) and may call INavigationService helpers to construct views and inject dialog services.
 - Window sizing: MainView code-behind toggles the parent Window.SizeToContent to match Login overlay when visible; on hide, restores previous dimensions if saved, otherwise sizes the window to the MainView base content.
 
 ## Code Naming and Error Handling Rules
@@ -63,8 +92,8 @@ Platform and Shell wiring
   - Read-Only: can open features in read-only mode; posting disabled within features.
 
 ## Integration Approach
-- INavigationService provides OpenInventoryTransfer and OpenWorkOrderTransaction which set MainViewModel.CurrentView to the appropriate View.
-- Settings entry is currently opened directly from MainViewModel by assigning SettingsView to CurrentView.
+- INavigationService provides OpenInventoryTransfer and OpenWorkOrderTransaction which can set MainViewModel.CurrentView to the appropriate View with dialog services injected.
+- Settings entry can be opened directly from MainViewModel by assigning SettingsView to CurrentView.
 - Propagate ISessionContext to features for environment/role decisions.
 
 ## Local Storage and Reporting

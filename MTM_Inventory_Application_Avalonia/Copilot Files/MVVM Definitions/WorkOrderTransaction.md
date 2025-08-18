@@ -42,7 +42,7 @@ Warehouse ID policy: green and read-only; initialized to the value shown in the 
 - Quantity (yellow, required): > 0; for Receipt compare to Remaining (over-receipt detection); for Issue compare to Available at From Location (insufficient detection). [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 - From Location (yellow for Issue): must exist and be active; show On-hand/Allocated/Available. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 - To Location (yellow for Receipt): must exist and be active; bin-type compatibility as applicable. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
-- Warehouse ID (green): fixed from settings/screenshot (e.g., "002"), not editable; included in all posts. [Ref: ../../References/Visual DLL & Config Files/Database.config]
+- Warehouse ID (green): fixed from settings/screenshot value (e.g., "002"), not editable; included in all posts. [Ref: ../../References/Visual DLL & Config Files/Database.config]
 - Site ID (green): derived from environment/site configuration; not editable. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - VMFG Shared Library.txt]
 - Transaction Date (blue): auto-set to current date; read-only. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt]
 - Operation/Sequence (optional): for routing context if required by policy. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt]
@@ -91,7 +91,7 @@ All exception paths invoke the Exception Handling Form to present messages/actio
 
 ## ViewModel, Commands, and Role Gating (Avalonia MVVM) [Ref: ../../App.axaml.cs]
 - ViewModel: WorkOrderTransactionViewModel exposes properties for fields above with INotifyDataErrorInfo validation and computed availability. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt]
-- Commands: ValidateWorkOrder, CheckAvailability, PostTransaction, Reset, OpenHistory, OpenReports, ApproveOverReceipt (Lead only). [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt]
+- Commands: ValidateWorkOrder, CheckAvailability, PostTransaction, Reset, OpenHistory, OpenReports, ApproveOverReceipt (Lead only), WorkOrder_Button_ResolveIncompletePartId (placeholder: uses WorkOrderId as seed and writes result back to placeholder until a Part field is added).
 - Role gating: enable/disable inputs and commands per role; always enforce server-side authorization to prevent elevation. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - VMFG Shared Library.txt]
 
 ## Integration Approach [Ref: ../../References/Visual CSV Database Dumps/MTMFG Procedure List.csv]
@@ -144,4 +144,4 @@ All exception paths invoke the Exception Handling Form to present messages/actio
 - View created: ../../Views/WorkOrderTransactionView.axaml
 - ViewModel created: ../../ViewModels/WorkOrderTransactionViewModel.cs
 - Open from MainView via NavigationService.OpenWorkOrderTransaction().
-- Commands are placeholders; VISUAL calls to be implemented in service layer; errors via IExceptionHandler.
+- Commands are placeholders; WorkOrder_Button_ResolveIncompletePartId uses IPartDialogService with a placeholder seed until a Part field is added; VISUAL calls to be implemented in service layer; errors via IExceptionHandler.

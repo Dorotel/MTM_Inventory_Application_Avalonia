@@ -3,7 +3,7 @@
 Purpose: provide a modal dialog to browse/filter/select a location for the current Item/Part during Inventory Transfer, with live header/footer descriptions.
 
 Global Rule — Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
 - Opens from Inventory Transfer when the user presses the Location button (F2) to pick either From or To location.
@@ -48,19 +48,22 @@ All methods must use centralized error handling (IExceptionHandler): wrap calls 
 - Cancel (Esc) ? Close without changes.
 
 ## ViewModel, Commands, and Role Gating
-- LocationPickerDialogViewModel properties
-  - UserName, ItemId, WarehouseId, SiteId.
-  - ApplyTo (From|To), Filters (Text, NonZeroOnly, CurrentWarehouseOnly, CurrentSiteOnly, BinType, LotSerial).
-  - Results (ObservableCollection<LocationBalanceDto>); SelectedRow.
-- Commands
-  - LocationPickerDialog_Button_Reload
-  - LocationPickerDialog_DataGrid_Select
+- LocationPickerDialogViewModel properties (current implementation)
+  - HeaderText (string)
+  - Filters_Text (string)
+  - Filters_NonZeroOnly (bool)
+  - Filters_CurrentWarehouseOnly (bool)
+  - Filters_CurrentSiteOnly (bool)
+  - Results (ObservableCollection<LocationBalanceDto>)
+  - SelectedRow (LocationBalanceDto?)
+- Commands (placeholders)
+  - LocationPickerDialog_Button_Select
   - LocationPickerDialog_Button_Cancel
 - Role gating
   - Read-Only: dialog is read-only; selection allowed.
 
 ## Integration Approach
-- InventoryTransferViewModel opens the dialog and receives the selected location; updates FromLocation or ToLocation accordingly.
+- InventoryTransferViewModel opens the dialog and receives the selected location; updates FromLocation or ToLocation accordingly (planned wiring).
 - Use DI to provide IInventoryService/IExceptionHandler; run GeneralQuery in a service layer.
 
 ## Keyboard and Scanner UX
@@ -70,9 +73,9 @@ All methods must use centralized error handling (IExceptionHandler): wrap calls 
 - Views
   - Views/Dialogs/LocationPickerDialog.axaml: header/footer labels; filters; DataGrid; ApplyTo toggle; Select/Cancel buttons.
 - ViewModels
-  - ViewModels/Dialogs/LocationPickerDialogViewModel.cs as above; INotifyDataErrorInfo for input validation.
+  - ViewModels/Dialogs/LocationPickerDialogViewModel.cs as above; INotifyDataErrorInfo for input validation (planned).
 - Services and DI
-  - IInventoryService (read model), IExceptionHandler; IClock for LastTxUtc display.
+  - ILocationService (read model), IExceptionHandler; IClock for LastTxUtc display.
 
 ## Testing and Acceptance Criteria
 - Opening from FromLocation context applies selection to FromLocation.

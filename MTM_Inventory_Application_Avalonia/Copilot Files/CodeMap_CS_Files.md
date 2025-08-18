@@ -24,9 +24,10 @@ Conventions used below
   - Initialize(): loads App.axaml resources
   - OnFrameworkInitializationCompleted():
     - Removes default data validation plugin (BindingPlugins.DataValidators.RemoveAt(0))
-    - Desktop: creates MainWindow, configures NavigationService with it, and navigates to Login overlay
+    - Registers Projektanker MaterialDesign icon provider (IconProvider.Current.Register<MaterialDesignIconProvider>())
+    - Desktop: creates Window host, configures NavigationService with it, and navigates to Login overlay
     - SingleView: creates MainView with MainViewModel
-- Dependencies: Views.MainWindow, Services.NavigationService, ViewModels.{MainViewModel}
+- Dependencies: Services.NavigationService, ViewModels.{MainViewModel}
 - Notes: All startup errors should be routed via centralized exception handling in UI flows; this file wires the shell only.
 
 ## MTM_Inventory_Application_Avalonia.Desktop/Program.cs
@@ -45,19 +46,20 @@ Conventions used below
   - ISessionContext, SessionContext
   - IAuthenticationService, AuthenticationService
   - INavigationService, NavigationService
+  - IPartDialogService, PartDialogService
 - Responsibilities:
   - Cross-cutting services and navigation host
-  - Dev placeholder authentication (Admin/Admin when Environment is Development)
+  - Dev placeholder authentication (Admin/Admin in Development)
   - Maintain and expose session info (user, site, warehouse, role)
-  - NavigationService ensures a single MainView is hosted in MainWindow and shows LoginView as an overlay via MainViewModel
-  - Feature navigation loads views into MainViewModel.CurrentView
+  - NavigationService ensures a single MainView is hosted in a Window and shows LoginView as an overlay via MainViewModel
+  - Feature navigation loads views into MainViewModel.CurrentView and injects IPartDialogService into feature view models
+  - PartDialogService opens IncompletePartDialog as a modal and returns a selected PartId
 - Key members:
-  - ExceptionHandler.Handle(ex, context): shows a modal ExceptionDialog (Window hosting Views.Dialogs.ExceptionDialog) with Message and Details; falls back to Debug.WriteLine if dialog fails
-  - Settings.Environment: string flag for Dev/Prod
-  - SessionContext.Logout(): clears session
-  - AuthenticationService.AuthenticateAsync(...): dev stub to set session
+  - ExceptionHandler.Handle(ex, context): shows modal ExceptionDialog with details
+  - AuthenticationService.AuthenticateAsync
   - NavigationService.Configure(window), NavigateToLogin(), NavigateToMain(), OpenInventoryTransfer(), OpenWorkOrderTransaction(), Exit()
-- Dependencies: Views (MainView, InventoryTransferView, WorkOrderTransactionView, Dialogs.ExceptionDialog), ViewModels, Avalonia lifetime
+  - PartDialogService.PickPartAsync(seed)
+- Dependencies: Views (MainView, InventoryTransferView, WorkOrderTransactionView, Dialogs.ExceptionDialog, Dialogs.IncompletePartDialog), ViewModels
 - Notes:
   - Uses EnsureMainView() to always host a single MainView instance
   - After successful login, calls MainViewModel.OnAuthenticated()
@@ -91,7 +93,7 @@ Conventions used below
     - Sets Window.SizeToContent = WidthAndHeight while login visible to match LoginView
     - On hide: restores previous sizing and dimensions if saved; if not available (NaN), sets SizeToContent = WidthAndHeight so the window sizes to the MainView base content
 - Dependencies: ViewModels.MainViewModel.IsLoginVisible
-- Notes: Ensures a smooth size transition for the window when switching between login and main UI. Handles initial NaN width/height correctly.
+- Notes: Smooth size transition for the window between login and main UI.
 
 ## MTM_Inventory_Application_Avalonia/ViewModels/MainViewModel.cs
 - Path: MTM_Inventory_Application_Avalonia/ViewModels/MainViewModel.cs
@@ -134,12 +136,13 @@ Conventions used below
 ## MTM_Inventory_Application_Avalonia/ViewModels/InventoryTransferViewModel.cs
 - Path: MTM_Inventory_Application_Avalonia/ViewModels/InventoryTransferViewModel.cs
 - Types: InventoryTransferViewModel : ObservableObject
-- Responsibilities: State and commands for inventory transfer flow (placeholders)
+- Responsibilities: State and commands for inventory transfer flow
 - Key members:
-  - Fields: ItemId, Quantity, FromLocation, ToLocation; labels WarehouseId, SiteId
-  - Commands: ValidateItem, CheckAvailabilityFrom, ShowLocationModal, PostTransfer, Reset
-- Dependencies: IExceptionHandler
-- Notes: All business actions are placeholders; future service adapters will call VISUAL.
+  - Fields: InventoryTransfer_TextBox_ItemId, Quantity, FromLocation, ToLocation; labels WarehouseId, SiteId
+  - Commands: ValidateItem, CheckAvailabilityFrom, ShowLocationModal, PostTransfer, Reset, ResolveIncompletePartId
+  - Property: IPartDialogService? PartDialog (injected)
+- Dependencies: IExceptionHandler, IPartDialogService
+- Notes: ResolveIncompletePartId opens IncompletePartDialog with seed text and updates ItemId with the selection.
 
 ## MTM_Inventory_Application_Avalonia/Views/WorkOrderTransactionView.axaml.cs
 - Path: MTM_Inventory_Application_Avalonia/Views/WorkOrderTransactionView.axaml.cs
@@ -153,8 +156,9 @@ Conventions used below
 - Responsibilities: State and commands for Issue/Receipt against Work Orders (placeholders)
 - Key members:
   - Fields: WorkOrderId, TransactionTypeIndex, Quantity, FromLocation, ToLocation; labels WarehouseId, SiteId
-  - Commands: ValidateWorkOrder, CheckAvailability, PostTransaction, Reset
-- Dependencies: IExceptionHandler
+  - Commands: ValidateWorkOrder, CheckAvailability, PostTransaction, Reset, ResolveIncompletePartId (placeholder uses WorkOrderId as seed until Part field is added)
+  - Property: IPartDialogService? PartDialog (injected)
+- Dependencies: IExceptionHandler, IPartDialogService
 - Notes: Placeholder implementations; VISUAL interactions to be added via service layer.
 
 ## MTM_Inventory_Application_Avalonia/Views/SettingsView.axaml.cs
@@ -201,38 +205,44 @@ Conventions used below
   - LocationBalanceDto (DTO)
 - Responsibilities: Provide filtering and selection of locations with inventory balances (placeholders)
 - Key members:
-  - Filters: text, NonZeroOnly, CurrentWarehouseOnly, CurrentSiteOnly
-  - Results: ObservableCollection<LocationBalanceDto>, SelectedRow
-  - Commands: Select, Cancel (placeholders)
+  - Properties: HeaderText; Filters_Text; Filters_NonZeroOnly; Filters_CurrentWarehouseOnly; Filters_CurrentSiteOnly; Results (ObservableCollection<LocationBalanceDto>); SelectedRow
+  - Commands: LocationPickerDialog_Button_Select; LocationPickerDialog_Button_Cancel
+- Dependencies: None (service integration for real search planned)
+- Notes: Selection logic and VISUAL-backed data loading to be implemented in service layer.
 
 ## MTM_Inventory_Application_Avalonia/Views/Dialogs/IncompletePartDialog.axaml.cs
 - Path: MTM_Inventory_Application_Avalonia/Views/Dialogs/IncompletePartDialog.axaml.cs
 - Types: IncompletePartDialog : UserControl
-- Responsibilities: Code-behind for a part search/selection dialog.
+- Responsibilities: Code-behind for the part search/selection dialog view XAML
+- Notes: Hosted by PartDialogService in a modal Window.
 
 ## MTM_Inventory_Application_Avalonia/ViewModels/Dialogs/IncompletePartDialogViewModel.cs
 - Path: MTM_Inventory_Application_Avalonia/ViewModels/Dialogs/IncompletePartDialogViewModel.cs
 - Types:
-  - IncompletePartDialogViewModel : ObservableObject
   - PartSearchResult (DTO)
-- Responsibilities: Provide search and selection of parts (placeholders)
+  - IncompletePartDialogViewModel : ObservableObject
+- Responsibilities: Provide seed-based suggestion list and selection/cancel events
 - Key members:
-  - Fields: SearchText, Results, SelectedPart
-  - Commands: Select, Cancel (placeholders)
+  - Properties: SearchText, Results, SelectedPart
+  - Events: OnSelected(string partId), OnCanceled()
+  - Commands: IncompletePartDialog_Button_Select, IncompletePartDialog_Button_Cancel
+  - Behavior: Seed-aware constructor preloads suggestions; SearchText change refreshes variants (placeholder)
+- Dependencies: None (service integration for real search planned)
 
-## MTM_Inventory_Application_Avalonia/Views/Dialogs/LoginView.axaml.cs (duplicate listed above)
-- See the LoginView section above.
+## MTM_Inventory_Application_Avalonia/Views/Dialogs/LoginView.axaml.cs
+- Path: MTM_Inventory_Application_Avalonia/Views/Dialogs/LoginView.axaml.cs
+- Types: LoginView : UserControl
+- Responsibilities: Code-behind for login dialog view XAML
+- Dependencies: ViewModels.Dialogs.LoginViewModel
 
 ## MTM_Inventory_Application_Avalonia/Converters/InverseBooleanConverter.cs
 - Path: MTM_Inventory_Application_Avalonia/Converters/InverseBooleanConverter.cs
 - Types: InverseBooleanConverter : IValueConverter
 - Responsibilities: Convert bool <-> inverted bool for bindings
-- Key members: Convert, ConvertBack (both logical negation when input is bool)
-- Notes: Used in MainView.axaml to hide the main layout when Login overlay is visible.
 
 ---
 
 Maintenance Rule
-- Whenever any .cs file is added, removed, renamed, or edited, update the corresponding section here in the same pull request/commit.
+- Whenever any .cs file is added, removed, renamed, or edited, update the corresponding section here in the same change set.
 - If a file is removed, keep its section under a “Removed” appendix with the date and replacement file, if any.
 - Validate that paths and types match the codebase after each change.

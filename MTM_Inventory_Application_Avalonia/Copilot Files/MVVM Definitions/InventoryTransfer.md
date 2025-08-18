@@ -3,7 +3,7 @@
 Purpose: define UI, validations, workflow, role gating, integration, storage, and configuration to implement Location-to-Location inventory transfers within the same warehouse in this Avalonia/.NET 8 application.
 
 Global Rule — Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope: transfers on-hand quantity for an Item/Part from a From Location to a To Location in the same warehouse; optimized for keyboard/barcode workflows; centralized exception handling and local reporting/logging.
 
@@ -77,7 +77,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 ## Incomplete Part ID window (secondary flow)
 - Trigger:
   - Automatically when Item/Part ID is missing/invalid or incomplete (e.g., prefix only), or
-  - Via explicit command (planned) from Inventory Transfer.
+  - Via explicit command from Inventory Transfer.
 - Behavior:
   - Dialog with a search box (supports prefix/contains), scan input, and results list (Part ID, Description, status).
   - Allows selecting a part to populate Item/Part ID on the main form.
@@ -107,7 +107,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
   - InventoryTransfer_Button_ShowLocationModalCommand
   - InventoryTransfer_Button_PostTransferCommand
   - InventoryTransfer_Button_ResetCommand
-  - ResolveIncompletePartId command is planned (not yet implemented).
+  - InventoryTransfer_Button_ResolveIncompletePartIdCommand (implemented, uses IPartDialogService to open Incomplete Part dialog and write back selection)
 - Role gating: enable/disable inputs and commands per role; Read-Only role cannot post or create/modify exception entries (client and server enforced).
 
 ## Integration Approach
@@ -122,7 +122,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 
 ## Keyboard and Scanner UX
 - Default focus: Item/Part ? Quantity ? From Location ? To Location.
-- Enter commits field; Esc closes dialogs; F2 opens Location dialog; F3 opens Incomplete Part window (planned).
+- Enter commits field; Esc closes dialogs; F2 opens Location dialog; F3 opens Incomplete Part window.
 - Support barcode scans into Item/Part and Locations; debounce lookups; in Location dialog, hitting Enter applies the highlighted row.
 
 ## UI Scaffolding (Avalonia 11)
@@ -146,7 +146,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 - Implement field behaviors per the screenshot highlights (reference only); no special color theming is required in the application.
 - Location button opens the Location dialog showing current locations for the entered Item/Part; selecting a row sets the active From/To location.
 - The two description strings render exactly as: "{UserName} Transfered from {FromLocation} using MTM-App." and "{UserName} Transfered to {ToLocation} using MTM-App." (updates live).
-- Incomplete Part ID window appears on invalid/incomplete Item/Part ID (planned) and allows selecting a valid Part ID.
+- Incomplete Part ID window appears on invalid/incomplete Item/Part ID and allows selecting a valid Part ID.
 - From Location ? To Location and both in WarehouseId; posting with equal or mismatched warehouse is blocked.
 - Posting blocked on insufficient on-hand; a not_enough_location row is created.
 - A local_tx_history row is created on successful transfer with tx_type = "Transfer" and extra_json as above.
@@ -160,4 +160,4 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 - View created: ../../Views/InventoryTransferView.axaml
 - ViewModel created: ../../ViewModels/InventoryTransferViewModel.cs
 - Open from MainView via NavigationService.OpenInventoryTransfer().
-- Commands implemented as listed; additional flows (ResolveIncompletePartId) are planned. Errors route through IExceptionHandler.
+- Commands implemented as listed; ResolveIncompletePartId wired to IPartDialogService. Errors route through IExceptionHandler.

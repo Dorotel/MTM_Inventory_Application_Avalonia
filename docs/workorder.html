@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Work Order Transactions — MTM Inventory Application</title>
+  <link rel="stylesheet" href="../UIX Template/assets/css/fontawesome-all.min.css" />
+  <link rel="stylesheet" href="../UIX Template/assets/css/main.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="is-preload with-sidebar">
+  <aside class="toc-sidebar">
+    <a class="logo" href="index.html"><img src="./Images/MTM_Logo.png" alt="MTM Logo" style="height:28px;width:auto;" /> <span>MTM Inventory App</span></a>
+    <h3>Contents</h3>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="platforms.html">Platforms</a></li>
+        <li><a href="visual-db-interactions.html">VISUAL DB Interactions</a></li>
+        <li><a href="rules.html">Global Rules and Platform</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="mainview.html">Main View</a></li>
+        <li><a href="inventory-transfer.html">Inventory Transfer</a></li>
+        <li><a href="workorder.html">Work Order Transactions</a></li>
+        <li><a href="dialogs.html">Supporting Dialogs</a></li>
+        <li><a href="errors.html">Exception Handling</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="mamp.html">App Database (MAMP)</a></li>
+        <li><a href="config.html">Configuration & Run</a></li>
+        <li><a href="advanced.html">Advanced</a></li>
+        <li><a href="future-updates.html">Future Updates</a></li>
+        <li><a href="links.html">Source Planning Docs</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <div id="page-wrap">
+    <article id="top" class="wrapper style1"><div class="container"><header><h1>Work Order Transactions (Issue/Receipt)</h1></header></div></article>
+    <main class="container">
+      <section class="panel" id="workorder">
+        <p>Purpose: issue material to a Work Order or receive completed quantity to stock.</p>
+        <div class="fig-grid"><figure><img src="./Images/WorkOrderTransactionView.png" alt="Work Order Transaction View mockup" /><figcaption>WorkOrderTransactionView.png</figcaption></figure></div>
+        <h3>What the user does</h3>
+        <ul>
+          <li>Choose a transaction type: Issue to WO or Receipt by WO.</li>
+          <li>Enter the Work Order ID, Quantity, and Location (From for Issue, To for Receipt).</li>
+          <li>Post the transaction.</li>
+        </ul>
+        <h3>What the app does</h3>
+        <ul>
+          <li>Validates the Work Order (status open/eligible, remaining qty, etc.).</li>
+          <li>Checks inventory availability for Issue, detects over-receipts for Receipt.</li>
+          <li>Posts the transaction via service adapters (VISUAL in production) and writes local exception/audit entries when applicable.</li>
+          <li>On errors (Closed WO, Not Enough @ From, Over Receipt), prompts via the Exception Dialog and logs to the app DB when appropriate.</li>
+        </ul>
+        <h3>Commands</h3>
+        <ul>
+          <li><strong>Validate Work Order</strong></li>
+          <li><strong>Check Availability</strong></li>
+          <li><strong>Post Transaction</strong></li>
+          <li><strong>Reset</strong></li>
+        </ul>
+      </section>
+    </main>
+    <article class="wrapper style4"><div class="container medium"><footer><ul id="copyright"><li>&copy; MTM Inventory Application.</li><li>Design base: HTML5 UP Template</li></ul></footer></div></article>
+  </div>
+  <script src="../UIX Template/assets/js/jquery.min.js"></script>
+  <script src="../UIX Template/assets/js/jquery.scrolly.min.js"></script>
+  <script src="../UIX Template/assets/js/browser.min.js"></script>
+  <script src="../UIX Template/assets/js/breakpoints.min.js"></script>
+  <script src="../UIX Template/assets/js/util.js"></script>
+  <script src="../UIX Template/assets/js/main.js"></script>
+  <script>(function(){var p=location.pathname.split('/').pop()||'workorder.html';document.querySelectorAll('.toc-sidebar nav a').forEach(function(a){var t=(a.getAttribute('href')||'').split('/').pop();if(t===p)a.classList.add('active');});})();</script>
+</body>
+</html>

@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels"
+             xmlns:ia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="MTM_Inventory_Application_Avalonia.Views.SettingsView"
              x:DataType="vm:SettingsViewModel">
@@ -10,39 +11,91 @@
     <vm:SettingsViewModel />
   </Design.DataContext>
 
-  <Grid Margin="16" RowDefinitions="Auto,Auto,*,Auto">
-    <TextBlock Grid.Row="0" Text="Settings" FontSize="20" FontWeight="SemiBold"/>
+  <Grid Margin="20" RowDefinitions="Auto,*,Auto">
+    <!-- Header -->
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+      <Viewbox Grid.Column="0" Width="36" Height="36" Stretch="Uniform">
+        <ia:Icon Value="mdi:cog-outline"/>
+      </Viewbox>
+      <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="Settings" FontSize="22" FontWeight="SemiBold"/>
+    </Grid>
 
-    <Grid Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="0,12,0,12">
-      <TextBlock Grid.Row="0" Grid.Column="0" Text="Environment" VerticalAlignment="Center"/>
+    <!-- Form -->
+    <Grid Grid.Row="1" ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="0,16,0,16">
+      <Grid.Styles>
+        <Style Selector="TextBox">
+          <Setter Property="Margin" Value="0,4"/>
+          <Setter Property="Padding" Value="8,6"/>
+          <Setter Property="MinWidth" Value="260"/>
+        </Style>
+        <Style Selector="ComboBox">
+          <Setter Property="Margin" Value="0,4"/>
+          <Setter Property="MinWidth" Value="200"/>
+        </Style>
+        <Style Selector="TextBlock.header">
+          <Setter Property="VerticalAlignment" Value="Center"/>
+          <Setter Property="Opacity" Value="0.9"/>
+          <Setter Property="Margin" Value="0,8,16,8"/>
+        </Style>
+      </Grid.Styles>
+
+      <TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Environment"/>
       <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="{Binding Settings_Combo_EnvironmentIndex}">
-        <ComboBoxItem Content="Development"/>
-        <ComboBoxItem Content="Production"/>
+        <ComboBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <ia:Icon Value="mdi:flask-outline" Width="16" Height="16"/>
+            <TextBlock Text="Development" VerticalAlignment="Center"/>
+          </StackPanel>
+        </ComboBoxItem>
+        <ComboBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <ia:Icon Value="mdi:office-building" Width="16" Height="16"/>
+            <TextBlock Text="Production" VerticalAlignment="Center"/>
+          </StackPanel>
+        </ComboBoxItem>
       </ComboBox>
 
-      <TextBlock Grid.Row="1" Grid.Column="0" Text="WarehouseId" VerticalAlignment="Center"/>
+      <TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="WarehouseId"/>
       <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Settings_Text_WarehouseId}"/>
 
-      <TextBlock Grid.Row="2" Grid.Column="0" Text="AppDb" VerticalAlignment="Center"/>
-      <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="8">
-        <TextBlock Text="{Binding Settings_Label_AppDbName}"/>
-        <Button Content="Test" Command="{Binding Settings_Button_TestAppDbCommand}"/>
+      <TextBlock Classes="header" Grid.Row="2" Grid.Column="0" Text="AppDb"/>
+      <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <ia:Icon Value="mdi:database" Width="18" Height="18"/>
+        <TextBlock Text="{Binding Settings_Label_AppDbName}" VerticalAlignment="Center"/>
+        <Button Command="{Binding Settings_Button_TestAppDbCommand}">
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <ia:Icon Value="mdi:check-network-outline" Width="16" Height="16"/>
+            <TextBlock Text="Test" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Button>
       </StackPanel>
 
-      <TextBlock Grid.Row="3" Grid.Column="0" Text="Session" VerticalAlignment="Center"/>
-      <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="16">
-        <TextBlock Text="User:"/>
-        <TextBlock Text="{Binding Settings_Label_SessionUser}"/>
-        <TextBlock Text="Site:" Margin="16,0,0,0"/>
-        <TextBlock Text="{Binding Settings_Label_SiteId}"/>
+      <TextBlock Classes="header" Grid.Row="3" Grid.Column="0" Text="Session"/>
+      <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+        <ia:Icon Value="mdi:account" Width="18" Height="18"/>
+        <TextBlock Text="User:" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding Settings_Label_SessionUser}" VerticalAlignment="Center"/>
+        <TextBlock Text="Site:" Margin="16,0,0,0" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding Settings_Label_SiteId}" VerticalAlignment="Center"/>
       </StackPanel>
 
       <CheckBox Grid.Row="4" Grid.Column="1" IsVisible="{Binding Settings_Toggle_IsDevVisible}" IsChecked="{Binding Settings_Toggle_DevLoginEnabled}" Content="Enable Dev Login (Admin/Admin)"/>
     </Grid>
 
-    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <Button Content="Save" Command="{Binding Settings_Button_SaveCommand}"/>
-      <Button Content="Cancel" Command="{Binding Settings_Button_CancelCommand}"/>
+    <!-- Actions -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+      <Button Command="{Binding Settings_Button_SaveCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <ia:Icon Value="mdi:content-save" Width="18" Height="18"/>
+          <TextBlock Text="Save" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
+      <Button Command="{Binding Settings_Button_CancelCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <ia:Icon Value="mdi:close-circle-outline" Width="18" Height="18"/>
+          <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
     </StackPanel>
   </Grid>
 </UserControl>

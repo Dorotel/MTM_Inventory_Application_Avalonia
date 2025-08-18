@@ -1,3 +1,9 @@
+# App — Shell, Startup, Navigation
+
+- MainWindow hosts MainView. Login overlay appears on start; Window auto-sizes to the active child (login vs content) and restores previous size after login.
+- Settings include a strict/assist toggle for incomplete part resolution; when enabled, the Parts-like dialog opens; when disabled, an error is shown.
+- All VISUAL calls are performed by service adapters; UI remains UI-only and routes errors via IExceptionHandler.
+
 # App.axaml — Planning and Integration Notes
 
 Purpose

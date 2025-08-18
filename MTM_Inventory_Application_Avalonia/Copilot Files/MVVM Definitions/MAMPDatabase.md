@@ -13,7 +13,7 @@ Database names
 - Selection: see README Configuration for connection strings and environment overrides.
 
 No overlap with VISUAL tables
-- Verified against References/Visual CSV Database Dumps/DatabaseTables.csv and MTMFG Tables.csv: none of the app tables below exist in the MTMFG schema. All names are application-specific to avoid collisions.
+- Verified against CSV dumps: none of the app tables below exist in the MTMFG schema. All names are application-specific to avoid collisions.
 
 Tables (dialect-agnostic DDL illustrated)
 
@@ -142,11 +142,9 @@ Environment and connections
   - INVENTORY__ENVIRONMENT, INVENTORY__CONNECTIONSTRINGS__APPDB, INVENTORY__CONNECTIONSTRINGS__APPDBTEST, INVENTORY__WAREHOUSEID
 
 References
-- README.md (Configuration section)
-- ExceptionHandling.md (logging model)
-- WorkOrderTransaction.md (Reporting Hooks)
-- Visual CSVs (no-conflict verification):
-  - ../References/Visual CSV Database Dumps/DatabaseTables.csv
-  - ../References/Visual CSV Database Dumps/MTMFG Tables.csv
-  - ../References/Visual CSV Database Dumps/MTMFG Relationships.csv (context only; no FKs to app DB)
-  - ../References/Visual CSV Database Dumps/MTMFG Procedure List.csv (context only)  - ../References/Visual CSV Database Dumps/MTMFG Procedure List.csv (context only)
+- ../../README.md (Configuration section)
+- ./ExceptionHandling.md (logging model)
+- ./WorkOrderTransaction.md (Reporting Hooks)
+- ../../References/Visual CSV Database Dumps/MTMFG Tables.csv
+- ../../References/Visual CSV Database Dumps/MTMFG Relationships.csv
+- ../../References/Visual CSV Database Dumps/MTMFG Procedure List.csv

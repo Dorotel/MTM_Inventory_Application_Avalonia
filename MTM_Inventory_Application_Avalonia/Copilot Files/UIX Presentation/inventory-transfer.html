@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inventory Transfer — MTM Inventory Application</title>
+  <link rel="stylesheet" href="../UIX Template/assets/css/fontawesome-all.min.css" />
+  <link rel="stylesheet" href="../UIX Template/assets/css/main.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="is-preload with-sidebar">
+  <aside class="toc-sidebar">
+    <a class="logo" href="index.html"><img src="./Images/MTM_Logo.png" alt="MTM Logo" style="height:initial;width:initial;" /> <span>MTM Inventory App</span></a>
+    <h3>Contents</h3>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="platforms.html">Platforms</a></li>
+        <li><a href="visual-db-interactions.html">VISUAL DB Interactions</a></li>
+        <li><a href="rules.html">Global Rules and Platform</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="mainview.html">Main View</a></li>
+        <li><a href="inventory-transfer.html">Inventory Transfer</a></li>
+        <li><a href="workorder.html">Work Order Transactions</a></li>
+        <li><a href="dialogs.html">Supporting Dialogs</a></li>
+        <li><a href="errors.html">Exception Handling</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="mamp.html">App Database (MAMP)</a></li>
+        <li><a href="config.html">Configuration & Run</a></li>
+        <li><a href="advanced.html">Advanced</a></li>
+        <li><a href="future-updates.html">Future Updates</a></li>
+        <li><a href="links.html">Source Planning Docs</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <div id="page-wrap">
+    <article id="top" class="wrapper style1"><div class="container"><header><h1>Inventory Transfer</h1></header></div></article>
+    <main class="container">
+      <section class="panel" id="inventory-transfer">
+        <p>Purpose: move on-hand inventory for a Part from one location to another within the same warehouse.</p>
+        <div class="fig-grid"><figure><img src="./Images/InventoryTransferView.png" alt="Inventory Transfer View mockup" /><figcaption>InventoryTransferView.png</figcaption></figure></div>
+        <h3>What the user does</h3>
+        <ul>
+          <li>Enter Part (Item) ID, Quantity, From Location, and To Location.</li>
+          <li>Use the Location Picker dialog to find a location, if needed.</li>
+          <li>Post the transfer.</li>
+        </ul>
+        <h3>What the app does</h3>
+        <ul>
+          <li>Validates fields (required, positive quantity, different From/To, same warehouse).</li>
+          <li>Checks available quantity at the From Location.</li>
+          <li>Posts a transfer using a service adapter (VISUAL call in production), then records a local audit entry.</li>
+          <li>On any error, opens the Exception Dialog with context and details.</li>
+        </ul>
+        <h3>Commands</h3>
+        <ul>
+          <li><strong>Validate Item</strong></li>
+          <li><strong>Check Availability (From)</strong></li>
+          <li><strong>Show Location Modal</strong></li>
+          <li><strong>Post Transfer</strong></li>
+          <li><strong>Reset</strong></li>
+        </ul>
+      </section>
+    </main>
+    <article class="wrapper style4"><div class="container medium"><footer><ul id="copyright"><li>&copy; MTM Inventory Application.</li><li>Design base: HTML5 UP Template</li></ul></footer></div></article>
+  </div>
+  <script src="../UIX Template/assets/js/jquery.min.js"></script>
+  <script src="../UIX Template/assets/js/jquery.scrolly.min.js"></script>
+  <script src="../UIX Template/assets/js/browser.min.js"></script>
+  <script src="../UIX Template/assets/js/breakpoints.min.js"></script>
+  <script src="../UIX Template/assets/js/util.js"></script>
+  <script src="../UIX Template/assets/js/main.js"></script>
+  <script>(function(){var p=location.pathname.split('/').pop()||'inventory-transfer.html';document.querySelectorAll('.toc-sidebar nav a').forEach(function(a){var t=(a.getAttribute('href')||'').split('/').pop();if(t===p)a.classList.add('active');});})();</script>
+</body>
+</html>

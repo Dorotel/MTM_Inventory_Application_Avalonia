@@ -11,7 +11,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 ## Scope
 - Desktop application using Avalonia 11 on .NET 8.
 - Functional/technical specs in Copilot Files reference artifacts in References via relative paths.
-- Features include: Login, Work Order transactions, Inventory Transfer, centralized Exception Handling, and app-owned database schema (MAMP).
+- Features include: Login, Work Order transactions, Inventory Transfer, centralized Exception Handling, Incomplete Part dialog, and app-owned database schema (MAMP).
 - Note: UOM (unit of measure) is not used in production; all UOM fields and references have been removed from the UI and planning documents.
 
 ## Platform
@@ -22,7 +22,13 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Shell wiring
 - Specs drive the feature View/ViewModel scaffolding; map ViewModels to Views via DataTemplates in App.axaml when applicable.
-- On app start, the desktop shell opens MainWindow and shows MainView hosting a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See Copilot Files/MVVM Definitions/LoginScreen.md and ExceptionHandling.md.
+- On app start, the desktop shell opens a Window that hosts MainView and shows a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See Copilot Files/MVVM Definitions/LoginScreen.md and ExceptionHandling.md.
+
+### Dialogs and selection flows
+- Incomplete Part dialog
+  - IPartDialogService provides PickPartAsync(seed) which shows Views/Dialogs/IncompletePartDialog as a modal and returns a selected PartId string or null.
+  - InventoryTransferViewModel binds a button (InventoryTransfer_Button_ResolveIncompletePartId) that calls IPartDialogService and writes the chosen PartId back to InventoryTransfer_TextBox_ItemId.
+  - WorkOrderTransactionViewModel exposes WorkOrder_Button_ResolveIncompletePartId (placeholder: seeds from WorkOrder_TextBox_WorkOrderId and writes it back; replace with Part field when added).
 
 ## Code Naming and Error Handling Rules
 - File naming: {Type}_{Parent}_{Name}
@@ -32,9 +38,8 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## New Rule — VISUAL business logic placeholders (Views and ViewModels)
 - When creating or updating Views and ViewModels, only incorporate placeholders for business logic that refers to VISUAL.
-- Do not call Vmfg*.dll assemblies or Dbms.OpenLocal/OpenLocalSSO directly from UI layers; instead depend on interfaces (e.g., IInventoryService, IAuthenticationService) with stubbed placeholder implementations.
+- Do not call Vmfg*.dll assemblies or Dbms.OpenLocal/OpenLocalSSO directly from UI layers; instead depend on interfaces (e.g., IInventoryService, IAuthenticationService, IPartDialogService) with stubbed placeholder implementations.
 - Keep try/catch in all UI-invoked methods and route errors through the centralized IExceptionHandler; mark real VISUAL calls with TODOs to be implemented in service adapters later.
-- Visual API specifics remain documented in the UI Planning .md files and will be implemented in service layers, not in Views/ViewModels.
 
 ### Development login
 - In Development environment, the placeholder AuthenticationService accepts Username: Admin and Password: Admin for testing. This path sets a demo session and navigates to MainView. In Production, replace with VISUAL-backed authentication per LoginScreen.md.
@@ -45,11 +50,11 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - InventoryTransfer.md — location-to-location transfer form spec; dialogs and validations; reporting hooks.
 - WorkOrderTransaction.md — WO Issue/Receipt spec; validations, exceptions and reporting hooks.
 - LocationPickerDialog.md — modal locations browser used by InventoryTransfer.
-- IncompletePartDialog.md — resolve incomplete/invalid Part IDs.
+- IncompletePartDialog.md — resolve incomplete/invalid Part IDs (now seeded from callers via IPartDialogService).
 - ExceptionHandling.md — centralized error handling form and service model.
-- ExceptionDialog.md — modal dialog UI spec for blocking errors.
 - MAMPDatabase.md — app-owned database schema (settings, audits, exception logs).
 - Settings.md — in-app Settings view spec (environment, WarehouseId, app DB testing).
+- Icons.md — provider registration and usage for Projektanker.Icons.Avalonia (MaterialDesign pack).
 
 ## Citation Rule (applies to all specs)
 - When a statement needs a reference, look through:
@@ -159,8 +164,9 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
     - WorkOrderTransaction.md (form spec)
     - InventoryTransfer.md (form spec)
     - LoginScreen.md (startup login/auth spec)
-    - ExceptionHandling.md (centralized error handling form spec)
+    - ExceptionHandling.md (centralized error handling form and service model)
     - MAMPDatabase.md (app-owned database schema and usage)
+    - Icons.md (icon provider registration and usage)
 - References/
   - Visual CSV Database Dumps/ (MTMFG Tables.csv, MTMFG Relationships.csv, MTMFG Procedure List.csv)
   - Visual DLL & Config Files/ (Database.config, Vmfg*.dll, Lsa*.dll, VmfgTrace.dll)
@@ -203,7 +209,6 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Run (desktop)
 - dotnet run --project MTM_Inventory_Application_Avalonia.Desktop
-
 ## Reevaluation (latest)
 - This README was reverified against the Text Conversion sources and CSV/Config folders.
 - Changes from previous version:
@@ -214,3 +219,4 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
   - Centralized MAMP database details into MAMPDatabase.md and referenced it from specs.
   - Clarified shell wiring and startup behavior to reflect Login overlay inside MainView.
   - Added the “Update All .md Files” rule.
+  - Added Icons.md with guidance for Projektanker.Icons.Avalonia registration and usage.

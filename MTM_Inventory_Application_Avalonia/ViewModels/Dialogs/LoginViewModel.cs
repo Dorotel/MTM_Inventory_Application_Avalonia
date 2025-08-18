@@ -62,6 +62,12 @@ public partial class LoginViewModel : ObservableObject
         try
         {
             IsBusy = true;
+
+            if (string.IsNullOrWhiteSpace(LoginViewModel_TextBox_Username))
+                throw new InvalidOperationException("Username is required.");
+            if (string.IsNullOrWhiteSpace(LoginViewModel_TextBox_Password))
+                throw new InvalidOperationException("Password is required.");   
+
             var ok = await _auth.AuthenticateAsync(LoginViewModel_TextBox_Username, LoginViewModel_TextBox_Password, LoginViewModel_TextBox_SiteOrDomain);
             if (ok)
             {

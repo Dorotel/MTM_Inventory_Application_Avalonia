@@ -126,6 +126,62 @@ public class AuthenticationService : IAuthenticationService
     }
 }
 
+public interface IPartDialogService
+{
+    Task<string?> PickPartAsync(string seed);
+}
+
+public class PartDialogService : IPartDialogService
+{
+    public async Task<string?> PickPartAsync(string seed)
+    {
+        var tcs = new TaskCompletionSource<string?>();
+
+        var vm = new IncompletePartDialogViewModel(seed);
+        vm.OnSelected += partId =>
+        {
+            tcs.TrySetResult(partId);
+            CloseHostingWindow(vm);
+        };
+        vm.OnCanceled += () =>
+        {
+            tcs.TrySetResult(null);
+            CloseHostingWindow(vm);
+        };
+
+        var dialog = new IncompletePartDialog { DataContext = vm };
+        var window = new Window
+        {
+            Title = "Find Part",
+            Width = 720,
+            Height = 480,
+            Content = dialog
+        };
+
+        var lifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+        if (lifetime?.MainWindow is Window owner)
+        {
+            await window.ShowDialog(owner);
+        }
+        else
+        {
+            window.Show();
+        }
+
+        return await tcs.Task;
+    }
+
+    private static void CloseHostingWindow(object vm)
+    {
+        // Attempt to find the window hosting the dialog via focused window
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime d && d.MainWindow is Window owner)
+        {
+            // If a modal dialog is open, try to close the focused window
+            owner?.OwnedWindows?[owner.OwnedWindows.Count - 1]?.Close();
+        }
+    }
+}
+
 public interface INavigationService
 {
     void Configure(Window? mainWindow);
@@ -145,6 +201,7 @@ public class NavigationService : INavigationService
     private readonly ISettings _settings = new Settings();
     private readonly ISessionContext _session = new SessionContext();
     private IAuthenticationService? _auth;
+    private readonly IPartDialogService _partDialog = new PartDialogService();
 
     private MainView? _mainView;
     private MainViewModel? _mainVm;
@@ -186,6 +243,9 @@ public class NavigationService : INavigationService
             _mainVm.CurrentView = new InventoryTransferView
             {
                 DataContext = new InventoryTransferViewModel(_exceptionHandler)
+                {
+                    PartDialog = _partDialog
+                }
             };
         }
     }
@@ -198,6 +258,9 @@ public class NavigationService : INavigationService
             _mainVm.CurrentView = new WorkOrderTransactionView
             {
                 DataContext = new WorkOrderTransactionViewModel(_exceptionHandler)
+                {
+                    PartDialog = _partDialog
+                }
             };
         }
     }

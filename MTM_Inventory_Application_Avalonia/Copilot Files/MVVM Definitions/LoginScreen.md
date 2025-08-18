@@ -14,7 +14,7 @@ Purpose
 - Define the startup login experience for authenticating a user with Infor Visual credentials before opening the main application UI.
 
 Global Rule — Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Screenshot highlighting (reference only)
 - Any colors shown in screenshots are illustrative callouts to indicate field roles/sections; they do not define application theming. Implement standard app styling.
@@ -89,7 +89,7 @@ UI Scaffolding (Avalonia 11)
 Citations (page and line)
 - Visual shared settings and site context: Reference - VMFG Shared Library.txt, p.55 — ApplGlobal properties list (see also p.78 MultiSite; p.84 SiteID; p.86 SystemCurrencyID).
 - Authentication connection behaviors: Intro - Development Guide.txt, p.13 — “Connection information is obtained from the Database.Config file.” (OpenLocal); p.14 — OpenLocalSSO with user/domain SIDs; Reference - Core.txt, p.33–37 — Dbms.OpenLocal overloads; p.48 — Dbms.UserID.
-- Work order/shop-floor login relevance: Reference - Shop Floor.txt, p.98–100 — GetWorkOrderSummary service (post?login usage scenario).
+- Work order/shop-floor login relevance: Reference - Shop Floor.txt, p.98–100 — GetWorkOrderSummary service (post-login usage scenario).
 
 References
 - ../../References/Visual DLL & Config Files/Database.config
@@ -105,3 +105,20 @@ References
 - ViewModel created: ../../ViewModels/Dialogs/LoginViewModel.cs
 - Navigation: App starts at Login overlay via NavigationService.NavigateToLogin(); on success, NavigateToMain() hides the overlay and keeps MainView active.
 - Development login: Username=Admin, Password=Admin accepted when Environment=Development (see README.md).
+
+# Login Screen — Planning Specification [Ref: ../UIX Presentation/login.html]
+
+Purpose: authenticate then hide overlay and continue in MainView.
+
+Global Rule — Visual license lifecycle
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes.
+
+Shell wiring
+- LoginView is shown as an overlay inside MainView. MainView sizes the Window to fit the overlay while visible and restores previous Manual size when hidden.
+
+UX rules
+- Minimal form: Username, Password, Site/Domain; Enter to submit; Esc cancels/clears in dev.
+- Buttons keep text within their bounds; use icon+text stacks when applicable.
+
+Error handling
+- All UI methods use try/catch and route through IExceptionHandler.

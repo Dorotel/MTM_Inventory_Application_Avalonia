@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels"
              xmlns:dialogs="clr-namespace:MTM_Inventory_Application_Avalonia.Views.Dialogs"
              xmlns:conv="clr-namespace:MTM_Inventory_Application_Avalonia.Converters"
+             xmlns:ia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="600"
              x:Class="MTM_Inventory_Application_Avalonia.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -16,42 +17,71 @@
     <!-- Main layout (side panel + content) -->
     <Grid x:Name="MainLayoutRoot"
           IsVisible="{Binding IsLoginVisible, Converter={x:Static conv:InverseBooleanConverter.Instance}}"
-          Margin="16" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+          Margin="20" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
       <!-- Header / Greeting -->
-      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
-        <TextBlock Grid.Column="0" Text="{Binding Greeting}" FontSize="24" FontWeight="SemiBold"/>
+      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+        <Viewbox Grid.Column="0" Width="32" Height="32" Stretch="Uniform">
+          <ia:Icon Value="mdi:view-dashboard-outline"/>
+        </Viewbox>
+        <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="{Binding Greeting}" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" HorizontalAlignment="Right" VerticalAlignment="Center">
-          <TextBlock Text="User:" Opacity="0.7"/>
-          <TextBlock Text="{Binding SessionUser}"/>
-          <TextBlock Text="Site:" Opacity="0.7" Margin="12,0,0,0"/>
-          <TextBlock Text="{Binding SiteId}"/>
-          <TextBlock Text="Warehouse:" Opacity="0.7" Margin="12,0,0,0"/>
-          <TextBlock Text="{Binding WarehouseId}"/>
+          <ia:Icon Value="mdi:account" Width="18" Height="18"/>
+          <TextBlock Text="User:" Opacity="0.7" VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding SessionUser}" VerticalAlignment="Center"/>
+          <TextBlock Text="Site:" Opacity="0.7" Margin="12,0,0,0" VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding SiteId}" VerticalAlignment="Center"/>
+          <TextBlock Text="Warehouse:" Opacity="0.7" Margin="12,0,0,0" VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding WarehouseId}" VerticalAlignment="Center"/>
         </StackPanel>
       </Grid>
 
       <!-- Main area: Left collapsible side panel + Right content host -->
-      <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+      <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Margin="0,12,0,12">
         <!-- Side panel -->
         <Border Background="{DynamicResource ThemeBackgroundBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="0,1,1,1">
-          <StackPanel Width="220" IsVisible="{Binding IsMenuOpen}" Margin="0,8,8,8" Spacing="8">
-            <Button Content="Settings" Command="{Binding MainView_Button_OpenSettingsCommand}"/>
-            <Button Content="Inventory Transfer (Alt+I)" Command="{Binding MainView_Button_OpenInventoryTransferCommand}" IsEnabled="{Binding CanOpenInventoryTransfer}"/>
-            <Button Content="Work Order Transaction (Alt+W)" Command="{Binding MainView_Button_OpenWorkOrderTransactionCommand}" IsEnabled="{Binding CanOpenWorkOrderTransaction}"/>
+          <StackPanel Width="240" IsVisible="{Binding IsMenuOpen}" Margin="0,12,12,12" Spacing="10">
+            <Button Command="{Binding MainView_Button_OpenSettingsCommand}">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <ia:Icon Value="mdi:cog-outline" Width="18" Height="18"/>
+                <TextBlock Text="Settings" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button>
+            <Button Command="{Binding MainView_Button_OpenInventoryTransferCommand}" IsEnabled="{Binding CanOpenInventoryTransfer}">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <ia:Icon Value="mdi:swap-horizontal" Width="18" Height="18"/>
+                <TextBlock Text="Inventory Transfer (Alt+I)" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button>
+            <Button Command="{Binding MainView_Button_OpenWorkOrderTransactionCommand}" IsEnabled="{Binding CanOpenWorkOrderTransaction}">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <ia:Icon Value="mdi:clipboard-list-outline" Width="18" Height="18"/>
+                <TextBlock Text="Work Order Transaction (Alt+W)" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button>
           </StackPanel>
         </Border>
 
         <!-- Right: content host -->
-        <Grid Grid.Column="1" Margin="8,8,0,8">
+        <Grid Grid.Column="1" Margin="12,12,0,12">
           <ContentControl Content="{Binding CurrentView}"/>
         </Grid>
       </Grid>
 
       <!-- Footer: menu toggle and logout -->
-      <Grid Grid.Row="2" ColumnDefinitions="Auto,*">
-        <ToggleButton Grid.Column="0" Content="Toggle Menu" IsChecked="{Binding IsMenuOpen}"/>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-          <Button Content="Logout (Alt+L)" Command="{Binding MainView_Button_LogoutCommand}"/>
+      <Grid Grid.Row="2" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+        <ToggleButton Grid.Column="0" IsChecked="{Binding IsMenuOpen}">
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <ia:Icon Value="mdi:menu" Width="16" Height="16"/>
+            <TextBlock Text="Toggle Menu" VerticalAlignment="Center"/>
+          </StackPanel>
+        </ToggleButton>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+          <Button Command="{Binding MainView_Button_LogoutCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <ia:Icon Value="mdi:logout" Width="16" Height="16"/>
+              <TextBlock Text="Logout (Alt+L)" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
         </StackPanel>
       </Grid>
     </Grid>

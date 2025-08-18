@@ -3,34 +3,64 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels.Dialogs"
+        xmlns:ia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         mc:Ignorable="d"
         x:Class="MTM_Inventory_Application_Avalonia.Views.Dialogs.LoginView"
-			        d:DesignWidth="500" d:DesignHeight="300"
+		        d:DesignWidth="500" d:DesignHeight="320"
         x:DataType="vm:LoginViewModel">
   <Design.DataContext>
     <vm:LoginViewModel />
   </Design.DataContext>
 
-  <Grid Margin="16" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
-    <StackPanel Grid.Row="0" Spacing="6">
-      <TextBlock Text="Sign in" FontSize="20" FontWeight="SemiBold"/>
-      <TextBlock Text="Enter your Visual credentials" Opacity="0.8"/>
-    </StackPanel>
-
-    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" Margin="0,12,0,12">
-      <TextBlock Grid.Row="0" Margin="0,0,25,0" Grid.Column="0" Text="Username" VerticalAlignment="Center"/>
-      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Username}" MinWidth="220"/>
-
-      <TextBlock Grid.Row="1" Grid.Column="0" Text="Password" VerticalAlignment="Center" Margin="0,8,0,0"/>
-      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Password}" Margin="0,8,0,0"/>
-
-      <TextBlock Grid.Row="2" Grid.Column="0" Text="Site/Domain" VerticalAlignment="Center" Margin="0,8,0,0"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_SiteOrDomain}" Margin="0,8,0,0"/>
+  <Grid Margin="20" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+    <!-- Header -->
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+      <Viewbox Grid.Column="0" Width="28" Height="28" Stretch="Uniform">
+        <ia:Icon Value="mdi:login"/>
+      </Viewbox>
+      <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2">
+        <TextBlock Text="Sign in" FontSize="20" FontWeight="SemiBold"/>
+        <TextBlock Text="Enter your Visual credentials" Opacity="0.8"/>
+      </StackPanel>
     </Grid>
 
-    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <Button Content="Login" Command="{Binding LoginViewModel_Button_LoginCommand}"/>
-      <Button Content="Cancel" Command="{Binding LoginViewModel_Button_CancelCommand}"/>
+    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="160,*" Margin="0,12,0,12">
+      <Grid.Styles>
+        <Style Selector="TextBox">
+          <Setter Property="Margin" Value="0,4"/>
+          <Setter Property="Padding" Value="8,6"/>
+          <Setter Property="MinWidth" Value="240"/>
+        </Style>
+        <Style Selector="TextBlock.header">
+          <Setter Property="VerticalAlignment" Value="Center"/>
+          <Setter Property="Opacity" Value="0.9"/>
+          <Setter Property="Margin" Value="0,8,16,8"/>
+        </Style>
+      </Grid.Styles>
+
+      <TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Username"/>
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Username}"/>
+
+      <TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="Password"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Password}"/>
+
+      <TextBlock Classes="header" Grid.Row="2" Grid.Column="0" Text="Site/Domain"/>
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_SiteOrDomain}"/>
+    </Grid>
+
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+      <Button Command="{Binding LoginViewModel_Button_LoginCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <ia:Icon Value="mdi:login" Width="16" Height="16"/>
+          <TextBlock Text="Login" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
+      <Button Command="{Binding LoginViewModel_Button_CancelCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <ia:Icon Value="mdi:close-circle-outline" Width="16" Height="16"/>
+          <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
     </StackPanel>
   </Grid>
 </UserControl>

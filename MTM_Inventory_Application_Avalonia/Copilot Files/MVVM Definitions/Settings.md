@@ -3,7 +3,7 @@
 Purpose: define an in-app Settings UI for environment and app-owned configuration (warehouse, environment mode, non-Visual DB connection), with placeholders for any VISUAL-dependent reads.
 
 Global Rule — Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
 
 Scope
 - Manage app-owned settings and runtime toggles that are safe to configure without contacting VISUAL.
@@ -60,7 +60,13 @@ Environment/Configuration keys (from README)
 
 ## ViewModel, Commands, and Role Gating
 - SettingsViewModel properties
-  - Environment (string enum via Settings_Combo_EnvironmentIndex), WarehouseId (string), AppDbName (string ro), SessionUser (ro), SiteId (ro), DevLoginEnabled (bool, Development only), IsDevVisible (bool ro from Environment).
+  - Settings_Combo_EnvironmentIndex (int)
+  - Settings_Text_WarehouseId (string)
+  - Settings_Label_AppDbName (string)
+  - Settings_Label_SessionUser (string)
+  - Settings_Label_SiteId (string)
+  - Settings_Toggle_IsDevVisible (bool)
+  - Settings_Toggle_DevLoginEnabled (bool)
 - Commands
   - Settings_Button_Save — persists changes (placeholder); prompts restart if Environment changed.
   - Settings_Button_Cancel — discards changes.

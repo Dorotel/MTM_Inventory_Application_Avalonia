@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MTM_Inventory_Application_Avalonia.ViewModels"
+             xmlns:ia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="MTM_Inventory_Application_Avalonia.Views.WorkOrderTransactionView"
              x:DataType="vm:WorkOrderTransactionViewModel"
@@ -11,40 +12,103 @@
     <vm:WorkOrderTransactionViewModel />
   </Design.DataContext>
 
-  <Grid Margin="16" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
-    <TextBlock Grid.Row="0" Text="Work Order Transaction" FontSize="20" FontWeight="SemiBold"/>
-
-    <Grid Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,12,0,12">
-      <TextBlock Grid.Row="0" Grid.Column="0" Text="Work Order" VerticalAlignment="Center"/>
-      <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding WorkOrder_TextBox_WorkOrderId}"/>
-
-      <TextBlock Grid.Row="1" Grid.Column="0" Text="Transaction Type" VerticalAlignment="Center"/>
-      <ComboBox  Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding WorkOrder_ComboBox_TransactionTypeIndex}">
-        <ComboBoxItem Content="Issue"/>
-        <ComboBoxItem Content="Receipt"/>
-      </ComboBox>
-
-      <TextBlock Grid.Row="2" Grid.Column="0" Text="Quantity" VerticalAlignment="Center"/>
-      <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding WorkOrder_TextBox_Quantity}"/>
-
-      <TextBlock Grid.Row="3" Grid.Column="0" Text="From Location" VerticalAlignment="Center"/>
-      <TextBox   Grid.Row="3" Grid.Column="1" Text="{Binding WorkOrder_TextBox_FromLocation}"/>
-
-      <TextBlock Grid.Row="4" Grid.Column="0" Text="To Location" VerticalAlignment="Center"/>
-      <TextBox   Grid.Row="4" Grid.Column="1" Text="{Binding WorkOrder_TextBox_ToLocation}"/>
-
-      <TextBlock Grid.Row="5" Grid.Column="0" Text="Warehouse" VerticalAlignment="Center"/>
-      <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding WorkOrder_Label_WarehouseId}"/>
-
-      <TextBlock Grid.Row="6" Grid.Column="0" Text="Site" VerticalAlignment="Center"/>
-      <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding WorkOrder_Label_SiteId}"/>
+  <Grid Margin="20" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+    <!-- Header with icon -->
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+      <Viewbox Grid.Column="0" Width="40" Height="40" Stretch="Uniform">
+        <ia:Icon Value="mdi:clipboard-list-outline"/>
+      </Viewbox>
+      <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="Work Order Transaction" FontSize="22" FontWeight="SemiBold"/>
     </Grid>
 
-    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <Button Content="Validate WO" Command="{Binding WorkOrder_Button_ValidateWorkOrderCommand}"/>
-      <Button Content="Check Availability" Command="{Binding WorkOrder_Button_CheckAvailabilityCommand}"/>
-      <Button Content="Post" Command="{Binding WorkOrder_Button_PostTransactionCommand}"/>
-      <Button Content="Reset" Command="{Binding WorkOrder_Button_ResetCommand}"/>
+    <!-- Form -->
+    <Grid Grid.Row="1" ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,16,0,16">
+      <Grid.Styles>
+        <Style Selector="TextBox">
+          <Setter Property="Margin" Value="0,4"/>
+          <Setter Property="Padding" Value="8,6"/>
+          <Setter Property="MinWidth" Value="260"/>
+        </Style>
+        <Style Selector="ComboBox">
+          <Setter Property="Margin" Value="0,4"/>
+          <Setter Property="MinWidth" Value="200"/>
+        </Style>
+        <Style Selector="TextBlock.header">
+          <Setter Property="VerticalAlignment" Value="Center"/>
+          <Setter Property="Opacity" Value="0.9"/>
+          <Setter Property="Margin" Value="0,8,16,8"/>
+        </Style>
+      </Grid.Styles>
+
+      <TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Work Order"/>
+      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <TextBox   Text="{Binding WorkOrder_TextBox_WorkOrderId}" Width="260"/>
+        <Button Command="{Binding WorkOrder_Button_ResolveIncompletePartIdCommand}">
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <ia:Icon Value="mdi:magnify" Width="18" Height="18"/>
+            <TextBlock Text="Find" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Button>
+      </StackPanel>
+
+      <TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="Transaction Type"/>
+      <ComboBox  Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding WorkOrder_ComboBox_TransactionTypeIndex}">
+        <ComboBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <ia:Icon Value="mdi:arrow-collapse-left" Width="16" Height="16"/>
+            <TextBlock Text="Issue"/>
+          </StackPanel>
+        </ComboBoxItem>
+        <ComboBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <ia:Icon Value="mdi:arrow-expand-right" Width="16" Height="16"/>
+            <TextBlock Text="Receipt"/>
+          </StackPanel>
+        </ComboBoxItem>
+      </ComboBox>
+
+      <TextBlock Classes="header" Grid.Row="2" Grid.Column="0" Text="Quantity"/>
+      <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding WorkOrder_TextBox_Quantity}"/>
+
+      <TextBlock Classes="header" Grid.Row="3" Grid.Column="0" Text="From Location"/>
+      <TextBox   Grid.Row="3" Grid.Column="1" Text="{Binding WorkOrder_TextBox_FromLocation}"/>
+
+      <TextBlock Classes="header" Grid.Row="4" Grid.Column="0" Text="To Location"/>
+      <TextBox   Grid.Row="4" Grid.Column="1" Text="{Binding WorkOrder_TextBox_ToLocation}"/>
+
+      <TextBlock Classes="header" Grid.Row="5" Grid.Column="0" Text="Warehouse"/>
+      <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding WorkOrder_Label_WarehouseId}" VerticalAlignment="Center"/>
+
+      <TextBlock Classes="header" Grid.Row="6" Grid.Column="0" Text="Site"/>
+      <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding WorkOrder_Label_SiteId}" VerticalAlignment="Center"/>
+    </Grid>
+
+    <!-- Actions -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+      <Button Command="{Binding WorkOrder_Button_ValidateWorkOrderCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <ia:Icon Value="mdi:playlist-check" Width="18" Height="18"/>
+          <TextBlock Text="Validate WO"/>
+        </StackPanel>
+      </Button>
+      <Button Command="{Binding WorkOrder_Button_CheckAvailabilityCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <ia:Icon Value="mdi:database-search" Width="18" Height="18"/>
+          <TextBlock Text="Check Availability"/>
+        </StackPanel>
+      </Button>
+      <Button Command="{Binding WorkOrder_Button_PostTransactionCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <ia:Icon Value="mdi:send" Width="18" Height="18"/>
+          <TextBlock Text="Post"/>
+        </StackPanel>
+      </Button>
+      <Button Command="{Binding WorkOrder_Button_ResetCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <ia:Icon Value="mdi:refresh" Width="18" Height="18"/>
+          <TextBlock Text="Reset"/>
+        </StackPanel>
+      </Button>
     </StackPanel>
   </Grid>
 </UserControl>

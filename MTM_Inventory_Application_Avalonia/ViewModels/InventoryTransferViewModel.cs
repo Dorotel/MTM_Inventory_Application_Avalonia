@@ -2,12 +2,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MTM_Inventory_Application_Avalonia.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace MTM_Inventory_Application_Avalonia.ViewModels;
 
 public partial class InventoryTransferViewModel : ObservableObject
 {
     private readonly IExceptionHandler _exceptionHandler;
+
+    public IPartDialogService? PartDialog { get; set; }
 
     public InventoryTransferViewModel() : this(new ExceptionHandler()) {}
 
@@ -66,5 +69,21 @@ public partial class InventoryTransferViewModel : ObservableObject
             InventoryTransfer_TextBox_ToLocation = string.Empty;
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_Reset)); }
+    }
+
+    [RelayCommand]
+    private async Task InventoryTransfer_Button_ResolveIncompletePartId()
+    {
+        try
+        {
+            var seed = InventoryTransfer_TextBox_ItemId;
+            if (PartDialog is null) return;
+            var picked = await PartDialog.PickPartAsync(seed);
+            if (!string.IsNullOrWhiteSpace(picked))
+            {
+                InventoryTransfer_TextBox_ItemId = picked!;
+            }
+        }
+        catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_ResolveIncompletePartId)); }
     }
 }
