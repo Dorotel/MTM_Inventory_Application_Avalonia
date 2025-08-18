@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{02EA681E-C
 		docs\mamp.html = docs\mamp.html
 		docs\Planned_Implementations.md = docs\Planned_Implementations.md
 		docs\platforms.html = docs\platforms.html
+		MTM_Inventory_Application_Avalonia\README.md = MTM_Inventory_Application_Avalonia\README.md
 		docs\rules.html = docs\rules.html
 		docs\settings.html = docs\settings.html
 		docs\styles.css = docs\styles.css
