@@ -1,6 +1,6 @@
 # Planned Implementations - Consolidated Plan
 
-Purpose: single place to track all upcoming implementation work across features. Source of truth compiled from the planning docs in Copilot Files/MVVM Definitions and current code in the solution.
+Purpose: single place to track all upcoming implementation work across features. Source of truth compiled from the planning docs in Copilot Files/MVVMDefinitions and current code in the solution.
 
 Global Rule - Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
@@ -9,18 +9,18 @@ Scope
 - Cross-feature backlog with priorities, dependencies, and acceptance checks. Links to detailed specs for API calls and UI.
 
 References (planning docs index)
-- MVVM Definitions/LoginScreen.md
-- MVVM Definitions/MainView.md
-- MVVM Definitions/InventoryTransfer.md
-- MVVM Definitions/WorkOrderTransaction.md
-- MVVM Definitions/LocationPickerDialog.md
-- MVVM Definitions/IncompletePartDialog.md
-- MVVM Definitions/ExceptionHandling.md
-- MVVM Definitions/ExceptionDialog.md
-- MVVM Definitions/MAMPDatabase.md
-- MVVM Definitions/Settings.md
-- MVVM Definitions/MainWindow.md
-- MVVM Definitions/App.md
+- MVVMDefinitions/LoginScreen.md
+- MVVMDefinitions/MainView.md
+- MVVMDefinitions/InventoryTransfer.md
+- MVVMDefinitions/WorkOrderTransaction.md
+- MVVMDefinitions/LocationPickerDialog.md
+- MVVMDefinitions/IncompletePartDialog.md
+- MVVMDefinitions/ExceptionHandling.md
+- MVVMDefinitions/ExceptionDialog.md
+- MVVMDefinitions/MAMPDatabase.md
+- MVVMDefinitions/Settings.md
+- MVVMDefinitions/MainWindow.md
+- MVVMDefinitions/App.md
 - README.md
 
 Cross-cutting backlog

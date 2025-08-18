@@ -100,7 +100,7 @@ Citations (file and page)
   - Enter = default action (Retry when available, otherwise Close); Esc = Cancel; Ctrl+C = Copy details; F1 = Help.
 
 ## References
-- ../MVVM Definitions/LoginScreen.md; ../MVVM Definitions/WorkOrderTransaction.md; ../MVVM Definitions/InventoryTransfer.md
+- ../MVVMDefinitions/LoginScreen.md; ../MVVMDefinitions/WorkOrderTransaction.md; ../MVVMDefinitions/InventoryTransfer.md
 - ../../References/Visual PDF Files/Text Conversion/Intro - Development Guide.txt; ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt; ../../References/Visual PDF Files/Text Conversion/Reference - Shared Library.txt; ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt; ../../References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt
 - ../../README.md
 

@@ -1,4 +1,4 @@
-﻿# Work Order Transaction Form — Functional and Technical Specification [Ref: ../../References/Visual Highlighted Screenshots/WorkOrderScreenshotHighlighted.png; ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
+# Work Order Transaction Form — Functional and Technical Specification [Ref: ../../References/Visual Highlighted Screenshots/WorkOrderScreenshotHighlighted.png; ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 
 Purpose: define UI, validations, workflow, role gating, integration, storage, and configuration to implement Work Order (WO) transactions for Infor Visual (VMFG) in this Avalonia/.NET 8 application. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt]
 
@@ -74,20 +74,20 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 - Not Enough at From Location (Issue): if On-hand < Quantity, prompt to verify or log "Not enough @ {From Location}"; posting is blocked. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 - Lot/Serial compliance: enforce capture before posting per item control flags. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 
-All above exception flows are routed to the centralized Exception Handling Form for normalization, user messaging, approvals (where required), and optional logging. See ../MVVM Definitions/ExceptionHandling.md.
+All above exception flows are routed to the centralized Exception Handling Form for normalization, user messaging, approvals (where required), and optional logging. See ../MVVMDefinitions/ExceptionHandling.md.
 
 ## Workflows [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt]
 - Receipt by WO (happy path): enter WO (yellow) → load header/status/remaining → enter Quantity and To Location (yellow) → Warehouse = green (screenshot value), Date = today (blue) → validate (closed/over-receipt/lot-serial) → post → write Visual transaction + local audit → clear. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 - Issue to WO (happy path): enter WO (yellow) → enter Quantity and From Location (yellow) → Warehouse = green (screenshot value) → validate availability → post → write Visual transaction + local audit → clear. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 - Exception paths: Closed WO (block + report), Over Receipt (prompt + report + optional approval), Not Enough (prompt + report + block). [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
 
-All exception paths invoke the Exception Handling Form to present messages/actions and record entries where appropriate. See ../MVVM Definitions/ExceptionHandling.md.
+All exception paths invoke the Exception Handling Form to present messages/actions and record entries where appropriate. See ../MVVMDefinitions/ExceptionHandling.md.
 
 ## Reporting Hooks (exception logs)
-- For app-owned tables and DDL details, see ../MVVM Definitions/MAMPDatabase.md.
+- For app-owned tables and DDL details, see ../MVVMDefinitions/MAMPDatabase.md.
 
 ## Data Storage Policy and Environment Configuration
-- Any data that cannot be stored on the Visual server is written to the app-owned database. See ../MVVM Definitions/MAMPDatabase.md for schema and to ../../README.md for connection selection via Database.config and environment overrides.
+- Any data that cannot be stored on the Visual server is written to the app-owned database. See ../MVVMDefinitions/MAMPDatabase.md for schema and to ../../README.md for connection selection via Database.config and environment overrides.
 
 ## ViewModel, Commands, and Role Gating (Avalonia MVVM) [Ref: ../../App.axaml.cs]
 - ViewModel: WorkOrderTransactionViewModel exposes properties for fields above with INotifyDataErrorInfo validation and computed availability. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt]
@@ -112,7 +112,7 @@ All exception paths invoke the Exception Handling Form to present messages/actio
 - Closed WO attempts block posting and append to Closed Work Orders report (app DB). [Ref: Reference - Shop Floor.txt, p.15]
 - Over Receipt detection prompts, logs, and requires Lead approval if policy allows override. [Ref: Reference - Inventory.txt]
 - Not Enough @ From Location prompts, logs, and blocks posting. [Ref: Reference - Inventory.txt]
-- Non-Visual data writes to the app-owned database per environment. See ../MVVM Definitions/MAMPDatabase.md and ../../README.md.
+- Non-Visual data writes to the app-owned database per environment. See ../MVVMDefinitions/MAMPDatabase.md and ../../README.md.
 
 ## UI Scaffolding (Avalonia 11)
 - Views

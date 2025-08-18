@@ -27,7 +27,7 @@ Testing
 
 
 
-# Main View (Home) - UI Planning Specification [Ref: ../MVVM Definitions/InventoryTransfer.md; ../MVVM Definitions/WorkOrderTransaction.md; ../MVVM Definitions/LoginScreen.md]
+# Main View (Home) - UI Planning Specification [Ref: ../MVVMDefinitions/InventoryTransfer.md; ../MVVMDefinitions/WorkOrderTransaction.md; ../MVVMDefinitions/LoginScreen.md]
 
 Purpose: define the home screen that users see after a successful login, providing clear entry points to Inventory Transfer and Work Order Transaction features.
 
@@ -127,8 +127,8 @@ Platform and Shell wiring
 - Errors anywhere route through the Exception Handling Form.
 
 ## References (artifacts used by this document)
-- ../MVVM Definitions/LoginScreen.md
-- ../MVVM Definitions/InventoryTransfer.md
-- ../MVVM Definitions/WorkOrderTransaction.md
-- ../MVVM Definitions/ExceptionHandling.md
+- ../MVVMDefinitions/LoginScreen.md
+- ../MVVMDefinitions/InventoryTransfer.md
+- ../MVVMDefinitions/WorkOrderTransaction.md
+- ../MVVMDefinitions/ExceptionHandling.md
 - ../../README.md

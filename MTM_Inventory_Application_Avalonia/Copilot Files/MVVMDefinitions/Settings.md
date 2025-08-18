@@ -1,4 +1,4 @@
-# Settings View - UI Planning Specification [Ref: ../../README.md; ./MAMPDatabase.md; ../MVVM Definitions/MainView.md]
+# Settings View - UI Planning Specification [Ref: ../../README.md; ./MAMPDatabase.md; ../MVVMDefinitions/MainView.md]
 
 Purpose: define an in-app Settings UI for environment and app-owned configuration (warehouse, environment mode, non-Visual DB connection), with placeholders for any VISUAL-dependent reads.
 
@@ -104,7 +104,7 @@ Environment/Configuration keys (from README)
 ## References
 - ../../README.md (Configuration; Development login; app start; placeholder rules; environment overrides)
 - ./MAMPDatabase.md (app_settings storage)
-- ../MVVM Definitions/MainView.md (navigation entry point)
+- ../MVVMDefinitions/MainView.md (navigation entry point)
 
 ## Implementation status (scaffold)
 - View created: ../../Views/SettingsView.axaml

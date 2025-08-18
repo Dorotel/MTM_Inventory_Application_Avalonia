@@ -89,7 +89,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 - Invalid/Inactive Item or Locations: block and show message; do not post.
 - From and To must be different and belong to the same warehouse; else block and message.
 - Lot/Serial compliance (if item-controlled): enforce capture before posting. [Ref: ../../References/Visual PDF Files/Text Conversion/Reference - Inventory.txt]
-- All exception paths surface through centralized Exception Handling service/modal (see ../MVVM Definitions/ExceptionHandling.md).
+- All exception paths surface through centralized Exception Handling service/modal (see ../MVVMDefinitions/ExceptionHandling.md).
 
 ## Workflows
 - Happy path: enter Item/Part ? load item details ? enter From Location, To Location, Quantity ? current date auto ? optionally open Location dialog ? validate availability ? Post Transfer ? write Visual transaction + local audit ? clear.
@@ -118,7 +118,7 @@ All methods must use centralized error handling (IExceptionHandler): wrap each o
 ## Local Storage and Reporting (app-owned DB)
 - Write a local audit to local_tx_history with tx_type = "Transfer" including: item_no, qty, site_id, warehouse_id, from_location, to_location, user_id, tx_utc (UTC), source_ref (e.g., "InventoryTransferForm"), and extra_json containing the two description texts.
 - On insufficient at From, write to not_enough_location.
-- See ../MVVM Definitions/MAMPDatabase.md for MySQL 5.7.24 DDL and index definitions.
+- See ../MVVMDefinitions/MAMPDatabase.md for MySQL 5.7.24 DDL and index definitions.
 
 ## Keyboard and Scanner UX
 - Default focus: Item/Part ? Quantity ? From Location ? To Location.

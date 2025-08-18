@@ -24,7 +24,7 @@ Scope
 - Collect Visual Username and Password (and optional Domain/Site if required by environment).
 - Verify credentials against the Visual server using approved APIs or stored procedures.
 - On success, persist a signed session token (not the raw password) in memory for the runtime session, then hide the Login overlay and remain in MainView.
-- On failure, display an error and remain on the Login screen (all errors are routed to the Exception Handling Form). See ../MVVM Definitions/ExceptionHandling.md.
+- On failure, display an error and remain on the Login screen (all errors are routed to the Exception Handling Form). See ../MVVMDefinitions/ExceptionHandling.md.
 
 Platform
 - Avalonia 11 on .NET 8; MVVM pattern (View, ViewModel, Services).
@@ -34,7 +34,7 @@ Security and Storage
 - Do not store plain passwords on disk.
 - Keep only an in?memory session context for the running process; clear it on logout/exit.
 - Use secure string handling and zeroing where practical.
-- For any app-owned data storage, see ../MVVM Definitions/MAMPDatabase.md.
+- For any app-owned data storage, see ../MVVMDefinitions/MAMPDatabase.md.
 
 User Interface (implemented as overlay)
 - Fields: Username, Password (masked), optional Site/Domain selector, Login button, Cancel/Exit.
@@ -72,7 +72,7 @@ Navigation
 - On successful authentication, INavigationService.NavigateToMain() invokes MainViewModel.OnAuthenticated() to hide the overlay; MainView remains loaded in MainWindow. See ../../App.axaml.cs and ../../Services/Services.cs.
 
 Error Handling
-- All errors (configuration, connection/auth, environment, and API/business) are routed to the Exception Handling Form. Current implementation calls IExceptionHandler.Handle(ex, context) which opens a modal ExceptionDialog with details. See ../MVVM Definitions/ExceptionHandling.md.
+- All errors (configuration, connection/auth, environment, and API/business) are routed to the Exception Handling Form. Current implementation calls IExceptionHandler.Handle(ex, context) which opens a modal ExceptionDialog with details. See ../MVVMDefinitions/ExceptionHandling.md.
 
 UI Scaffolding (Avalonia 11)
 - Views

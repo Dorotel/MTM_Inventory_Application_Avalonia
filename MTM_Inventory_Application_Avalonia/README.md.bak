@@ -1,4 +1,4 @@
-﻿# MTM Inventory Application (Avalonia, .NET 8)
+# MTM Inventory Application (Avalonia, .NET 8)
 
 Purpose: summarize the solution structure, governing rules, reference guide, configuration, and run/build instructions for this Avalonia/.NET 8 application.
 
@@ -22,7 +22,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Shell wiring
 - Specs drive the feature View/ViewModel scaffolding; map ViewModels to Views via DataTemplates in App.axaml when applicable.
-- On app start, the desktop shell opens a Window that hosts MainView and shows a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See Copilot Files/MVVM Definitions/LoginScreen.md and ExceptionHandling.md.
+- On app start, the desktop shell opens a Window that hosts MainView and shows a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See Copilot Files/MVVMDefinitions/LoginScreen.md and ExceptionHandling.md.
 
 ### Dialogs and selection flows
 - Incomplete Part dialog
@@ -50,7 +50,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
   - Do not paste content that introduces invalid bytes; if a replacement character (�) appears, replace it with the intended ASCII character.
 - An .editorconfig file is provided at the repository root to enforce UTF-8 on .md/.html.
 
-## Planning documents index (Copilot Files/MVVM Definitions)
+## Planning documents index (Copilot Files/MVVMDefinitions)
 - LoginScreen.md — startup login/authentication flow and UX spec; navigation to MainView.
 - MainView.md — home hub and navigation to feature forms; session summary and logout.
 - InventoryTransfer.md — location-to-location transfer form spec; dialogs and validations; reporting hooks.
@@ -134,7 +134,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - Ensure the doc follows the UI Planning file format (when applicable) and includes Visual API Commands by scenario.
 
 ## New Rule — UI Planning file format
-- Applies to: Copilot Files/MVVM Definitions/WorkOrderTransaction.md, InventoryTransfer.md, LoginScreen.md.
+- Applies to: Copilot Files/MVVMDefinitions/WorkOrderTransaction.md, InventoryTransfer.md, LoginScreen.md.
 - Required sections (in order):
   - Title with short reference list in brackets.
   - Purpose (inline line after title).
@@ -156,7 +156,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
   - References (artifacts used by this document).
 
 ## New Rule — Creating a UI Planning file (triggered by: “Create a UI Planning file for <FeatureName>”))
-- Location and name: place under Copilot Files/MVVM Definitions; name the file descriptively (e.g., FeatureName.md). Follow {Type}_{Parent}_{Name} for any companion files.
+- Location and name: place under Copilot Files/MVVMDefinitions; name the file descriptively (e.g., FeatureName.md). Follow {Type}_{Parent}_{Name} for any companion files.
 - Start from the required section list above; keep headings and order consistent.
 - Include at least one reference image under References/Visual Highlighted Screenshots and cite it in the Title bracket.
 - Add “Visual API Commands (by scenario)” with concrete calls (Dbms.OpenLocal/OpenLocalSSO, GeneralQuery, InventoryTransaction, Shop Floor services, VMFG Shared conversion/defaults) and page-cited sources.
@@ -166,7 +166,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Folder layout (key)
 - Copilot Files/
-  - MVVM Definitions/
+  - MVVMDefinitions/
     - WorkOrderTransaction.md (form spec)
     - InventoryTransfer.md (form spec)
     - LoginScreen.md (startup login/auth spec)
@@ -197,10 +197,10 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - Keep citations intact and adjust only the narrative/spec to reflect implementation.
 
 ## Startup behavior
-- At startup, MainWindow hosts MainView. A Login overlay (Views/Dialogs/LoginView) is shown inside MainView. After successful verification against the Visual server, the overlay is hidden and the app continues in MainView. See Copilot Files/MVVM Definitions/LoginScreen.md. All errors should be routed through Copilot Files/MVVM Definitions/ExceptionHandling.md.
+- At startup, MainWindow hosts MainView. A Login overlay (Views/Dialogs/LoginView) is shown inside MainView. After successful verification against the Visual server, the overlay is hidden and the app continues in MainView. See Copilot Files/MVVMDefinitions/LoginScreen.md. All errors should be routed through Copilot Files/MVVMDefinitions/ExceptionHandling.md.
 
 ## Work Order Transaction spec (summary)
-- See Copilot Files/MVVM Definitions/WorkOrderTransaction.md. For app-owned database tables used by this feature (exception logs, local history, app settings), see Copilot Files/MVVM Definitions/MAMPDatabase.md.
+- See Copilot Files/MVVMDefinitions/WorkOrderTransaction.md. For app-owned database tables used by this feature (exception logs, local history, app settings), see Copilot Files/MVVMDefinitions/MAMPDatabase.md.
 
 ## Configuration (Database.config keys and app DB)
 - Environment = Development | Production
@@ -208,7 +208,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - ConnectionStrings:AppDbTest → mtm_visual_application_test (dev)
 - Optional environment overrides: INVENTORY__ENVIRONMENT, INVENTORY__CONNECTIONSTRINGS__APPDB, INVENTORY__CONNECTIONSTRINGS__APPDBTEST, INVENTORY__WAREHOUSEID
 - Connection behavior: Dbms.OpenLocal obtains connection info from Database.config; OpenLocalSSO supported. See Text Conversion sources for citations.
-- App-owned tables and seeding: see Copilot Files/MVVM Definitions/MAMPDatabase.md.
+- App-owned tables and seeding: see Copilot Files/MVVMDefinitions/MAMPDatabase.md.
 
 ## Build
 - dotnet build

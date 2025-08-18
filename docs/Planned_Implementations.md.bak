@@ -1,26 +1,26 @@
-# Planned Implementations — Consolidated Plan
+# Planned Implementations â€” Consolidated Plan
 
-Purpose: single place to track all upcoming implementation work across features. Source of truth compiled from the planning docs in Copilot Files/MVVM Definitions and current code in the solution.
+Purpose: single place to track all upcoming implementation work across features. Source of truth compiled from the planning docs in Copilot Files/MVVMDefinitions and current code in the solution.
 
-Global Rule — Visual license lifecycle
+Global Rule â€” Visual license lifecycle
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
 
 Scope
 - Cross-feature backlog with priorities, dependencies, and acceptance checks. Links to detailed specs for API calls and UI.
 
 References (planning docs index)
-- MVVM Definitions/LoginScreen.md
-- MVVM Definitions/MainView.md
-- MVVM Definitions/InventoryTransfer.md
-- MVVM Definitions/WorkOrderTransaction.md
-- MVVM Definitions/LocationPickerDialog.md
-- MVVM Definitions/IncompletePartDialog.md
-- MVVM Definitions/ExceptionHandling.md
-- MVVM Definitions/ExceptionDialog.md
-- MVVM Definitions/MAMPDatabase.md
-- MVVM Definitions/Settings.md
-- MVVM Definitions/MainWindow.md
-- MVVM Definitions/App.md
+- MVVMDefinitions/LoginScreen.md
+- MVVMDefinitions/MainView.md
+- MVVMDefinitions/InventoryTransfer.md
+- MVVMDefinitions/WorkOrderTransaction.md
+- MVVMDefinitions/LocationPickerDialog.md
+- MVVMDefinitions/IncompletePartDialog.md
+- MVVMDefinitions/ExceptionHandling.md
+- MVVMDefinitions/ExceptionDialog.md
+- MVVMDefinitions/MAMPDatabase.md
+- MVVMDefinitions/Settings.md
+- MVVMDefinitions/MainWindow.md
+- MVVMDefinitions/App.md
 - README.md
 
 Cross-cutting backlog
@@ -34,10 +34,10 @@ Cross-cutting backlog
   - Define and register service interfaces: IVisualConnectionService, IAuthenticationService (prod), IInventoryService, IShopFloorService, IPartService, ILocationService, ISettingsStore, IAppDb, IPartDialogService.
   - Move VISUAL-specific logic to service adapters; keep ViewModels UI-only.
   - Acceptance: ViewModels depend only on interfaces; service adapters stubbed for dev; production TODO markers present.
-  - References: README.md (New Rule — VISUAL business logic placeholders).
+  - References: README.md (New Rule â€” VISUAL business logic placeholders).
 - Settings and Environment
   - Implement Settings persistence via MAMP DB; environment toggle (Development/Production); WarehouseId default.
-  - Implement “Test App DB” command to verify connectivity and schema.
+  - Implement â€œTest App DBâ€ command to verify connectivity and schema.
   - Acceptance: changing settings persists; app reads on start; test shows success/failure.
   - References: Settings.md, MAMPDatabase.md, README.md (Configuration).
 - App-owned Database (MAMP)
@@ -48,10 +48,10 @@ Cross-cutting backlog
 - Navigation and Shell
   - Keep single MainView instance; ensure overlay sizing transitions are smooth.
   - Ensure feature views load via NavigationService; add back/close patterns if needed.
-  - Acceptance: Login overlay -> MainView swap; features navigate and return with state preserved as spec’d.
+  - Acceptance: Login overlay -> MainView swap; features navigate and return with state preserved as specâ€™d.
   - References: App.md, MainWindow.md, MainView.md, Services.cs notes in README CodeMap.
 - Documentation maintenance
-  - Enforce CodeMap sync for .cs files and “Update All .md Files” rule.
+  - Enforce CodeMap sync for .cs files and â€œUpdate All .md Filesâ€ rule.
   - Acceptance: PRs include CodeMap_CS_Files.md updates and affected planning docs.
   - References: README.md (rules), CodeMap_CS_Files.md.
 
