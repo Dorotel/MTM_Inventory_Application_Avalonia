@@ -12,30 +12,48 @@ This is an **Avalonia desktop application** built with **.NET 8** for managing i
 
 ## Build and Validation Commands
 
-### Prerequisites
-- .NET 8 SDK installed
-- All commands run from repository root
+### Environment Setup
 
-### Essential Build Commands
-```bash
-# Build solution (required for all changes)
-dotnet build
+- **Required:**
+  - .NET SDK 8.0+
+  - Avalonia Templates (`dotnet new install Avalonia.Templates`)
+  - (If needed) Node.js & npm for web builds
+- Always run `dotnet restore` after cloning or pulling
+- Check for and run provided PowerShell/Batch scripts for setup or dependency management
 
-# Run desktop application 
-dotnet run --project MTM_Inventory_Application_Avalonia.Desktop
+### Build Steps
 
-# Clean build (when facing issues)
-dotnet clean && dotnet build
-```
+1. `dotnet restore`
+2. `dotnet build --configuration Release`
+3. `dotnet run --project MTM_Inventory_Application_Avalonia.Desktop`
 
 **Build Time:** ~20 seconds for clean build
 **Expected Warnings:** 2 MVVM toolkit warnings about direct field access in ExceptionDialogViewModel.cs (non-blocking)
 
-### No Test Projects
-This repository currently has **no automated test projects**. Validation relies on:
-1. Successful build compilation
-2. Manual application testing
-3. Documentation consistency checks
+### Test Steps
+
+- If present: `dotnet test` (always build before testing)
+- Currently **no automated test projects** - validation relies on:
+  1. Successful build compilation
+  2. Manual application testing
+  3. Documentation consistency checks
+
+### Lint/Style
+
+- Use `.editorconfig` for consistent formatting (UTF-8 encoding, CRLF line endings)
+- For HTML/CSS, check for linters in scripts or npm configs
+
+### Common Problems/Workarounds
+
+- Restore before build
+- For XAML errors: try `dotnet clean` then rebuild
+- On Windows, unblock scripts if needed (file properties)
+
+### CI/CD & Validation
+
+- Standard flow: restore → build → test
+- Review `.github/workflows/` for CI details
+- Always pass local build/tests before PR
 
 ### Known Build Issues and Workarounds
 
@@ -53,8 +71,8 @@ This repository currently has **no automated test projects**. Validation relies 
 ### Solution Structure
 ```
 MTM_Inventory_Application_Avalonia/           # Main application project
-├── Views/                                    # Avalonia XAML views
-├── ViewModels/                              # MVVM view models
+├── Views/                                    # Avalonia XAML views (*.axaml)
+├── ViewModels/                              # MVVM view models (*.cs)
 ├── Services/                                # Business logic interfaces/implementations
 ├── Copilot Files/                           # Planning and documentation
 │   ├── MVVMDefinitions/                     # Feature specifications
@@ -66,6 +84,19 @@ MTM_Inventory_Application_Avalonia/           # Main application project
 MTM_Inventory_Application_Avalonia.Desktop/  # Desktop launcher project
 docs/                                        # HTML documentation site
 ```
+
+### Config/Validation
+
+- `*.csproj`: Project/build config
+- `.editorconfig`: Lint/style config (UTF-8 encoding, CRLF line endings)
+- `.github/workflows/`: Actions YAMLs
+- `fix-markdown-utf8.ps1/.bat`: Utility scripts for UTF-8 encoding fixes
+
+### Checks and Validation
+
+- Restore → build → test (if present) for every change
+- Address linter/style violations before PR
+- Review/comply with CI checks in GitHub Actions
 
 ### Critical Documentation Maintenance Rules
 
@@ -165,6 +196,205 @@ docs/                                        # HTML documentation site
 1. Run UTF-8 normalization script
 2. Verify all relative links in markdown files
 3. Check Jekyll site generation in docs/ folder
+
+## Special Copilot Commands
+
+### "Update Readme Files"
+
+- For each `.cs` or `.axaml` in `Views/` or `ViewModels/`:
+    - Ensure a matching `.md` exists in `Copilot Files/`
+    - If missing, generate using the **standard Copilot markdown documentation format** (see below)
+    - Each `.md` must stay up to date with its corresponding source file, documenting all field names, commands, validation, and business rules
+    - If a `.md` exists, verify its content aligns with the associated code
+
+### "Update HTML Files"
+
+When updating or generating a help HTML file in `Copilot Files/`, always follow these rules to ensure consistency, accuracy, and usability:
+
+- **Content Sources:**  
+    - Use data from the View (`.axaml`), its ViewModel (`.cs`), and the connected `.md` documentation file in `Copilot Files/`
+    - Do not invent or hallucinate facts—only include information that is present or implied in these sources
+    - Reference and embed any images/screenshots or key artifacts from `References` as appropriate
+
+- **Structure and Layout:**  
+    - Use a consistent structure for all help files:
+        1. **Title/Header:** Feature or view name
+        2. **Purpose/Overview:** Summary of what the feature/view does
+        3. **How to Use:** Step-by-step user workflow instructions
+        4. **Field and Control Descriptions:** List and describe all important fields, buttons, and controls (match UI and ViewModel)
+        5. **Validation and Error Handling:** Required fields, validation rules, common error messages
+        6. **Roles and Permissions:** Describe actions restricted by user role (if applicable)
+        7. **Keyboard/Barcode Shortcuts:** List available shortcuts and scanner behaviors
+        8. **Dialog/Popup Windows:** Explain dialogs and their usage
+        9. **References and Screenshots:** Link/embed relevant screenshots/reference files from `References`
+        10. **Troubleshooting/Common Issues:** List known issues/tips (from code or documentation only)
+        11. **Navigation:**  
+            - Include navigation aids (table of contents, links to other help files, "Back to Main Help")
+    - Use tables, lists, and headings for readability
+
+- **Style and Accessibility:**  
+    - Use clear, user-focused language
+    - Avoid jargon unless defined
+    - Use semantic HTML (headings, lists, tables, links, strong/em) for accessibility
+    - Ensure images/screenshots have meaningful alt text/captions
+    - Apply consistent formatting across all pages
+
+- **Data Accuracy and Maintenance:**  
+    - Ensure all descriptions, workflows, and field names are derived from the actual code and `.md` documentation
+    - Update the help file if any code, validation, or business rule changes
+    - Do not copy outdated or deprecated information from other sources
+    - If information is not found in code or documentation, omit it or clearly mark as "Not Documented"
+
+- **Navigation and Integration:**  
+    - Cross-link related help pages for easy navigation
+    - Always provide an easy way back to the main help index/dashboard
+
+- **Other Best Practices:**  
+    - Include a "Last Updated" date and version/documentation status
+    - Reference the origin of business rules or workflows (design doc, `.md` file)
+    - Use examples/images only if sourced from repo assets
+    - Proofread all help files for clarity, grammar, and spelling
+    - Test navigation and links after each update
+
+## Standard Copilot Markdown Documentation Format
+
+Every `.md` file in `Copilot Files/` should strictly follow this structure:
+
+````markdown
+# {Feature or View Name}
+_Functional and Technical Specification_
+
+---
+
+**Metadata**  
+- **View:** `{ViewFile.axaml}`
+- **ViewModel:** `{ViewModelFile.cs}`
+- **Primary Commands:** (list all)
+- **Related Dialogs:** (if any)
+- **Last Updated:** {YYYY-MM-DD}
+- **Copilot Template Version:** 1.1
+
+---
+
+## Purpose
+
+_Describe the functionality, scope, and intent of this View or feature._
+
+---
+
+## Key Visual References
+
+- ![Screenshot1](References/relative/path/to/screenshot1.png)
+- ...
+
+---
+
+## Global Rules
+
+_List global technical, business, or architectural constraints._
+
+---
+
+## Scope
+
+_What is covered by this View/feature? Workflows, boundaries, and limitations._
+
+---
+
+## Naming, Error Handling, and Coding Conventions
+
+- File, method, variable naming rules
+- Error handling: always use `IExceptionHandler`
+
+---
+
+## UX/Validation Rules
+
+- Field definitions, validations, required/optional/read-only
+- Description text mapping
+- Exception handling surface conventions
+
+---
+
+## Visual API Command Patterns
+
+- Backend/service patterns: authentication, validation, posting, etc
+
+---
+
+## Dialogs
+
+- Outline all dialogs, triggers, and core logic/UI
+
+---
+
+## Business Rules
+
+- Enumerate posting/validation rules and exception paths
+
+---
+
+## Workflow Summary
+
+- Happy and alternate path steps
+
+---
+
+## ViewModel/Command Conventions
+
+- List field and command names, role gating, etc
+
+---
+
+## Integration & Storage
+
+- Service/API use, local audits/logging, DB refs
+
+---
+
+## Keyboard/Scanner UX
+
+- Focus order, shortcuts, barcode workflow
+
+---
+
+## UI Scaffold
+
+- Views, ViewModels, services, navigation patterns
+
+---
+
+## Testing & Acceptance
+
+- Behaviors, dialog flows, error, and audit requirements
+
+---
+
+## References
+
+- Screenshots, PDFs, code docs, related markdown files
+
+---
+
+## Implementation Status
+
+- Current implementation state, what's wired/stubbed
+
+---
+
+## TODOs / Copilot Agent Notes
+
+- [ ] Checklist for future enhancement/validation
+
+---
+
+_Copilot Note:  
+When generating or updating this file:_
+- _Always use the metadata header_
+- _Reference related Views, ViewModels, commands, dialogs_
+- _Highlight changes to requirements, validation, or commands since last update_
+- _If missing for a View, generate from .axaml and .cs using this format_
+````
 
 ### Agent Guidelines
 
