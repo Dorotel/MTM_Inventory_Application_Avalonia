@@ -72,13 +72,7 @@ Conventions used below
 - Dependencies: None
 - Notes: Duplicate concept with ExceptionHandler in Services.cs; plan to remove or merge into the central IExceptionHandler implementation.
 
-## MTM_Inventory_Application_Avalonia/Views/MainWindow.axaml.cs
-- Path: MTM_Inventory_Application_Avalonia/Views/MainWindow.axaml.cs
-- Types: MainWindow : Avalonia.Controls.Window
-- Responsibilities: Code-behind bootstrap for the main window XAML.
-- Key members: ctor calls InitializeComponent()
-- Dependencies: None
-- Notes: All content is set by NavigationService/App startup.
+
 
 ## MTM_Inventory_Application_Avalonia/Views/MainView.axaml.cs
 - Path: MTM_Inventory_Application_Avalonia/Views/MainView.axaml.cs
@@ -229,11 +223,7 @@ Conventions used below
   - Behavior: Seed-aware constructor preloads suggestions; SearchText change refreshes variants (placeholder)
 - Dependencies: None (service integration for real search planned)
 
-## MTM_Inventory_Application_Avalonia/Views/Dialogs/LoginView.axaml.cs
-- Path: MTM_Inventory_Application_Avalonia/Views/Dialogs/LoginView.axaml.cs
-- Types: LoginView : UserControl
-- Responsibilities: Code-behind for login dialog view XAML
-- Dependencies: ViewModels.Dialogs.LoginViewModel
+
 
 ## MTM_Inventory_Application_Avalonia/Converters/InverseBooleanConverter.cs
 - Path: MTM_Inventory_Application_Avalonia/Converters/InverseBooleanConverter.cs
