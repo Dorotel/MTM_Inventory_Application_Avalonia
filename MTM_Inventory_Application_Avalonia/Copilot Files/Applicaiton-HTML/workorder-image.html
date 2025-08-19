@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Work Order Transaction View (HTML Image)</title>
+    <style>
+        :root {
+            --fg: #222;
+            --fg-low: #666;
+            --bg: #fff;
+            --bg-panel: #f6f6f6;
+            --border: #ddd;
+            --accent: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            margin: 16px;
+            font: 14px/1.4 Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+        }
+
+        .window {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            max-width: 900px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 32px;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .expander {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .expander-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            cursor: default;
+            background: #f9f9f9;
+        }
+
+        .expander-content {
+            padding: 20px;
+        }
+
+        .form-panel {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            background: var(--bg-panel);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .form-label {
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .form-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 260px;
+        }
+
+        .form-select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 260px;
+            background: var(--bg);
+        }
+
+        .icon-btn {
+            padding: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            cursor: default;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: default;
+        }
+
+        .btn.primary {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .btn.success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .btn.warning {
+            background: var(--warning);
+            color: white;
+            border-color: var(--warning);
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .status-panel {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <!-- Header -->
+        <div class="header">
+            <span class="header-icon">📋</span>
+            <span class="header-title">Work Order Transaction</span>
+        </div>
+
+        <!-- Search Panel -->
+        <div class="expander">
+            <div class="expander-header">
+                <span class="icon">🔍</span>
+                <span>Search</span>
+            </div>
+            <div class="expander-content">
+                <div class="form-panel">
+                    <div class="form-grid">
+                        <!-- Work Order -->
+                        <div class="form-label">Work Order</div>
+                        <div class="form-input-group">
+                            <input class="form-input" type="text" value="WO-2024-001" />
+                            <button class="icon-btn" title="Find (Ctrl+F)">
+                                <span class="icon">🔍</span>
+                            </button>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="form-label">Quantity</div>
+                        <div class="form-input-group">
+                            <input class="form-input" type="number" value="5" />
+                        </div>
+
+                        <!-- Transaction Type -->
+                        <div class="form-label">Transaction Type</div>
+                        <div class="form-input-group">
+                            <select class="form-select">
+                                <option>Issue Material</option>
+                                <option>Receipt Material</option>
+                                <option>Return Material</option>
+                            </select>
+                        </div>
+
+                        <!-- Part Number -->
+                        <div class="form-label">Part Number</div>
+                        <div class="form-input-group">
+                            <input class="form-input" type="text" value="PART-67890" />
+                        </div>
+
+                        <!-- Location -->
+                        <div class="form-label">Location</div>
+                        <div class="form-input-group">
+                            <input class="form-input" type="text" value="WIP-FLOOR-01" />
+                        </div>
+
+                        <!-- Warehouse ID -->
+                        <div class="form-label">Warehouse ID</div>
+                        <div class="form-input-group">
+                            <input class="form-input" type="text" value="MAIN" readonly />
+                        </div>
+                    </div>
+
+                    <!-- Status Panel -->
+                    <div class="status-panel">
+                        <strong>ℹ️ Work Order Status</strong><br />
+                        Work Order WO-2024-001 is active. Operation: Assembly of Product ABC.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Panel -->
+        <div class="expander">
+            <div class="expander-header">
+                <span class="icon">⚡</span>
+                <span>Actions</span>
+            </div>
+            <div class="actions">
+                <button class="btn primary">
+                    <span class="icon">✔️</span>
+                    <span>Validate Work Order</span>
+                </button>
+                <button class="btn warning">
+                    <span class="icon">📊</span>
+                    <span>Check Material</span>
+                </button>
+                <button class="btn success">
+                    <span class="icon">📤</span>
+                    <span>Post Transaction</span>
+                </button>
+                <button class="btn">
+                    <span class="icon">🔄</span>
+                    <span>Reset</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

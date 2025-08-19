@@ -88,8 +88,33 @@ All methods must use centralized error handling (IExceptionHandler): wrap calls 
 - ../../References/Visual Highlighted Screenshots/InventoryTransferLocationScreen.png
 - ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt; Reference - Shared Library.txt; Intro - Development Guide.txt
 
-## Implementation status (scaffold)
-- View created: ../../Views/Dialogs/LocationPickerDialog.axaml
-- ViewModel created: ../../ViewModels/Dialogs/LocationPickerDialogViewModel.cs
-- Open from InventoryTransferView (planned) via InventoryTransfer_Button_ShowLocationModal command; returns selected location to caller.
-- Contains placeholder commands and DTOs; VISUAL read models to be implemented in services.
+## Implementation Status (Current - 2024-12-19)
+
+**Fully Implemented:**
+- `Views/Dialogs/LocationPickerDialog.axaml` - Complete UI with location search and selection
+- `ViewModels/Dialogs/LocationPickerDialogViewModel.cs` - Full ViewModel with mock data
+- Integration with InventoryTransfer and WorkOrderTransaction views
+- Command pattern for Search, Select, and Cancel operations
+
+**Current Features:**
+- Location filter TextBox for search functionality
+- DataGrid displaying LocationRow records (Location, Description, Status)
+- Select/Cancel buttons with proper command binding
+- Mock data generation via `SampleLocationResults()`
+
+**Mock Data Implementation:**
+- Test locations (A1-001, B2-102, C3-203, etc.) with descriptions and active status
+- Filtered search functionality working with mock data
+- TODO: Replace with actual Visual API integration for warehouse location master
+
+**Integration Points:**
+- Called from `InventoryTransferViewModel.ShowLocationModal` (F2/F3 shortcuts)
+- Called from `WorkOrderTransactionViewModel.ShowLocationModal`
+- Modal window hosting with proper centering and sizing
+- Returns selected location to calling ViewModel fields
+
+**Keyboard Support:**
+- F2: Pick From Location (in InventoryTransfer)
+- F3: Pick To Location (in InventoryTransfer)
+- Enter: Select current row
+- Esc: Cancel dialog

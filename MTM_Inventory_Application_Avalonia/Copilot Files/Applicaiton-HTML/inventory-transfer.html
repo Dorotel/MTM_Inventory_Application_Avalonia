@@ -37,28 +37,222 @@
     <article id="top" class="wrapper style1"><div class="container"><header><h1>Inventory Transfer</h1></header></div></article>
     <main class="container">
       <section class="panel" id="inventory-transfer">
-        <p>Purpose: move on-hand inventory for a Part from one location to another within the same warehouse.</p>
-        <div class="fig-grid"><figure><img src="./Images/InventoryTransferView.png" alt="Inventory Transfer View mockup" /><figcaption>InventoryTransferView.png</figcaption></figure></div>
-        <h3>What the user does</h3>
+        <h2>Purpose and Overview</h2>
+        <p>The Inventory Transfer feature enables location-to-location inventory transfers within the same warehouse. It provides validation, availability checking, and posting capabilities optimized for keyboard and barcode scanner workflows.</p>
+
+        <div class="fig-grid">
+          <figure>
+            <iframe src="./inventory-transfer-image.html" width="100%" height="600" frameborder="0" style="border: 1px solid #ddd; border-radius: 8px;"></iframe>
+            <figcaption>Inventory Transfer View - Form for moving inventory between locations</figcaption>
+          </figure>
+        </div>
+
+        <h2>How to Use</h2>
+        <h3>Step-by-Step Transfer Process</h3>
+        <ol>
+          <li>Access Inventory Transfer from MainView</li>
+          <li>Enter or scan the <strong>Item/Part ID</strong></li>
+          <li>Click <strong>Validate Item</strong> to verify the part exists and is active</li>
+          <li>Enter the <strong>From Location</strong> (where inventory currently exists)</li>
+          <li>Enter the <strong>To Location</strong> (destination location)</li>
+          <li>Enter the <strong>Quantity</strong> to transfer</li>
+          <li>Click <strong>Check Availability</strong> to verify sufficient inventory</li>
+          <li>Review the information and click <strong>Post Transfer</strong></li>
+          <li>Use <strong>Reset</strong> to clear the form for another transfer</li>
+        </ol>
+
+        <h2>Field and Control Descriptions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Required</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Item/Part ID</td>
+              <td>Text Input</td>
+              <td>Part number to transfer</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Quantity</td>
+              <td>Numeric Input</td>
+              <td>Amount to transfer (must be > 0)</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>From Location</td>
+              <td>Text Input</td>
+              <td>Source location with available inventory</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>To Location</td>
+              <td>Text Input</td>
+              <td>Destination location (must differ from source)</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Warehouse ID</td>
+              <td>Read-Only Label</td>
+              <td>Current warehouse (typically "002")</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Site ID</td>
+              <td>Read-Only Label</td>
+              <td>Current site identifier</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Validation and Error Handling</h2>
+        <h3>Required Fields</h3>
         <ul>
-          <li>Enter Part (Item) ID, Quantity, From Location, and To Location.</li>
-          <li>Use the Location Picker dialog to find a location, if needed.</li>
-          <li>Post the transfer.</li>
+          <li><strong>Item/Part ID</strong>: Must exist and be active in VISUAL</li>
+          <li><strong>Quantity</strong>: Must be greater than zero</li>
+          <li><strong>From Location</strong>: Must exist and contain available inventory</li>
+          <li><strong>To Location</strong>: Must exist and differ from From Location</li>
         </ul>
-        <h3>What the app does</h3>
+
+        <h3>Business Rules</h3>
         <ul>
-          <li>Validates fields (required, positive quantity, different From/To, same warehouse).</li>
-          <li>Checks available quantity at the From Location.</li>
-          <li>Posts a transfer using a service adapter (VISUAL call in production), then records a local audit entry.</li>
-          <li>On any error, opens the Exception Dialog with context and details.</li>
+          <li>Both locations must belong to the current warehouse</li>
+          <li>From Location must have sufficient available quantity</li>
+          <li>Part must be active and transferable</li>
+          <li>Lot/serial controlled items require additional capture (future enhancement)</li>
         </ul>
-        <h3>Commands</h3>
+
+        <h3>Common Error Scenarios</h3>
         <ul>
-          <li><strong>Validate Item</strong></li>
-          <li><strong>Check Availability (From)</strong></li>
-          <li><strong>Show Location Modal</strong></li>
-          <li><strong>Post Transfer</strong></li>
-          <li><strong>Reset</strong></li>
+          <li><strong>Part not found</strong>: Invalid or inactive part number</li>
+          <li><strong>Insufficient inventory</strong>: Not enough available at From Location</li>
+          <li><strong>Invalid location</strong>: Location doesn't exist or inactive</li>
+          <li><strong>Same location error</strong>: From and To locations cannot be identical</li>
+          <li><strong>Warehouse mismatch</strong>: Locations not in current warehouse</li>
+        </ul>
+
+        <h2>Command Descriptions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Function</th>
+              <th>When to Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Validate Item</td>
+              <td>Verifies part exists and is active</td>
+              <td>After entering Item/Part ID</td>
+            </tr>
+            <tr>
+              <td>Check Availability (From)</td>
+              <td>Displays available inventory at From Location</td>
+              <td>Before posting to verify sufficient quantity</td>
+            </tr>
+            <tr>
+              <td>Show Location Modal</td>
+              <td>Opens Location Picker dialog</td>
+              <td>When you need to search for locations</td>
+            </tr>
+            <tr>
+              <td>Resolve Incomplete Part</td>
+              <td>Opens Part search dialog</td>
+              <td>When part ID is incomplete or unknown</td>
+            </tr>
+            <tr>
+              <td>Post Transfer</td>
+              <td>Executes the inventory transfer</td>
+              <td>After all validation passes</td>
+            </tr>
+            <tr>
+              <td>Reset</td>
+              <td>Clears all fields</td>
+              <td>To start a new transfer</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Dialog Integration</h2>
+        <h3>Location Picker Dialog</h3>
+        <ul>
+          <li>Browse available locations with filtering options</li>
+          <li>Filter by current warehouse, current site, or non-zero balances</li>
+          <li>Search by location name or description</li>
+          <li>Select location and return to main form</li>
+        </ul>
+
+        <h3>Incomplete Part Dialog</h3>
+        <ul>
+          <li>Search for parts by partial ID or description</li>
+          <li>Shows suggested matches based on input</li>
+          <li>Select part and return ID to main form</li>
+        </ul>
+
+        <h2>Keyboard and Scanner Support</h2>
+        <h3>Barcode Scanner Integration</h3>
+        <ul>
+          <li>Item/Part ID field supports barcode input</li>
+          <li>Location fields accept scanned location barcodes</li>
+          <li>Scanner input automatically moves focus to next field</li>
+        </ul>
+
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li><span class="kbd">Tab</span>: Move between fields in logical order</li>
+          <li><span class="kbd">Enter</span>: Activate focused button</li>
+          <li><span class="kbd">Esc</span>: Cancel dialogs or clear current field</li>
+        </ul>
+
+        <h2>Results Display</h2>
+        <h3>Availability Check Results</h3>
+        <p>When checking availability, the results grid shows:</p>
+        <ul>
+          <li>On-hand quantity at the From Location</li>
+          <li>Allocated quantity (reserved for other operations)</li>
+          <li>Available quantity (on-hand minus allocated)</li>
+          <li>Location details and status</li>
+        </ul>
+
+        <h2>Technical Implementation</h2>
+        <h3>Key Components</h3>
+        <ul>
+          <li><strong>View</strong>: <code>Views/InventoryTransferView.axaml</code></li>
+          <li><strong>ViewModel</strong>: <code>ViewModels/InventoryTransferViewModel.cs</code></li>
+          <li><strong>Service Integration</strong>: <code>IInventoryService</code> (planned)</li>
+          <li><strong>Dialog Services</strong>: <code>IPartDialogService</code></li>
+        </ul>
+
+        <h3>VISUAL Integration</h3>
+        <ul>
+          <li>Uses InventoryTransaction for posting transfers</li>
+          <li>Validates parts via GeneralQuery</li>
+          <li>Checks location balances through VISUAL APIs</li>
+          <li>Maintains TRACE requirements for tracked items</li>
+        </ul>
+
+        <h2>Troubleshooting</h2>
+        <h3>Common Issues</h3>
+        <ul>
+          <li><strong>Scanner not working</strong>: Ensure focus is on correct input field</li>
+          <li><strong>Part validation fails</strong>: Check part number formatting and status</li>
+          <li><strong>Location errors</strong>: Verify locations exist in current warehouse</li>
+          <li><strong>Transfer posting fails</strong>: Check VISUAL connection and permissions</li>
+        </ul>
+
+        <h2>References</h2>
+        <ul>
+          <li><a href="mainview.html">Main View</a> - Navigation to Inventory Transfer</li>
+          <li><a href="dialogs.html">Supporting Dialogs</a> - Location Picker and Part Search</li>
+          <li><a href="errors.html">Exception Handling</a> - Error display and resolution</li>
+          <li><a href="workorder.html">Work Order Transactions</a> - Related inventory operations</li>
         </ul>
       </section>
     </main>

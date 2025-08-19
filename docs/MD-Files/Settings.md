@@ -1,113 +1,211 @@
-# Settings View - UI Planning Specification [Ref: ../../README.md; ./MAMPDatabase.md; ../MVVMDefinitions/MainView.md]
+# Settings View - Configuration Management
+_Functional and Technical Specification_
 
-Purpose: define an in-app Settings UI for environment and app-owned configuration (warehouse, environment mode, non-Visual DB connection), with placeholders for any VISUAL-dependent reads.
+---
 
-Global Rule - Visual license lifecycle
+**Metadata**  
+- **View:** `Views/SettingsView.axaml`
+- **ViewModel:** `ViewModels/SettingsViewModel.cs`
+- **Primary Commands:** Save, Cancel
+- **Related Services:** ISettings, ISessionContext, IExceptionHandler
+- **Last Updated:** 2024-12-19
+- **Copilot Template Version:** 1.1
+
+---
+
+## Purpose
+
+In-app settings configuration for warehouse ID and other application-specific settings. Provides interface for managing runtime configuration without requiring Visual server connections.
+
+---
+
+## Global Rules
+
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
+- ALL methods implement try/catch and route errors through IExceptionHandler with the same normalization routine
 
-Scope
-- Manage app-owned settings and runtime toggles that are safe to configure without contacting VISUAL.
-- Display read-only VISUAL context (e.g., SiteId) when available via session; do not open VISUAL connections from this View.
-- Note: UOM is not used in production. No UOM-related settings or displays are present anywhere in the app.
+---
 
-Platform and Shell wiring
-- View: Views/SettingsView.axaml (UserControl). DataContext: SettingsViewModel.
-- Navigation: open from MainView (menu/toolbar) or dedicated button (planned via INavigationService).
+## Scope
 
-## Code Naming and Error Handling Rules
-- File naming: {Type}_{Parent}_{Name}
-- Methods: {Class}_{ControlType}_{Name}
-- Variables: {Method}_{Type(Int|string|exc)}_{Name}
-- ALL methods have try/catch and route errors via IExceptionHandler.
+- Manage app-owned settings and runtime toggles safe to configure without contacting VISUAL
+- Display warehouse ID configuration for inventory transactions
+- Provide Save/Cancel operations for settings persistence
+- Does not initiate Visual server connections from this view
 
-## Screenshot highlighting (reference only)
-- None. Use standard app styling.
+---
+
+## Platform and Shell Wiring
+
+- **View:** `Views/SettingsView.axaml` (UserControl)
+- **Host:** Displayed in MainView content area via CurrentView binding
+- **Navigation:** Created by MainViewModel.MainView_Button_OpenSettingsCommand
+- **Data Context:** SettingsViewModel with ISettings, ISessionContext dependencies
+
+---
+
+## Current Implementation Details
+
+**SettingsView.axaml Structure:**
+- Header with cog-outline icon and "Settings" title
+- **Transaction Settings** panel (expandable, default expanded):
+  - "Set Warehouse ID" field with TextBox input
+- Action buttons: Save and Cancel with appropriate icons
+
+**Key UI Features:**
+- Expandable panel for organized settings groups
+- Consistent styling with other application forms
+- Icon-based action buttons for clear user intent
+
+---
 
 ## Fields and Validation Rules
-- Environment (Development|Production): affects behaviors like Development login and connection selection.
-  - Maps to ISettings.Environment and optionally to an app-owned setting for persistence.
-  - Changing this value prompts for an application restart to take full effect.
-- WarehouseId (string, required): app-owned default warehouse (e.g., "002").
-  - Persist to app DB (see MAMPDatabase.md app_settings) or configuration.
-  - Used by InventoryTransfer and WorkOrderTransaction screens as context.
-- AppDb Connection (read-only text + Test button): shows effective app DB connection name.
-  - Test triggers a non-VISUAL connectivity check to the app DB (placeholder service call; result shown via Exception Handling service/toast).
-- Session (read-only): shows current UserId and SiteId from ISessionContext if authenticated.
-- Development login enabled (toggle, Development only): when enabled, allows Admin/Admin dev login shortcut for testing.
-  - Reads current environment to decide visibility.
 
-Environment/Configuration keys (from README)
-- Environment = Development | Production
-- Optional environment overrides (examples):
-  - INVENTORY__ENVIRONMENT
-  - INVENTORY__CONNECTIONSTRINGS__APPDB
-  - INVENTORY__CONNECTIONSTRINGS__APPDBTEST
-  - INVENTORY__WAREHOUSEID
+**Configurable Fields:**
+- `Settings_Text_WarehouseId` (string) - Default warehouse for inventory transactions
+  - Initialized from ISessionContext.WarehouseId or defaults to "002"
+  - Used by InventoryTransfer and WorkOrderTransaction screens
+
+**Planned Fields (not currently implemented):**
+- Environment (Development|Production) - affects login behaviors
+- Development login toggle - enables Admin/Admin bypass
+- AppDb connection display and test functionality
+- Session context display (UserId, SiteId)
+
+---
 
 ## Visual API Commands (by scenario)
-- None initiated from this View. Do not call VISUAL directly here; any VISUAL context shown is read from existing ISessionContext populated by Login.
+
+**Current Implementation:**
+- No Visual API calls initiated from Settings view
+- All Visual context read from existing ISessionContext populated by Login
+
+**Planned Integrations:**
+- AppDb connectivity testing (non-Visual)
+- Configuration persistence to app-owned database
+
+---
 
 ## Business Rules and Exceptions
-- Changing Environment requires restart; ask user to restart now or later.
-- WarehouseId updates take effect on next start or when services reload settings.
-- Dev login toggle is visible only when Environment = Development; ignored in Production.
-- All errors route via Exception Handling Form.
+
+- Warehouse ID changes take effect immediately upon Save
+- Cancel operation reverts UI to current session values
+- All errors route through centralized Exception Handling Form
+- No Visual server connections required for current settings
+
+---
 
 ## Workflows
-- Open Settings ? edit WarehouseId (and Dev toggle if in Development) ? Save ? success toast; prompt for restart if Environment changed.
-- Test AppDb connection ? show pass/fail via Exception Handling service/toast.
-- Cancel ? close without saving (no changes persisted).
 
-## ViewModel, Commands, and Role Gating
-- SettingsViewModel properties
-  - Settings_Combo_EnvironmentIndex (int)
-  - Settings_Text_WarehouseId (string)
-  - Settings_Label_AppDbName (string)
-  - Settings_Label_SessionUser (string)
-  - Settings_Label_SiteId (string)
-  - Settings_Toggle_IsDevVisible (bool)
-  - Settings_Toggle_DevLoginEnabled (bool)
-- Commands
-  - Settings_Button_Save - persists changes (placeholder); prompts restart if Environment changed.
-  - Settings_Button_Cancel - discards changes.
-  - Settings_Button_TestAppDb - tests app DB connectivity (placeholder) and reports result.
-- Role gating
-  - Only users with appropriate role (e.g., Lead/Admin) can change settings; others read-only.
+1. **Open Settings:** Click Settings button from MainView → SettingsView loads in content area
+2. **Edit Warehouse:** Modify warehouse ID in text field
+3. **Save Changes:** Click Save → persist to session context → success feedback
+4. **Cancel Changes:** Click Cancel → revert UI to original values
+5. **Navigation:** Settings view remains open until user navigates to another feature
 
-## Integration Approach
-- ISettings exposes current Environment and can read from env vars/config; WarehouseId persisted to app DB via IAppDb (planned) or config fallback.
-- Use IExceptionHandler for all error paths; IClock for timestamps if logging tests.
-- INavigationService to provide entry point from MainView (planned method: OpenSettings()).
+---
 
-## Local Storage and Reporting
-- app_settings table (see MAMPDatabase.md) stores WarehouseId and optional DevLoginEnabled flag.
-- Optionally log Settings changes to a local audit table with user/time/context.
+## ViewModel/Command Conventions
 
-## Keyboard and Scanner UX
-- Enter = Save; Esc = Cancel.
+**SettingsViewModel Constructor:**
+- Default: Creates service instances for testing
+- Injected: Accepts IExceptionHandler, ISettings, ISessionContext
 
-## UI Scaffolding (Avalonia 11)
-- Views
-  - Views/SettingsView.axaml
-- ViewModels
-  - ViewModels/SettingsViewModel.cs with properties/commands above.
-- Services and DI
-  - ISettings, IExceptionHandler, IAppDb (planned), IClock, ISessionContext.
+**Properties:**
+- `Settings_Text_WarehouseId` - warehouse ID field with ObservableProperty
 
-## Testing and Acceptance Criteria
-- WarehouseId saves to app DB/config and is reflected when reopening Settings.
-- Environment shows current value and prompts on change; restart prompt works.
-- Dev login toggle is only visible in Development; hidden in Production.
-- Test AppDb shows pass/fail with friendly message via Exception Handling.
-- No UOM references anywhere in the app.
+**Commands:**
+- `Settings_Button_SaveCommand` - persists warehouse ID to session context
+- `Settings_Button_CancelCommand` - reverts UI to current session values
+
+**Service Integration:**
+- ISessionContext for warehouse ID persistence
+- ISettings for future configuration expansion
+- IExceptionHandler for error routing
+
+---
+
+## Integration & Storage
+
+**Services Used:**
+- ISessionContext: warehouse ID storage and retrieval
+- ISettings: configuration interface (future expansion)
+- IExceptionHandler: centralized error handling
+
+**Data Persistence:**
+- Current: In-memory session context only
+- Planned: App-owned database settings table
+- Configuration: Environment variable overrides supported
+
+---
+
+## Keyboard/Scanner UX
+
+**Current Implementation:**
+- Standard tab navigation between fields
+- Enter key likely submits form (framework default)
+
+**Planned Enhancements:**
+- Keyboard shortcuts for Save (Ctrl+S) and Cancel (Esc)
+- Direct warehouse ID barcode scanning
+
+---
+
+## UI Scaffold
+
+**Views:**
+- `Views/SettingsView.axaml` - settings configuration form
+- Expandable Transaction Settings panel
+- Save/Cancel action buttons with icons
+
+**ViewModels:**
+- `ViewModels/SettingsViewModel.cs` - settings management logic
+- Inherits from ObservableObject (CommunityToolkit.Mvvm)
+- Simple property binding and command pattern
+
+**Services:**
+- Settings service for configuration persistence
+- SessionContext for runtime state management
+- ExceptionHandler for error display
+
+---
+
+## Testing & Acceptance
+
+- Settings view loads with current warehouse ID from session
+- Warehouse ID changes are reflected in text field
+- Save button persists changes to session context
+- Cancel button reverts changes to original values
+- Navigation back to main features uses updated warehouse ID
+- All errors display through Exception Handling Form
+
+---
 
 ## References
-- ../../README.md (Configuration; Development login; app start; placeholder rules; environment overrides)
-- ./MAMPDatabase.md (app_settings storage)
-- ../MVVMDefinitions/MainView.md (navigation entry point)
 
-## Implementation status (scaffold)
-- View created: ../../Views/SettingsView.axaml
-- ViewModel created: ../../ViewModels/SettingsViewModel.cs
-- Navigation entry from MainView via INavigationService is planned (OpenSettings()).
-- All persistence and connectivity actions are placeholders pending service implementation.
+- ../../Views/SettingsView.axaml (UI implementation)
+- ../../ViewModels/SettingsViewModel.cs (settings logic)
+- ../../Services/Service_Settings.cs (configuration service)
+- ./MAMPDatabase.md (future database persistence)
+- ./ExceptionHandling.md (error handling flow)
+
+---
+
+## Implementation Status
+
+- **Current:** Basic warehouse ID configuration implemented
+- **Save/Cancel:** Working with session context persistence
+- **UI:** Complete with expandable panels and action buttons
+- **Navigation:** Integrated with MainView navigation system
+
+---
+
+## TODOs / Copilot Agent Notes
+
+- [ ] Add environment selection (Development/Production)
+- [ ] Implement app database connectivity testing
+- [ ] Add development login toggle (Development mode only)
+- [ ] Add session context display (UserId, SiteId)
+- [ ] Implement persistent storage to app-owned database
+- [ ] Add keyboard shortcuts (Ctrl+S for Save, Esc for Cancel)
+- [ ] Consider adding configuration import/export functionality

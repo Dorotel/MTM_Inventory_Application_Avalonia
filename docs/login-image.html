@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login View (HTML Image)</title>
+    <style>
+        :root {
+            --fg: #222;
+            --fg-low: #666;
+            --bg: #fff;
+            --bg-panel: #f6f6f6;
+            --border: #ddd;
+            --accent: #2563eb;
+            --success: #10b981;
+        }
+
+        body {
+            margin: 16px;
+            font: 14px/1.4 Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+        }
+
+        .window {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .header-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 28px;
+        }
+
+        .header-content h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-content p {
+            margin: 2px 0 0 0;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .expander {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .expander-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            cursor: default;
+            background: #f9f9f9;
+        }
+
+        .expander-content {
+            padding: 20px;
+        }
+
+        .form-panel {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            background: var(--bg-panel);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .form-label {
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .form-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 240px;
+        }
+
+        .form-input[type="password"] {
+            font-family: monospace;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: default;
+        }
+
+        .btn.success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .collapsed {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <!-- Header -->
+        <div class="header">
+            <span class="header-icon">🔐</span>
+            <div class="header-content">
+                <h2>Sign in</h2>
+                <p>Enter your Visual credentials</p>
+            </div>
+        </div>
+
+        <!-- Visual Log-In Information Panel -->
+        <div class="expander">
+            <div class="expander-header">
+                <span class="icon">🔑</span>
+                <span>Visual Log-In Information</span>
+            </div>
+            <div class="expander-content">
+                <div class="form-panel">
+                    <div class="form-grid">
+                        <!-- Username -->
+                        <div class="form-label">Username</div>
+                        <input class="form-input" type="text" value="Admin" />
+
+                        <!-- Password -->
+                        <div class="form-label">Password</div>
+                        <input class="form-input" type="password" value="••••••" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional Panel (Collapsed) -->
+        <div class="expander collapsed">
+            <div class="expander-header">
+                <span class="icon">🌐</span>
+                <span>Optional</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn success">
+                <span class="icon">🚪</span>
+                <span>Sign In</span>
+            </button>
+            <button class="btn">
+                <span class="icon">❌</span>
+                <span>Cancel</span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

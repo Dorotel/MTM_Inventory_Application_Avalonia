@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MainView (HTML Image)</title>
+    <style>
+        :root {
+            --fg: #222;
+            --fg-low: #666;
+            --bg: #fff;
+            --bg-panel: #f6f6f6;
+            --border: #ddd;
+            --accent: #2563eb;
+        }
+
+        body {
+            margin: 16px;
+            font: 14px/1.4 Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+        }
+
+        .window {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            max-width: 1200px;
+            min-height: 600px;
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-left .icon {
+            width: 32px;
+            height: 32px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 32px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--fg-low);
+        }
+
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            min-height: 500px;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            padding: 12px;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            cursor: default;
+            text-align: left;
+        }
+
+        .nav-button:hover {
+            background: #f0f0f0;
+        }
+
+        .nav-button.primary {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .content-area {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--fg-low);
+            font-style: italic;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <!-- Header with greeting and session info -->
+        <div class="header">
+            <div class="header-left">
+                <span class="icon">📋</span>
+                <span class="header-title">Good morning, User!</span>
+            </div>
+            <div></div>
+            <div class="header-right">
+                <div class="session-info">
+                    <span class="icon">👤</span>
+                    <span>User:</span>
+                    <strong>Admin</strong>
+                </div>
+                <div class="session-info">
+                    <span>Site:</span>
+                    <strong>HQ</strong>
+                </div>
+                <div class="session-info">
+                    <span>Warehouse:</span>
+                    <strong>MAIN</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content area -->
+        <div class="main-content">
+            <!-- Left sidebar with navigation -->
+            <div class="sidebar">
+                <button class="nav-button">
+                    <span class="icon">⚠️</span>
+                    <span>Test Exception Dialog</span>
+                </button>
+                <button class="nav-button primary">
+                    <span class="icon">📋</span>
+                    <span>Work Order Transaction</span>
+                </button>
+                <button class="nav-button">
+                    <span class="icon">🔄</span>
+                    <span>Inventory Transfer</span>
+                </button>
+            </div>
+
+            <!-- Content area -->
+            <div class="content-area">
+                <em>Select a feature from the navigation menu to begin</em>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-left">
+                <button class="btn">
+                    <span class="icon">☰</span>
+                    <span>Toggle Menu</span>
+                </button>
+            </div>
+            <div>
+                <button class="btn">
+                    <span class="icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+                <button class="btn" style="margin-left: 8px;">
+                    <span class="icon">🚪</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
