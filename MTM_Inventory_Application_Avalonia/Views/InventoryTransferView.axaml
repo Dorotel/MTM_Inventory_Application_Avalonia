@@ -8,106 +8,143 @@
              x:Class="MTM_Inventory_Application_Avalonia.Views.InventoryTransferView"
              x:DataType="vm:InventoryTransferViewModel"
              d:DesignWidth="900" d:DesignHeight="600">
-  <Design.DataContext>
-    <vm:InventoryTransferViewModel />
-  </Design.DataContext>
+	<Design.DataContext>
+		<vm:InventoryTransferViewModel />
+	</Design.DataContext>
 
-  <Grid Margin="20" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
-    <!-- Header with icon -->
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
-      <Viewbox x:Name="HeaderIconBox" Grid.Column="0" Width="40" Height="40" Stretch="Uniform">
-        <ia:Icon Value="mdi:swap-horizontal"/>
-      </Viewbox>
-      <!-- Wrap TextBlock in a Border that matches the icon box height to ensure perfect vertical centering -->
-      <Border Grid.Column="1" Height="{Binding #HeaderIconBox.Height}">
-        <TextBlock Margin="12,0,0,0" Text="Inventory Transfer" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center"/>
-      </Border>
-    </Grid>
+	<Grid Margin="20" RowDefinitions="Auto,*,Auto,Auto" ColumnDefinitions="*">
+		<Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+			<Viewbox x:Name="HeaderIconBox" Grid.Column="0" Width="40" Height="40" Stretch="Uniform">
+				<ia:Icon Value="mdi:swap-horizontal"/>
+			</Viewbox>
+			<Border Grid.Column="1" Height="{Binding #HeaderIconBox.Height}">
+				<TextBlock Margin="12,0,0,0" Text="Inventory Transfer" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center"/>
+			</Border>
+		</Grid>
 
-    <!-- Form -->
-    <Grid Grid.Row="1" ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,16,0,16">
-      <Grid.Styles>
-        <Style Selector="TextBox">
-          <Setter Property="Margin" Value="0,4"/>
-          <Setter Property="Padding" Value="8,6"/>
-          <Setter Property="MinWidth" Value="260"/>
-        </Style>
-        <Style Selector="TextBlock.header">
-          <Setter Property="VerticalAlignment" Value="Center"/>
-          <Setter Property="Opacity" Value="0.9"/>
-          <Setter Property="Margin" Value="0,8,16,8"/>
-        </Style>
-      </Grid.Styles>
+		<Grid Grid.Row="1" ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,16,0,16">
+			<Grid.Styles>
+				<Style Selector="TextBox">
+					<Setter Property="Margin" Value="0,4"/>
+					<Setter Property="Padding" Value="8,6"/>
+					<Setter Property="MinWidth" Value="260"/>
+				</Style>
+				<Style Selector="TextBlock.header">
+					<Setter Property="VerticalAlignment" Value="Center"/>
+					<Setter Property="Opacity" Value="0.9"/>
+					<Setter Property="Margin" Value="0,8,16,8"/>
+				</Style>
+			</Grid.Styles>
 
-      <TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Item/Part"/>
-      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <TextBox   Text="{Binding InventoryTransfer_TextBox_ItemId}" Width="260"/>
-        <Button Command="{Binding InventoryTransfer_Button_ResolveIncompletePartIdCommand}">
-          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-            <ia:Icon Value="mdi:magnify" Width="18" Height="18"/>
-            <TextBlock Text="Find" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Button>
-      </StackPanel>
+			<TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Part Number"/>
+			<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+				<TextBox   Text="{Binding InventoryTransfer_TextBox_ItemId}" Width="260"/>
+				<Button Command="{Binding InventoryTransfer_Button_ResolveIncompletePartIdCommand}">
+					<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+						<ia:Icon Value="mdi:magnify" Width="18" Height="18"/>
+						<TextBlock Text="Find" VerticalAlignment="Center"/>
+					</StackPanel>
+				</Button>
+			</StackPanel>
 
-      <TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="Quantity"/>
-      <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding InventoryTransfer_TextBox_Quantity}"/>
+			<TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="Quantity"/>
+			<TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding InventoryTransfer_TextBox_Quantity}"/>
 
-      <TextBlock Classes="header" Grid.Row="2" Grid.Column="0" Text="From Location"/>
-      <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <TextBox Text="{Binding InventoryTransfer_TextBox_FromLocation}" Width="260"/>
-        <Button>
-          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-            <ia:Icon Value="mdi:map-marker" Width="18" Height="18"/>
-            <TextBlock Text="Locations (F2)" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Button>
-      </StackPanel>
+			<TextBlock Classes="header" Grid.Row="2" Grid.Column="0" Text="From Location"/>
+			<StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+				<TextBox Text="{Binding InventoryTransfer_TextBox_FromLocation}" Width="260"/>
+				<Button>
+					<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+						<ia:Icon Value="mdi:map-marker" Width="18" Height="18"/>
+						<TextBlock Text="Locations (F2)" VerticalAlignment="Center"/>
+					</StackPanel>
+				</Button>
+			</StackPanel>
 
-      <TextBlock Classes="header" Grid.Row="3" Grid.Column="0" Text="To Location"/>
-      <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <TextBox Text="{Binding InventoryTransfer_TextBox_ToLocation}" Width="260"/>
-        <Button>
-          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-            <ia:Icon Value="mdi:map-marker" Width="18" Height="18"/>
-            <TextBlock Text="Locations (F2)" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Button>
-      </StackPanel>
+			<TextBlock Classes="header" Grid.Row="3" Grid.Column="0" Text="To Location"/>
+			<StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+				<TextBox Text="{Binding InventoryTransfer_TextBox_ToLocation}" Width="260"/>
+				<Button>
+					<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+						<ia:Icon Value="mdi:map-marker" Width="18" Height="18"/>
+						<TextBlock Text="Locations (F2)" VerticalAlignment="Center"/>
+					</StackPanel>
+				</Button>
+			</StackPanel>
 
-      <TextBlock Classes="header" Grid.Row="4" Grid.Column="0" Text="Warehouse"/>
-      <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding InventoryTransfer_Label_WarehouseId}" VerticalAlignment="Center"/>
+			<TextBlock Classes="header" Grid.Row="4" Grid.Column="0" Text="Warehouse"/>
+			<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding InventoryTransfer_Label_WarehouseId}" VerticalAlignment="Center"/>
 
-      <TextBlock Classes="header" Grid.Row="5" Grid.Column="0" Text="Site"/>
-      <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding InventoryTransfer_Label_SiteId}" VerticalAlignment="Center"/>
-    </Grid>
+			<TextBlock Classes="header" Grid.Row="5" Grid.Column="0" Text="Site"/>
+			<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding InventoryTransfer_Label_SiteId}" VerticalAlignment="Center"/>
+		</Grid>
 
-    <!-- Actions -->
-    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-      <Button Command="{Binding InventoryTransfer_Button_ValidateItemCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <ia:Icon Value="mdi:check-circle-outline" Width="18" Height="18"/>
-          <TextBlock Text="Validate Item" VerticalAlignment="Center"/>
-        </StackPanel>
-      </Button>
-      <Button Command="{Binding InventoryTransfer_Button_CheckAvailabilityFromCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <ia:Icon Value="mdi:database-search" Width="18" Height="18"/>
-          <TextBlock Text="Check Availability" VerticalAlignment="Center"/>
-        </StackPanel>
-      </Button>
-      <Button Command="{Binding InventoryTransfer_Button_PostTransferCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <ia:Icon Value="mdi:send" Width="18" Height="18"/>
-          <TextBlock Text="Post Transfer" VerticalAlignment="Center"/>
-        </StackPanel>
-      </Button>
-      <Button Command="{Binding InventoryTransfer_Button_ResetCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <ia:Icon Value="mdi:refresh" Width="18" Height="18"/>
-          <TextBlock Text="Reset" VerticalAlignment="Center"/>
-        </StackPanel>
-      </Button>
-    </StackPanel>
-  </Grid>
+		<!-- Collapsible Results DataGrid -->
+		<Expander Grid.Row="2" IsExpanded="True">
+			<Expander.Header>
+				<StackPanel Orientation="Horizontal" Spacing="8">
+					<ia:Icon Value="mdi:view-list" Width="18" Height="18"/>
+					<TextBlock Text="Results" VerticalAlignment="Center"/>
+					<Border Background="{DynamicResource ThemeAccentBrush}" CornerRadius="10" Padding="6,2" VerticalAlignment="Center">
+						<TextBlock Foreground="White"
+								   FontWeight="SemiBold"
+								   Text="{Binding InventoryTransfer_DataGrid_Results.Count, FallbackValue=0}"
+								   VerticalAlignment="Center"/>
+					</Border>
+				</StackPanel>
+			</Expander.Header>
+
+			<Border Margin="0,8,0,16" Padding="8" BorderBrush="{DynamicResource ThemeForegroundLowBrush}" BorderThickness="1" CornerRadius="6">
+				<DataGrid ItemsSource="{Binding InventoryTransfer_DataGrid_Results}"
+						  IsReadOnly="True"
+						  AutoGenerateColumns="False"
+						  CanUserReorderColumns="True"
+						  CanUserSortColumns="True"
+						  HeadersVisibility="All"
+						  GridLinesVisibility="All"
+						  RowHeight="32"
+						  MinHeight="120"
+						  MaxHeight="320">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Part Number" Binding="{Binding PartNumber}" Width="*" />
+						<DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*" />
+						<DataGridTextColumn Header="From" Binding="{Binding FromLocation}" Width="*" />
+						<DataGridTextColumn Header="To" Binding="{Binding ToLocation}" Width="*" />
+						<DataGridTextColumn Header="Available" Binding="{Binding AvailableQuantity}" Width="Auto" />
+						<DataGridTextColumn Header="UOM" Binding="{Binding Uom}" Width="Auto" />
+						<DataGridTextColumn Header="Warehouse" Binding="{Binding WarehouseId}" Width="Auto" />
+						<DataGridTextColumn Header="Site" Binding="{Binding SiteId}" Width="Auto" />
+					</DataGrid.Columns>
+				</DataGrid>
+			</Border>
+		</Expander>
+
+		<!-- Actions -->
+		<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+			<Button Command="{Binding InventoryTransfer_Button_ValidateItemCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:check-circle-outline" Width="18" Height="18"/>
+					<TextBlock Text="Validate Item" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+			<Button Command="{Binding InventoryTransfer_Button_CheckAvailabilityFromCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:database-search" Width="18" Height="18"/>
+					<TextBlock Text="Check Availability" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+			<Button Command="{Binding InventoryTransfer_Button_PostTransferCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:send" Width="18" Height="18"/>
+					<TextBlock Text="Post Transfer" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+			<Button Command="{Binding InventoryTransfer_Button_ResetCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:refresh" Width="18" Height="18"/>
+					<TextBlock Text="Reset" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+		</StackPanel>
+	</Grid>
 </UserControl>

@@ -6,6 +6,12 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
+  <!-- Ensure App.axaml is compiled as Avalonia XAML -->
+  <ItemGroup>
+    <AvaloniaXaml Update="App.axaml" />
+    <AvaloniaXaml Update="Views\**\*.axaml" />
+  </ItemGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" />
   </ItemGroup>

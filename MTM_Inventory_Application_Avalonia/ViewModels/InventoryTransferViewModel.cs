@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MTM_Inventory_Application_Avalonia.Services;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MTM_Inventory_Application_Avalonia.ViewModels;
@@ -17,6 +18,9 @@ public partial class InventoryTransferViewModel : ObservableObject
     public InventoryTransferViewModel(IExceptionHandler exceptionHandler)
     {
         _exceptionHandler = exceptionHandler;
+
+        // Keep ItemsSource stable; mutate the inner collection
+        InventoryTransfer_DataGrid_Results = new ReadOnlyObservableCollection<InventoryTransferResultRow>(_inventoryTransfer_DataGrid_Results);
     }
 
     // Fields
@@ -29,6 +33,18 @@ public partial class InventoryTransferViewModel : ObservableObject
     [ObservableProperty] private string inventoryTransfer_Label_WarehouseId = "002";
     [ObservableProperty] private string inventoryTransfer_Label_SiteId = "SITE";
 
+    // Results DataGrid backing store (mutable) + read-only projection for binding
+    private readonly ObservableCollection<InventoryTransferResultRow> _inventoryTransfer_DataGrid_Results = new();
+    public ReadOnlyObservableCollection<InventoryTransferResultRow> InventoryTransfer_DataGrid_Results { get; }
+
+    // Helper to replace current results
+    private void SetInventoryTransferResults(System.Collections.Generic.IEnumerable<InventoryTransferResultRow> rows)
+    {
+        _inventoryTransfer_DataGrid_Results.Clear();
+        foreach (var r in rows)
+            _inventoryTransfer_DataGrid_Results.Add(r);
+    }
+
     // Commands (placeholders with centralized error handling)
     [RelayCommand]
     private void InventoryTransfer_Button_ValidateItem()
@@ -40,7 +56,15 @@ public partial class InventoryTransferViewModel : ObservableObject
     [RelayCommand]
     private void InventoryTransfer_Button_CheckAvailabilityFrom()
     {
-        try { /* TODO: VISUAL availability check via service */ }
+        try
+        {
+            // TODO: Replace with service call; example usage:
+            // var rows = await _inventoryService.GetAvailabilityAsync(...);
+            // SetInventoryTransferResults(rows);
+
+            // For now, ensure previous results are cleared
+            _inventoryTransfer_DataGrid_Results.Clear();
+        }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_CheckAvailabilityFrom)); }
     }
 
@@ -67,6 +91,8 @@ public partial class InventoryTransferViewModel : ObservableObject
             InventoryTransfer_TextBox_Quantity = string.Empty;
             InventoryTransfer_TextBox_FromLocation = string.Empty;
             InventoryTransfer_TextBox_ToLocation = string.Empty;
+
+            _inventoryTransfer_DataGrid_Results.Clear();
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_Reset)); }
     }
@@ -86,4 +112,15 @@ public partial class InventoryTransferViewModel : ObservableObject
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_ResolveIncompletePartId)); }
     }
+
+    // Row type displayed by the DataGrid
+    public sealed record InventoryTransferResultRow(
+        string PartNumber,
+        string Description,
+        string FromLocation,
+        string ToLocation,
+        decimal AvailableQuantity,
+        string Uom,
+        string WarehouseId,
+        string SiteId);
 }
