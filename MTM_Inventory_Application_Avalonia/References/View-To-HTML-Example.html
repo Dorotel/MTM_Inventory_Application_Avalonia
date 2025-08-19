@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Location Picker Dialog (Mock)</title>
+    <style>
+        :root {
+            --fg: #222;
+            --fg-low: #666;
+            --bg: #fff;
+            --bg-panel: #f6f6f6;
+            --border: #ddd;
+            --accent: #2563eb;
+        }
+
+        body {
+            margin: 16px;
+            font: 14px/1.4 Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+        }
+
+        .window {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            max-width: 1100px;
+        }
+
+        .titlebar {
+            padding: 10px 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: auto repeat(6,auto) 1fr repeat(3,auto);
+            gap: 8px;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .toolbtn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 4px 6px;
+            cursor: default;
+        }
+
+            .toolbtn span {
+                font-size: 16px;
+                opacity: .8;
+            }
+
+        .search {
+            min-width: 260px;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .check {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .combo {
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 150px;
+        }
+
+        .expander {
+            border-top: 1px solid var(--border);
+        }
+
+        .expander-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            cursor: default;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin-left: 6px;
+        }
+
+        .panel {
+            margin: 0 12px 12px 12px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-panel);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        thead th {
+            text-align: left;
+            font-weight: 600;
+            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        tbody tr:nth-child(even) td {
+            background: #fcfcfc;
+        }
+
+        .footer {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+        }
+
+        .muted {
+            color: var(--fg-low);
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 6px 12px;
+        }
+
+            .btn.primary {
+                background: var(--accent);
+                color: #fff;
+                border-color: var(--accent);
+            }
+
+            .btn[disabled] {
+                opacity: .6;
+            }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="titlebar">Locations</div>
+
+        <div class="toolbar">
+            <div style="font-weight:600; margin-right:6px;">Locations</div>
+            <button class="toolbtn" title="Accept"><span class="icon">✔</span></button>
+            <button class="toolbtn" title="Cancel"><span class="icon">✖</span></button>
+            <button class="toolbtn" title="Refresh"><span class="icon">⟳</span></button>
+            <button class="toolbtn" title="Search"><span class="icon">🔎</span></button>
+            <button class="toolbtn" title="Filter"><span class="icon">⧉</span></button>
+            <button class="toolbtn" title="Clear Filter"><span class="icon">🧹</span></button>
+
+            <input class="search" placeholder="Location contains..." value="LOC-001" />
+            <label class="check"><input type="checkbox" /> Active only</label>
+            <label class="check"><input type="checkbox" /> Search in description</label>
+            <div style="display:flex; align-items:center; gap:6px;">
+                <div>Match:</div>
+                <select class="combo">
+                    <option>Contains (%seed%)</option>
+                    <option>Starts with (seed%)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="expander">
+            <div class="expander-header">
+                <span class="icon">≣</span>
+                <div>Results</div>
+                <span class="badge">12</span>
+            </div>
+
+            <div class="panel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>OnHand</th>
+                            <th>Allocated</th>
+                            <th>Available</th>
+                            <th>Warehouse</th>
+                            <th>Site</th>
+                            <th>BinType</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>LOC-001-A</td><td>9</td><td>2</td><td>7</td><td>MAIN</td><td>HQ</td><td>STD</td></tr>
+                        <tr><td>LOC-002-B</td><td>6</td><td>3</td><td>3</td><td>A1</td><td>EAST</td><td>BULK</td></tr>
+                        <tr><td>LOC-003-C</td><td>12</td><td>4</td><td>8</td><td>B2</td><td>WEST</td><td>RACK</td></tr>
+                        <tr><td>LOC-004-D</td><td>0</td><td>0</td><td>0</td><td>MAIN</td><td>HQ</td><td>STD</td></tr>
+                        <tr><td>LOC-005-E</td><td>7</td><td>1</td><td>6</td><td>A1</td><td>EAST</td><td>BULK</td></tr>
+                        <tr><td>LOC-006-F</td><td>5</td><td>2</td><td>3</td><td>B2</td><td>WEST</td><td>RACK</td></tr>
+                        <tr><td>SEED-X01</td><td>12</td><td>2</td><td>10</td><td>MAIN</td><td>HQ</td><td>STD</td></tr>
+                        <tr><td>A-SEED-Z99</td><td>5</td><td>1</td><td>4</td><td>A1</td><td>EAST</td><td>RACK</td></tr>
+                        <tr><td>LOC-007-A</td><td>8</td><td>5</td><td>3</td><td>MAIN</td><td>HQ</td><td>STD</td></tr>
+                        <tr><td>LOC-008-B</td><td>4</td><td>1</td><td>3</td><td>A1</td><td>EAST</td><td>BULK</td></tr>
+                        <tr><td>LOC-009-C</td><td>11</td><td>6</td><td>5</td><td>B2</td><td>WEST</td><td>RACK</td></tr>
+                        <tr><td>LOC-010-D</td><td>2</td><td>0</td><td>2</td><td>MAIN</td><td>HQ</td><td>STD</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="muted">12 results</div>
+            <button class="btn" disabled>✔ Select</button>
+            <button class="btn">✖ Cancel</button>
+        </div>
+    </div>
+</body>
+</html>

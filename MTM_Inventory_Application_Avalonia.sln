@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{02EA681E-C
 		docs\rules.html = docs\rules.html
 		docs\settings.html = docs\settings.html
 		docs\styles.css = docs\styles.css
+		test.html = test.html
 		docs\visual-db-interactions.html = docs\visual-db-interactions.html
 		docs\workorder.html = docs\workorder.html
 		docs\MVVM Definitions\WorkOrderTransaction.md = docs\MVVM Definitions\WorkOrderTransaction.md
@@ -58,6 +59,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{4AECAA
 		docs\Images\MTM_Logo.png = docs\Images\MTM_Logo.png
 		docs\Images\Settings.png = docs\Images\Settings.png
 		docs\Images\WorkOrderTransactionView.png = docs\Images\WorkOrderTransactionView.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{5302BE56-EFD8-4C50-AA06-AAFBC68C69D1}"
+	ProjectSection(SolutionItems) = preProject
+		.git\COMMIT_EDITMSG = .git\COMMIT_EDITMSG
+		.git\config = .git\config
+		.git\description = .git\description
+		.git\FETCH_HEAD = .git\FETCH_HEAD
+		.git\HEAD = .git\HEAD
+		.git\index = .git\index
+		.git\ms-persist.xml = .git\ms-persist.xml
+		.git\ORIG_HEAD = .git\ORIG_HEAD
 	EndProjectSection
 EndProject
 Global
