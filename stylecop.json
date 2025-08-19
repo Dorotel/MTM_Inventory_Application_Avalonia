@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "companyName": "MTM Inventory Application",
+      "copyrightText": "Copyright (c) MTM Inventory Application.",
+      "documentInterfaces": true,
+      "documentExposedElements": true,
+      "documentInternalElements": false,
+      "documentPrivateElements": false
+    },
+    "orderingRules": {
+      "usingDirectivesPlacement": "outsideNamespace",
+      "systemUsingDirectivesFirst": true,
+      "blankLinesBetweenUsingGroups": "require"
+    },
+    "namingRules": {
+      "allowCommonHungarianPrefixes": false,
+      
+      "includeInferredTupleElementNames": true,
+      
+      "allowUnderscorePrefixInFieldNames": true
+    },
+    "layoutRules": {
+      "newlineAtEndOfFile": "require"
+    }
+  }
+}
