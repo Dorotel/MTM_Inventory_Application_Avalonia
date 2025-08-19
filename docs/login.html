@@ -37,29 +37,151 @@
     <article id="top" class="wrapper style1"><div class="container"><header><h1>Login</h1><p>Authentication flow and requirements</p></header></div></article>
     <main class="container">
       <section class="panel" id="login">
+        <h2>Purpose and Overview</h2>
+        <p>The Login screen appears as an overlay inside MainView when the application starts. It authenticates users with Infor VISUAL credentials before allowing access to inventory features. After successful login, the overlay hides and the user remains in MainView.</p>
         
-        <p>Purpose: authenticate a user before the app becomes fully available.</p>
         <div class="fig-grid">
           <figure>
             <img src="./Images/LoginView.png" alt="Login View mockup" />
-            <figcaption>LoginView.png</figcaption>
+            <figcaption>Login View - appears as centered overlay in MainView</figcaption>
           </figure>
         </div>
-        <h3>What the user does</h3>
+
+        <h2>How to Use</h2>
+        <h3>Step-by-Step Workflow</h3>
+        <ol>
+          <li>When the application starts, the Login overlay appears centered in MainView</li>
+          <li>Enter your Infor VISUAL username in the <strong>Username</strong> field</li>
+          <li>Enter your password in the <strong>Password</strong> field (characters are masked)</li>
+          <li>Optionally enter Site/Domain information if required by your environment</li>
+          <li>Click <strong>Login</strong> or press <span class="kbd">Enter</span> to authenticate</li>
+          <li>If successful, the overlay disappears and you see the main application interface</li>
+          <li>If authentication fails, an error dialog provides details about the issue</li>
+        </ol>
+
+        <h2>Field and Control Descriptions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Required</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Text Input</td>
+              <td>Your Infor VISUAL username</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Password</td>
+              <td>Password Input</td>
+              <td>Your Infor VISUAL password (masked)</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Site/Domain</td>
+              <td>Text Input</td>
+              <td>Optional site or domain information</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Login Button</td>
+              <td>Button</td>
+              <td>Initiates authentication process</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Cancel Button</td>
+              <td>Button</td>
+              <td>Exits the application</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Validation and Error Handling</h2>
+        <h3>Required Fields</h3>
         <ul>
-          <li>Enter your Infor VISUAL username and password (and Site/Domain if required by your environment).</li>
-          <li>Press <span class="kbd">Enter</span> or click Login.</li>
+          <li><strong>Username</strong>: Must not be empty</li>
+          <li><strong>Password</strong>: Must not be empty</li>
         </ul>
-        <h3>What the app does</h3>
+        
+        <h3>Validation Rules</h3>
         <ul>
-          <li>Calls <span class="pill">IAuthenticationService.AuthenticateAsync</span>. In Development, accepts Admin/Admin and creates a demo session. In Production, validates Infor VISUAL credentials.</li>
-          <li>On success: updates the session and hides the Login overlay, staying on MainView.</li>
-          <li>On failure: opens the Exception Dialog with a friendly message and technical details.</li>
+          <li>Login button is disabled while authentication is in progress</li>
+          <li>Input validation occurs when Login is clicked</li>
+          <li>Empty required fields trigger validation errors</li>
         </ul>
-        <h3>Commands</h3>
+
+        <h3>Error Scenarios</h3>
         <ul>
-          <li><strong>Login</strong>: attempts authentication; disables inputs while in progress.</li>
-          <li><strong>Cancel/Exit</strong>: closes the app or returns to a safe state (configurable).</li>
+          <li><strong>Missing credentials</strong>: "Username is required" or "Password is required"</li>
+          <li><strong>Authentication failure</strong>: "Login failed. Check credentials."</li>
+          <li><strong>Connection issues</strong>: VISUAL server connection problems</li>
+          <li><strong>Configuration errors</strong>: Missing Database.config or DLL references</li>
+        </ul>
+
+        <h2>Development vs Production Authentication</h2>
+        <h3>Development Environment</h3>
+        <ul>
+          <li>Username: <strong>Admin</strong></li>
+          <li>Password: <strong>Admin</strong></li>
+          <li>Creates a demo session for testing purposes</li>
+        </ul>
+
+        <h3>Production Environment</h3>
+        <ul>
+          <li>Validates against Infor VISUAL server</li>
+          <li>Uses Database.config for connection settings</li>
+          <li>Supports both OpenLocal and OpenLocalSSO authentication</li>
+        </ul>
+
+        <h2>Keyboard Shortcuts</h2>
+        <ul>
+          <li><span class="kbd">Enter</span>: Submit login (when fields are valid)</li>
+          <li><span class="kbd">Esc</span>: Cancel login and exit application</li>
+        </ul>
+
+        <h2>Navigation</h2>
+        <ul>
+          <li><strong>Successful Login</strong>: Overlay hides, MainView becomes active</li>
+          <li><strong>Cancel/Exit</strong>: Application closes</li>
+          <li><strong>Error</strong>: Exception dialog opens with details</li>
+        </ul>
+
+        <h2>Technical Implementation</h2>
+        <h3>Key Components</h3>
+        <ul>
+          <li><strong>View</strong>: <code>Views/Dialogs/LoginView.axaml</code></li>
+          <li><strong>ViewModel</strong>: <code>ViewModels/Dialogs/LoginViewModel.cs</code></li>
+          <li><strong>Service</strong>: <code>IAuthenticationService</code> with placeholder implementation</li>
+        </ul>
+
+        <h3>Business Rules</h3>
+        <ul>
+          <li>Authentication operations use short-lived VISUAL licenses</li>
+          <li>Passwords are never stored on disk</li>
+          <li>Session context is maintained in memory only</li>
+          <li>All errors route through centralized exception handling</li>
+        </ul>
+
+        <h2>Troubleshooting</h2>
+        <h3>Common Issues</h3>
+        <ul>
+          <li><strong>Cannot connect to VISUAL</strong>: Check Database.config file location and contents</li>
+          <li><strong>Authentication repeatedly fails</strong>: Verify username/password in VISUAL system</li>
+          <li><strong>Application won't start</strong>: Ensure required DLLs are present (LsaCore.dll, LsaShared.dll)</li>
+        </ul>
+
+        <h2>References</h2>
+        <ul>
+          <li><a href="mainview.html">Main View</a> - Where you go after successful login</li>
+          <li><a href="errors.html">Exception Handling</a> - How errors are displayed</li>
+          <li><a href="config.html">Configuration</a> - Database.config setup</li>
         </ul>
       </section>
     </main>
