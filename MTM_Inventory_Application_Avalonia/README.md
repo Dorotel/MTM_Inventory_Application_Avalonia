@@ -46,6 +46,23 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - Do not call Vmfg*.dll assemblies or Dbms.OpenLocal/OpenLocalSSO directly from UI layers; instead depend on interfaces (e.g., IInventoryService, IAuthenticationService, IPartDialogService) with stubbed placeholder implementations.
 - Keep try/catch in all UI-invoked methods and route errors through the centralized IExceptionHandler; mark real VISUAL calls with TODOs to be implemented in service adapters later.
 
+### Integration architecture: Visual API vs Application API (current: no server calls)
+
+This application layer intentionally does not call the VISUAL server. UI and ViewModels depend on internal service interfaces with placeholder implementations. A future adapter may bridge these to the VISUAL API toolkit behind the same interfaces.
+
+| Visual API (DLL.Class) | Example method(s) | Application API (Service interface) | Current implementation | Server interaction |
+| --- | --- | --- | --- | --- |
+| Lsa.Data.Dbms (LsaCore.dll) | OpenLocal, Close | IAuthenticationService (e.g., OpenSessionAsync/LogoutAsync) | Placeholder login (Admin/Admin in Development) | None |
+| Lsa.Vmfg.Inventory.InventoryTransaction (VmfgInventory.dll) | Prepare, NewInputRow, Save | IInventoryService.PostTransactionAsync | Placeholder stub; validates inputs only | None |
+| Lsa.Vmfg.ShopFloor.ChangeWOStatus (VmfgShopFloor.dll) | Prepare, NewInputRow, Save | IWorkOrderService.ChangeStatusAsync | Placeholder stub; no posting | None |
+| Lsa.Vmfg.ShopFloor.GetWorkOrderSummary | Prepare, NewInputRow, Execute | IWorkOrderService.GetSummaryAsync | Placeholder stub; returns mocked data | None |
+| Lsa.Shared.GeneralQuery (LsaShared.dll) | Prepare, Parameters, Execute | IDataQueryService.ExecuteAsync | Not implemented; reserved for adapter | None |
+
+Notes
+- UI layers never reference Vmfg*.dll or Dbms directly.
+- All calls route through services registered in DI (see Services/*). Current services are placeholders to avoid any server access.
+- Production adapters, if required, must implement these interfaces and handle the VISUAL license lifecycle per Global Rule.
+
 ### Development login
 - In Development environment, the placeholder AuthenticationService accepts Username: Admin and Password: Admin for testing. This path sets a demo session and navigates to MainView. In Production, replace with VISUAL-backed authentication per LoginScreen.md.
 
@@ -216,6 +233,81 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Work Order Transaction spec (summary)
 - See `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/WorkOrderTransaction.md`. For app-owned database tables used by this feature (exception logs, local history, app settings), see `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/MAMPDatabase.md`.
+
+## How to perform a Work Order transaction (example: MTMFGPLAY / WO-065149)
+
+Plain English
+- Open a VISUAL connection with the user’s credentials using `Dbms.OpenLocal` for instance "MTMFGPLAY" (Reference - Core.txt: OpenLocal).
+- Change the status of Work Order WO-065149 at site MTM2 using `Lsa.Vmfg.ShopFloor.ChangeWOStatus`: call `Prepare()`, add a `NewInputRow()`, set the `WORKORDER_*` keys (TYPE = "W", BASE_ID = "WO-065149", LOT_ID = "0", SPLIT_ID = "0", SUB_ID = "0"), set `NEW_STATUS` as needed, set `SITE_ID = "MTM2"`, then `Save()` (Reference - Shop Floor.txt: ChangeWOStatus + ChangeWorkOrderStatus table).
+- To post material for that Work Order, use `Lsa.Vmfg.Inventory.InventoryTransaction`: `Prepare()`, `NewInputRow()`, set `TRANSACTION_TYPE` (e.g., "RECEIPT"), set `QTY = 500`, `SITE_ID = MTM2`, and warehouse/location:
+  - Receipts: `TO_WAREHOUSE_ID = 002`, `TO_LOCATION_ID = FG`
+  - Issues: `FROM_WAREHOUSE_ID = 002`, `FROM_LOCATION_ID = FG`
+  Also set `PART_ID` and the `WORKORDER_*` columns for WO-065149, then `Save()` (Reference - Inventory.txt: InventoryTransaction table and methods).
+- When finished, close the instance with `Dbms.Close("MTMFGPLAY")` (Reference - Core.txt: Close/CloseAll).
+- References:
+  - Core: `MTM_Inventory_Application_Avalonia/References/Visual PDF Files/Text Conversion/Reference - Core.txt` (Dbms.OpenLocal, Dbms.Close)
+  - Shop Floor: `.../Reference - Shop Floor.txt` (ChangeWOStatus, GetWorkOrderSummary)
+  - Inventory: `.../Reference - Inventory.txt` (InventoryTransaction)
+
+Markdown version
+
+```markdown
+- Open with user credentials
+  - Reference - Core.txt → Dbms.OpenLocal (String, String, String)
+    MTM_Inventory_Application_Avalonia/References/Visual PDF Files/Text Conversion/Reference - Core.txt
+    Sections: "Dbms.OpenLocal Method (String, String, String)" and overload with config path
+
+- Perform Work Order transaction
+  - Reference - Shop Floor.txt → ChangeWOStatus (transaction) Prepare/NewInputRow/Save
+    MTM_Inventory_Application_Avalonia/References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt
+    Sections: "ChangeWOStatus Class", "ChangeWOStatus.Prepare Method", "ChangeWOStatus.NewInputRow Method", "ChangeWOStatus.Save Method", and "ChangeWorkOrderStatus" (dataset columns)
+  - If you are posting material for the Work Order, use InventoryTransaction and set:
+    - QTY = 500
+    - SITE_ID = MTM2
+    - TO_WAREHOUSE_ID = 002 (for receipts) or FROM_WAREHOUSE_ID = 002 (for issues)
+    - TO_LOCATION_ID = FG (for receipts) or FROM_LOCATION_ID = FG (for issues)
+    - Include WORKORDER_* columns for WO-065149 (see table), plus required PART_ID
+    - Reference - Inventory.txt → InventoryTransaction Prepare/NewInputRow/Save and field table
+
+- (Also applicable patterns for other WO operations)
+  - GetWorkOrderSummary (service): Prepare/NewInputRow/Execute
+    Sections: "GetWorkOrderSummary … Prepare/NewInputRow/Execute" and "GetWorkOrderSummary Data Tables"
+  - WorkOrder (document maintenance): NewWorkOrderRow/Save
+    Sections: "WorkOrder Class" and "WorkOrder.Save Method"
+
+- Close the connection
+  - Reference - Core.txt → Dbms.Close / Dbms.CloseAll
+    MTM_Inventory_Application_Avalonia/References/Visual PDF Files/Text Conversion/Reference - Core.txt
+    Sections: "Dbms.Close Method", "Dbms.CloseAll Method"
+
+Example flow (concise)
+
+- Dbms.OpenLocal("MTMFGPLAY", loginUser, loginPassword)
+- Change status for WO-065149 at site MTM2:
+  - var tx = new Lsa.Vmfg.ShopFloor.ChangeWOStatus("MTMFGPLAY");
+  - tx.Prepare();
+  - var row = tx.NewInputRow();
+  - row["WORKORDER_TYPE"] = "W";
+  - row["WORKORDER_BASE_ID"] = "WO-065149"; // map WO keys per your schema
+  - row["WORKORDER_LOT_ID"] = "0";
+  - row["WORKORDER_SPLIT_ID"] = "0";
+  - row["WORKORDER_SUB_ID"] = "0";
+  - row["NEW_STATUS"] = "R"; // example new status
+  - row["SITE_ID"] = "MTM2";
+  - tx.Save();
+- Optional receipt to the WO with quantity and location:
+  - var it = new Lsa.Vmfg.Inventory.InventoryTransaction("MTMFGPLAY");
+  - it.Prepare();
+  - var inRow = it.NewInputRow();
+  - inRow["TRANSACTION_TYPE"] = "RECEIPT";
+  - inRow["QTY"] = 500M;
+  - inRow["SITE_ID"] = "MTM2";
+  - inRow["TO_WAREHOUSE_ID"] = "002";
+  - inRow["TO_LOCATION_ID"] = "FG";
+  - // also set PART_ID and WORKORDER_* fields for WO-065149 per table
+  - it.Save();
+- Dbms.Close("MTMFGPLAY")
+```
 
 ## Configuration (Database.config keys and app DB)
 - Environment = Development | Production
