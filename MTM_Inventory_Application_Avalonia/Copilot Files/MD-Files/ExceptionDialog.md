@@ -1,71 +1,212 @@
-# Exception Dialog - UI Planning Specification [Ref: ./ExceptionHandling.md]
+# Exception Dialog - Error Display and User Actions
+_Functional and Technical Specification_
 
-Purpose: define the modal dialog UI that surfaces blocking errors normalized by IExceptionHandler, including details and user actions.
+---
 
-Global Rule - Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+**Metadata**  
+- **View:** `Views/Dialogs/ExceptionDialog.axaml`
+- **ViewModel:** `ViewModels/Dialogs/ExceptionDialogViewModel.cs`
+- **Primary Commands:** Retry, Cancel, Help, CopyDetails
+- **Related Services:** IExceptionHandler integration
+- **Last Updated:** 2024-12-19
+- **Copilot Template Version:** 1.1
 
-Scope
-- Modal dialog shown for blocking errors (connection/auth, closed WO, insufficient inventory, etc.).
-- Non?modal toast handles low?severity validations (planned in ExceptionHandling.md).
+---
 
-Platform and Shell wiring
-- View: Views/Dialogs/ExceptionDialog.axaml (UserControl hosted in a modal Window). DataContext: ExceptionDialogViewModel.
-- Opened by: IExceptionHandler.Handle(exception, context) (see ExceptionHandling.md and ../../Services/Services.cs implementation).
+## Purpose
 
-## Code Naming and Error Handling Rules
-- File naming: {Type}_{Parent}_{Name}
-- Methods: {Class}_{ControlType}_{Name}
-- Variables: {Method}_{Type(Int|string|exc)}_{Name}
-- All methods must have error handling and must use the same centralized error handling (IExceptionHandler).
+Centralized error display dialog for all application exceptions. Provides consistent error presentation with severity indicators, expandable details, and user action options.
 
-## Screenshot highlighting (reference only)
-- No screenshot required. Use standard app styling.
+---
+
+## Global Rules
+
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
+- ALL methods implement try/catch and route errors through IExceptionHandler with the same normalization routine
+
+---
+
+## Scope
+
+- Display error messages with appropriate severity indicators
+- Provide expandable technical details for troubleshooting
+- Offer user actions: Retry, Help, Copy Details, Cancel
+- Support different error types: Info, Warning, Error, Critical
+- Integrate with centralized IExceptionHandler service
+
+---
+
+## Platform and Shell Wiring
+
+- **View:** `Views/Dialogs/ExceptionDialog.axaml` (UserControl)
+- **Host:** Modal Window created by IExceptionHandler.Handle()
+- **Navigation:** Triggered by exception handling throughout application
+- **Window Properties:** SizeToContent, CenterScreen positioning
+
+---
+
+## Current Implementation Details
+
+**ExceptionDialog.axaml Structure:**
+- Header with severity icon and error title
+- Message text with wrapping support
+- Expandable details panel with read-only TextBox
+- Action buttons: Retry, Help, Copy Details, Cancel
+
+**Severity Indicators:**
+- Info: Blue information-outline icon
+- Warning: Amber alert-outline icon  
+- Error: Red alert-circle icon
+- Critical: Dark red alert-octagon icon
+
+**Visual Features:**
+- Dynamic icon colors based on error type
+- Expandable details with collapsible header
+- Action buttons with proper spacing and alignment
+
+---
 
 ## Fields and Validation Rules
-- Model (read-only): Title, Message, Details, IsDetailsOpen (current implementation). Future: Category, Code, Severity, Context (WO, Part, Qty, Site, Warehouse, FromLocation, ToLocation, User, Timestamp).
-- Buttons: Retry, Cancel, Help, Copy Details; enable/disable per model.
+
+**ExceptionDialogViewModel Properties:**
+- `Title` (string) - Main error title
+- `Message` (string) - User-friendly error description
+- `Details` (string) - Technical error details (stack trace, etc.)
+- `ShortTitle` (string) - Brief title for details expander
+- `IsDetailsOpen` (bool) - Controls details panel expansion
+- `ErrorType` (enum) - Info, Warning, Error, Critical
+
+**Computed Properties:**
+- `IconBackground` - Color brush for error type
+- `IconBrush` - Foreground color for icon
+- `IconKindName` - MaterialDesign icon identifier
+
+---
 
 ## Visual API Commands (by scenario)
-- None. This dialog does not call VISUAL APIs; it only presents error information and returns user choice.
+
+**No Direct Visual API Integration:**
+- ExceptionDialog displays errors from Visual API calls
+- Does not initiate Visual server connections
+- Purely UI component for error presentation
+
+---
 
 ## Business Rules and Exceptions
-- Always display available server/procedure message text when present.
-- Provide a "View details" expander and a "Copy details" action.
+
+- Error type determines icon color and style
+- Details panel provides technical information for support
+- Retry action available for recoverable errors
+- Cancel always available to dismiss dialog
+- Copy Details for technical support scenarios
+
+---
 
 ## Workflows
-- Exception raised ? IExceptionHandler.Handle constructs ExceptionDialogViewModel ? modal Window hosting ExceptionDialog is shown ? user selects action ? window closes.
 
-## ViewModel, Commands, and Role Gating
-- ExceptionDialogViewModel properties: Title, Message, Details, IsDetailsOpen.
-- Commands
-  - ExceptionDialog_Button_Retry
-  - ExceptionDialog_Button_Cancel
-  - ExceptionDialog_Button_Help
-  - ExceptionDialog_Button_CopyDetails
-- Role gating: not applicable.
+1. **Error Occurs:** Application code throws exception
+2. **Exception Routing:** IExceptionHandler.Handle(ex, context) called
+3. **Dialog Creation:** ExceptionDialogViewModel populated with error info
+4. **Dialog Display:** Modal window shown with ExceptionDialog content
+5. **User Action:** User selects Retry, Help, Copy Details, or Cancel
+6. **Dialog Close:** Window closed, control returned to calling code
 
-## Integration Approach
-- IExceptionHandler (Services.ExceptionHandler) creates a Window with ExceptionDialog as Content, sets DataContext to a new ExceptionDialogViewModel populated from exception/context, and calls ShowDialog(owner).
+---
 
-## Keyboard and Scanner UX
-- Enter = default action (Retry if available, otherwise Close);
-- Esc = Cancel; Ctrl+C = Copy details; F1 = Help.
+## ViewModel/Command Conventions
 
-## UI Scaffolding (Avalonia 11)
-- Views: Views/Dialogs/ExceptionDialog.axaml with header, message, details expander, context grid placeholder, buttons.
-- ViewModels: ViewModels/Dialogs/ExceptionDialogViewModel.cs with commands above.
+**ExceptionDialogViewModel Commands:**
+- `ExceptionDialog_Button_RetryCommand` - Currently cycles error types for testing
+- `ExceptionDialog_Button_CancelCommand` - Dismiss dialog (placeholder)
+- `ExceptionDialog_Button_HelpCommand` - Show help information (placeholder)
+- `ExceptionDialog_Button_CopyDetailsCommand` - Copy technical details (placeholder)
 
-## Testing and Acceptance Criteria
-- Model fields render correctly.
-- Retry/Cancel/Help/CopyDetails commands are wired (placeholders now).
-- Details can be expanded/collapsed; Copy copies all fields to clipboard (planned).
+**Property Notifications:**
+- ErrorType changes notify dependent computed properties
+- Proper ObservableProperty attributes for MVVM binding
 
-## References (artifacts used by this document)
-- ./ExceptionHandling.md
-- ../../README.md
+---
 
-## Implementation status (current)
-- View created: ../../Views/Dialogs/ExceptionDialog.axaml
-- ViewModel created: ../../ViewModels/Dialogs/ExceptionDialogViewModel.cs
-- IExceptionHandler implemented in ../../Services/Services.cs shows this dialog via Handle(ex, context).
+## Integration & Storage
+
+**Services Used:**
+- IExceptionHandler creates and displays the dialog
+- No persistent storage - transient error display only
+
+**Integration Points:**
+- Called from all ViewModels and services
+- Consistent error presentation across application
+- Modal dialog pattern for user attention
+
+---
+
+## Keyboard/Scanner UX
+
+**Current Implementation:**
+- Standard dialog keyboard navigation
+- Tab between action buttons
+- Esc likely dismisses dialog (framework default)
+
+**Planned Enhancements:**
+- Enter key for default action (Retry or Cancel)
+- Ctrl+C for copy details shortcut
+- F1 for help action
+
+---
+
+## UI Scaffold
+
+**Views:**
+- `Views/Dialogs/ExceptionDialog.axaml` - error display dialog
+- MaterialDesign icons for severity indicators
+- Expandable details panel for technical information
+
+**ViewModels:**
+- `ViewModels/Dialogs/ExceptionDialogViewModel.cs` - error data and actions
+- ErrorType enum for severity classification
+- Computed properties for dynamic styling
+
+**Hosting:**
+- Created by IExceptionHandler as modal Window
+- CenterScreen positioning and SizeToContent sizing
+
+---
+
+## Testing & Acceptance
+
+- Dialog displays with appropriate severity icon and colors
+- Error message shows clearly with text wrapping
+- Details panel expands/collapses properly
+- All action buttons are functional
+- Modal behavior prevents interaction with parent window
+- Dialog closes properly on user action
+- Integration with IExceptionHandler service works
+
+---
+
+## References
+
+- ../../Views/Dialogs/ExceptionDialog.axaml (UI implementation)
+- ../../ViewModels/Dialogs/ExceptionDialogViewModel.cs (dialog logic)
+- ../../Services/Service_ExceptionHandler.cs (service integration)
+- ./ExceptionHandling.md (overall error handling strategy)
+
+---
+
+## Implementation Status
+
+- **Current:** Fully implemented with all error types and UI elements
+- **Commands:** Basic structure implemented, actions need full implementation
+- **Styling:** Complete with dynamic icons and colors
+- **Integration:** Working with IExceptionHandler service
+
+---
+
+## TODOs / Copilot Agent Notes
+
+- [ ] Implement actual Copy Details functionality (clipboard)
+- [ ] Implement Help action (context-sensitive help)
+- [ ] Enhance Retry logic beyond error type cycling
+- [ ] Add keyboard shortcuts for common actions
+- [ ] Consider adding error logging/reporting capabilities
+- [ ] Add proper Cancel dialog close behavior
