@@ -10,7 +10,10 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Scope
 - Desktop application using Avalonia 11 on .NET 8.
-- Functional/technical specs in Copilot Files reference artifacts in References via relative paths.
+- Functional/technical specs live under:
+  - Authoring: `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/`
+  - Published site: `docs/MD-Files/`
+  - Specs reference artifacts in `References/` via relative paths.
 - Features include: Login, Work Order transactions, Inventory Transfer, centralized Exception Handling, Incomplete Part dialog, and app-owned database schema (MAMP).
 - Note: UOM (unit of measure) is not used in production; all UOM fields and references have been removed from the UI and planning documents.
 
@@ -22,7 +25,9 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## Shell wiring
 - Specs drive the feature View/ViewModel scaffolding; map ViewModels to Views via DataTemplates in App.axaml when applicable.
-- On app start, the desktop shell opens a Window that hosts MainView and shows a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See Copilot Files/MVVMDefinitions/LoginScreen.md and ExceptionHandling.md.
+- On app start, the desktop shell opens a Window that hosts MainView and shows a Login overlay (Views/Dialogs/LoginView). After successful verification, the overlay is hidden and the app remains in MainView. All errors route to the Exception Handling Form. See:
+  - `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/LoginScreen.md`
+  - `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/ExceptionHandling.md`
 
 ### Dialogs and selection flows
 - Incomplete Part dialog
@@ -50,17 +55,20 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
   - Do not paste content that introduces invalid bytes; if a replacement character (?) appears, replace it with the intended ASCII character.
 - An .editorconfig file is provided at the repository root to enforce UTF-8 on .md/.html.
 
-## Planning documents index (Copilot Files/MVVMDefinitions)
-- LoginScreen.md - startup login/authentication flow and UX spec; navigation to MainView.
-- MainView.md - home hub and navigation to feature forms; session summary and logout.
-- InventoryTransfer.md - location-to-location transfer form spec; dialogs and validations; reporting hooks.
-- WorkOrderTransaction.md - WO Issue/Receipt spec; validations, exceptions and reporting hooks.
-- LocationPickerDialog.md - modal locations browser used by InventoryTransfer.
-- IncompletePartDialog.md - resolve incomplete/invalid Part IDs (now seeded from callers via IPartDialogService).
-- ExceptionHandling.md - centralized error handling form and service model.
-- MAMPDatabase.md - app-owned database schema (settings, audits, exception logs).
-- Settings.md - in-app Settings view spec (environment, WarehouseId, app DB testing).
-- Icons.md - provider registration and usage for Projektanker.Icons.Avalonia (MaterialDesign pack).
+## Planning documents index (authoring and published)
+- Authoring (edit here): `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/`
+- Published (docs site): `docs/MD-Files/`
+- Index (typical files):
+  - LoginScreen.md - startup login/authentication flow and UX spec; navigation to MainView.
+  - MainView.md - home hub and navigation to feature forms; session summary and logout.
+  - InventoryTransfer.md - location-to-location transfer form spec; dialogs and validations; reporting hooks.
+  - WorkOrderTransaction.md - WO Issue/Receipt spec; validations, exceptions and reporting hooks.
+  - LocationPickerDialog.md - modal locations browser used by InventoryTransfer.
+  - IncompletePartDialog.md - resolve incomplete/invalid Part IDs (now seeded from callers via IPartDialogService).
+  - ExceptionHandling.md - centralized error handling form and service model.
+  - MAMPDatabase.md - app-owned database schema (settings, audits, exception logs).
+  - Settings.md / SettingsView.md - in-app Settings view spec (environment, WarehouseId, app DB testing).
+  - Icons.md - provider registration and usage for Projektanker.Icons.Avalonia (MaterialDesign pack).
 
 ## Citation Rule (applies to all specs)
 - When a statement needs a reference, look through:
@@ -134,7 +142,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - Ensure the doc follows the UI Planning file format (when applicable) and includes Visual API Commands by scenario.
 
 ## New Rule - UI Planning file format
-- Applies to: Copilot Files/MVVMDefinitions/WorkOrderTransaction.md, InventoryTransfer.md, LoginScreen.md.
+- Applies to authoring files in: `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/WorkOrderTransaction.md`, `InventoryTransfer.md`, `LoginScreen.md`.
 - Required sections (in order):
   - Title with short reference list in brackets.
   - Purpose (inline line after title).
@@ -155,8 +163,8 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
   - Testing and Acceptance Criteria.
   - References (artifacts used by this document).
 
-## New Rule - Creating a UI Planning file (triggered by: "Create a UI Planning file for <FeatureName>"))
-- Location and name: place under Copilot Files/MVVMDefinitions; name the file descriptively (e.g., FeatureName.md). Follow {Type}_{Parent}_{Name} for any companion files.
+## New Rule - Creating a UI Planning file (triggered by: "Create a UI Planning file for <FeatureName>")
+- Location and name: place under `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/`; name the file descriptively (e.g., FeatureName.md). Follow {Type}_{Parent}_{Name} for any companion files.
 - Start from the required section list above; keep headings and order consistent.
 - Include at least one reference image under References/Visual Highlighted Screenshots and cite it in the Title bracket.
 - Add "Visual API Commands (by scenario)" with concrete calls (Dbms.OpenLocal/OpenLocalSSO, GeneralQuery, InventoryTransaction, Shop Floor services, VMFG Shared conversion/defaults) and page-cited sources.
@@ -165,14 +173,16 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - End with clear Testing and Acceptance Criteria to validate the feature end-to-end.
 
 ## Folder layout (key)
-- Copilot Files/
-  - MVVMDefinitions/
-    - WorkOrderTransaction.md (form spec)
-    - InventoryTransfer.md (form spec)
-    - LoginScreen.md (startup login/auth spec)
-    - ExceptionHandling.md (centralized error handling form and service model)
-    - MAMPDatabase.md (app-owned database schema and usage)
-    - Icons.md (icon provider registration and usage)
+- Authoring: `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/`
+  - WorkOrderTransaction.md (form spec)
+  - InventoryTransfer.md (form spec)
+  - LoginScreen.md (startup login/auth spec)
+  - ExceptionHandling.md (centralized error handling form and service model)
+  - MAMPDatabase.md (app-owned database schema and usage)
+  - Icons.md (icon provider registration and usage)
+  - LocationPickerDialog.md, IncompletePartDialog.md (dialogs)
+  - MainView.md, Settings.md, SettingsView.md (views)
+- Published: `docs/MD-Files/` (mirrors authoring content for the site)
 - References/
   - Visual CSV Database Dumps/ (MTMFG Tables.csv, MTMFG Relationships.csv, MTMFG Procedure List.csv)
   - Visual DLL & Config Files/ (Database.config, Vmfg*.dll, Lsa*.dll, VmfgTrace.dll)
@@ -187,20 +197,25 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 
 ## New Rule - Update All .md Files (triggered by: "Update All .md Files")
 - Trigger: "Update All .md Files".
-- Action: Systematically review each .md listed in "Planning documents index" above.
-- For each .md, read the associated .cs files (Views, ViewModels, Services) it references and ensure consistency with current code:
+- Action: Systematically review each authoring `.md` under `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/` (and keep `docs/MD-Files/` in sync).
+- For each `.md`, also open and reconcile against its source code artifacts:
+  1. The View `.axaml` file
+  2. The View code-behind `.axaml.cs` (if present)
+  3. The ViewModel `.cs`
+  4. Any related Model/DTO classes used by the ViewModel
+- Validate and update the `.md` so it matches current code:
   - Navigation flow and hosting (MainWindow/MainView, overlays, DataTemplates)
   - Commands/properties naming and existence
   - Service interfaces used by the ViewModels
   - Startup/Shutdown behavior
-- If inconsistencies exist, update the .md to match the implemented code in the same change set.
+- If inconsistencies exist, update the `.md` to match the implemented code in the same change set.
 - Keep citations intact and adjust only the narrative/spec to reflect implementation.
 
 ## Startup behavior
-- At startup, MainWindow hosts MainView. A Login overlay (Views/Dialogs/LoginView) is shown inside MainView. After successful verification against the Visual server, the overlay is hidden and the app continues in MainView. See Copilot Files/MVVMDefinitions/LoginScreen.md. All errors should be routed through Copilot Files/MVVMDefinitions/ExceptionHandling.md.
+- At startup, MainWindow hosts MainView. A Login overlay (Views/Dialogs/LoginView) is shown inside MainView. After successful verification against the Visual server, the overlay is hidden and the app continues in MainView. See `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/LoginScreen.md`. All errors should be routed through `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/ExceptionHandling.md`.
 
 ## Work Order Transaction spec (summary)
-- See Copilot Files/MVVMDefinitions/WorkOrderTransaction.md. For app-owned database tables used by this feature (exception logs, local history, app settings), see Copilot Files/MVVMDefinitions/MAMPDatabase.md.
+- See `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/WorkOrderTransaction.md`. For app-owned database tables used by this feature (exception logs, local history, app settings), see `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/MAMPDatabase.md`.
 
 ## Configuration (Database.config keys and app DB)
 - Environment = Development | Production
@@ -208,7 +223,7 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
 - ConnectionStrings:AppDbTest → mtm_visual_application_test (dev)
 - Optional environment overrides: INVENTORY__ENVIRONMENT, INVENTORY__CONNECTIONSTRINGS__APPDB, INVENTORY__CONNECTIONSTRINGS__APPDBTEST, INVENTORY__WAREHOUSEID
 - Connection behavior: Dbms.OpenLocal obtains connection info from Database.config; OpenLocalSSO supported. See Text Conversion sources for citations.
-- App-owned tables and seeding: see Copilot Files/MVVMDefinitions/MAMPDatabase.md.
+- App-owned tables and seeding: see `MTM_Inventory_Application_Avalonia/Copilot Files/MD-Files/MAMPDatabase.md`.
 
 ## Build
 - dotnet build
@@ -224,6 +239,6 @@ Purpose: summarize the solution structure, governing rules, reference guide, con
   - Added a centralized Exception Handling Form spec and linked from Login/WO specs.
   - Centralized MAMP database details into MAMPDatabase.md and referenced it from specs.
   - Clarified shell wiring and startup behavior to reflect Login overlay inside MainView.
-  - Added the "Update All .md Files" rule.
+  - Added the "Update All .md Files" rule and cross-reference to .axaml, .axaml.cs, and Model/DTOs.
   - Added Icons.md with guidance for Projektanker.Icons.Avalonia registration and usage.
   - Added "Documentation encoding (Markdown/HTML)" rule and repository .editorconfig to enforce UTF‑8 and ASCII punctuation.
