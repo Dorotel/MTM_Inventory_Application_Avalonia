@@ -11,7 +11,7 @@ public partial class SettingsViewModel : ObservableObject
     private readonly ISettings _settings;
     private readonly ISessionContext _session;
 
-    public SettingsViewModel() : this(new ExceptionHandler(), new Settings(), new SessionContext()) {}
+    public SettingsViewModel() : this(new ExceptionHandler(), new Settings(), new SessionContext()) { }
 
     public SettingsViewModel(IExceptionHandler exceptionHandler, ISettings settings, ISessionContext session)
     {
@@ -19,28 +19,20 @@ public partial class SettingsViewModel : ObservableObject
         _settings = settings;
         _session = session;
 
-        Settings_Label_SessionUser = _session.UserId ?? string.Empty;
-        Settings_Label_SiteId = _session.SiteId ?? string.Empty;
-        Settings_Label_AppDbName = "AppDb (configured)";
-        Settings_Text_WarehouseId = "002";
-        Settings_Toggle_IsDevVisible = string.Equals(_settings.Environment, "Development", StringComparison.OrdinalIgnoreCase);
-        Settings_Combo_EnvironmentIndex = Settings_Toggle_IsDevVisible ? 0 : 1;
+        // Initialize from current session (fallback default)
+        Settings_Text_WarehouseId = string.IsNullOrWhiteSpace(_session.WarehouseId) ? "002" : _session.WarehouseId!;
     }
 
-    [ObservableProperty] private int settings_Combo_EnvironmentIndex;
+    // Only field used by SettingsView
     [ObservableProperty] private string settings_Text_WarehouseId = string.Empty;
-    [ObservableProperty] private string settings_Label_AppDbName = string.Empty;
-    [ObservableProperty] private string settings_Label_SessionUser = string.Empty;
-    [ObservableProperty] private string settings_Label_SiteId = string.Empty;
-    [ObservableProperty] private bool settings_Toggle_IsDevVisible;
-    [ObservableProperty] private bool settings_Toggle_DevLoginEnabled;
 
     [RelayCommand]
     private void Settings_Button_Save()
     {
         try
         {
-            // TODO: persist to app DB / config
+            // Persist to session (and optionally to ISettings/config if added later)
+            _session.WarehouseId = Settings_Text_WarehouseId?.Trim();
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(Settings_Button_Save)); }
     }
@@ -48,14 +40,11 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void Settings_Button_Cancel()
     {
-        try { /* TODO: navigate back */ }
+        try
+        {
+            // Revert UI to current session value
+            Settings_Text_WarehouseId = _session.WarehouseId ?? Settings_Text_WarehouseId;
+        }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(Settings_Button_Cancel)); }
-    }
-
-    [RelayCommand]
-    private void Settings_Button_TestAppDb()
-    {
-        try { /* TODO: ping app DB and report */ }
-        catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(Settings_Button_TestAppDb)); }
     }
 }

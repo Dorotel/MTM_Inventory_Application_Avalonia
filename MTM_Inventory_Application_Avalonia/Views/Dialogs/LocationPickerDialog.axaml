@@ -7,50 +7,126 @@
              mc:Ignorable="d"
              x:Class="MTM_Inventory_Application_Avalonia.Views.Dialogs.LocationPickerDialog"
              x:DataType="vm:LocationPickerDialogViewModel">
-  <Design.DataContext>
-    <vm:LocationPickerDialogViewModel />
-  </Design.DataContext>
 
-  <Grid Margin="20" RowDefinitions="Auto,Auto,*,Auto">
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
-      <Viewbox Grid.Column="0" Width="28" Height="28" Stretch="Uniform">
-        <ia:Icon Value="mdi:map-search-outline"/>
-      </Viewbox>
-      <TextBlock Grid.Column="1" Margin="8,0,0,0" Text="{Binding HeaderText}" FontSize="18"/>
-    </Grid>
+	<Design.DataContext>
+		<vm:LocationPickerDialogViewModel />
+	</Design.DataContext>
 
-    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="10" Margin="0,10,0,10" VerticalAlignment="Center">
-      <TextBox Width="260" Watermark="Filter locations" Text="{Binding Filters_Text}"/>
-      <CheckBox Content="Non-zero OnHand" IsChecked="{Binding Filters_NonZeroOnly}"/>
-      <CheckBox Content="Current Warehouse" IsChecked="{Binding Filters_CurrentWarehouseOnly}"/>
-      <CheckBox Content="Current Site" IsChecked="{Binding Filters_CurrentSiteOnly}"/>
-    </StackPanel>
+	<!-- Keyboard shortcuts: Enter selects, Esc cancels -->
+	<UserControl.KeyBindings>
+		<KeyBinding Gesture="Enter" Command="{Binding LocationPickerDialog_Button_SelectCommand}"/>
+		<KeyBinding Gesture="Escape" Command="{Binding LocationPickerDialog_Button_CancelCommand}"/>
+	</UserControl.KeyBindings>
 
-    <DataGrid Grid.Row="2" ItemsSource="{Binding Results}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,4,0,4">
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="Location" Binding="{Binding Location}"/>
-        <DataGridTextColumn Header="OnHand" Binding="{Binding OnHand}"/>
-        <DataGridTextColumn Header="Allocated" Binding="{Binding Allocated}"/>
-        <DataGridTextColumn Header="Available" Binding="{Binding Available}"/>
-        <DataGridTextColumn Header="Warehouse" Binding="{Binding Warehouse}"/>
-        <DataGridTextColumn Header="Site" Binding="{Binding Site}"/>
-        <DataGridTextColumn Header="BinType" Binding="{Binding BinType}"/>
-      </DataGrid.Columns>
-    </DataGrid>
+	<!-- Layout: toolbar header, results panel, footer actions -->
+	<Grid Margin="10" RowDefinitions="Auto,*,Auto">
+		<!-- Toolbar/header row -->
+		<Border Grid.Row="0" Padding="8" BorderBrush="#33000000" BorderThickness="0,0,0,1">
+			<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto,Auto,Auto">
+				<!-- Title -->
+				<TextBlock Grid.Column="0" Text="Locations" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,12,0"/>
 
-    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-      <Button Command="{Binding LocationPickerDialog_Button_SelectCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6">
-          <ia:Icon Value="mdi:check" Width="16" Height="16"/>
-          <TextBlock Text="Select"/>
-        </StackPanel>
-      </Button>
-      <Button Command="{Binding LocationPickerDialog_Button_CancelCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6">
-          <ia:Icon Value="mdi:close" Width="16" Height="16"/>
-          <TextBlock Text="Cancel"/>
-        </StackPanel>
-      </Button>
-    </StackPanel>
-  </Grid>
+				<!-- Tool buttons (visual parity) -->
+				<Button Grid.Column="1" Classes="ToolButton" Padding="4" ToolTip.Tip="Accept">
+					<ia:Icon Value="mdi:check-circle-outline" Width="18" Height="18"/>
+				</Button>
+				<Button Grid.Column="2" Classes="ToolButton" Padding="4" ToolTip.Tip="Cancel">
+					<ia:Icon Value="mdi:close-circle-outline" Width="18" Height="18"/>
+				</Button>
+				<Button Grid.Column="3" Classes="ToolButton" Padding="4" ToolTip.Tip="Refresh">
+					<ia:Icon Value="mdi:refresh" Width="18" Height="18"/>
+				</Button>
+				<Button Grid.Column="4" Classes="ToolButton" Padding="4" ToolTip.Tip="Search">
+					<ia:Icon Value="mdi:magnify" Width="18" Height="18"/>
+				</Button>
+				<Button Grid.Column="5" Classes="ToolButton" Padding="4" ToolTip.Tip="Filter">
+					<ia:Icon Value="mdi:filter-variant" Width="18" Height="18"/>
+				</Button>
+				<Button Grid.Column="6" Classes="ToolButton" Padding="4" ToolTip.Tip="Clear Filter">
+					<ia:Icon Value="mdi:filter-off-outline" Width="18" Height="18"/>
+				</Button>
+
+				<!-- Search + filters aligned right -->
+				<TextBox Grid.Column="7"
+						 Watermark="Location contains..."
+						 Text="{Binding SearchText}"
+						 MinWidth="260"
+						 Margin="10,0"/>
+				<CheckBox Grid.Column="8"
+						  Content="Active only"
+						  IsChecked="{Binding Filters_ActiveOnly}"
+						  VerticalAlignment="Center"
+						  Margin="6,0"/>
+				<CheckBox Grid.Column="9"
+						  Content="Search in description"
+						  IsChecked="{Binding Filters_SearchInDescription}"
+						  VerticalAlignment="Center"
+						  Margin="6,0"/>
+				<StackPanel Grid.Column="10" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="10,0,0,0">
+					<TextBlock Text="Match:" VerticalAlignment="Center"/>
+					<ComboBox SelectedIndex="{Binding Filters_ModeIndex}" MinWidth="150">
+						<ComboBoxItem Content="Contains (%seed%)"/>
+						<ComboBoxItem Content="Starts with (seed%)"/>
+					</ComboBox>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<!-- Results collapsible panel -->
+		<Expander Grid.Row="1" IsExpanded="True" HorizontalAlignment="Stretch">
+			<Expander.Header>
+				<StackPanel Orientation="Horizontal" Spacing="8">
+					<ia:Icon Value="mdi:view-list" Width="18" Height="18"/>
+					<TextBlock Text="Results" VerticalAlignment="Center"/>
+					<Border Background="{DynamicResource ThemeAccentBrush}"
+							CornerRadius="10" Padding="6,2" VerticalAlignment="Center" Margin="6,0,0,0">
+						<TextBlock Foreground="White" FontWeight="SemiBold"
+								   Text="{Binding Results.Count, FallbackValue=0}"
+								   VerticalAlignment="Center"/>
+					</Border>
+				</StackPanel>
+			</Expander.Header>
+
+			<Border Margin="0,6,0,6" Padding="6"
+					BorderBrush="{DynamicResource ThemeForegroundLowBrush}"
+					BorderThickness="1" CornerRadius="6">
+				<DataGrid
+					ItemsSource="{Binding Results}"
+					AutoGenerateColumns="False"
+					IsReadOnly="True"
+					GridLinesVisibility="All"
+					HeadersVisibility="All"
+					SelectionMode="Single"
+					ColumnWidth="Auto">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="Auto"/>
+						<DataGridTextColumn Header="OnHand" Binding="{Binding OnHand}" Width="Auto"/>
+						<DataGridTextColumn Header="Allocated" Binding="{Binding Allocated}" Width="Auto"/>
+						<DataGridTextColumn Header="Available" Binding="{Binding Available}" Width="Auto"/>
+						<DataGridTextColumn Header="Warehouse" Binding="{Binding Warehouse}" Width="Auto"/>
+						<DataGridTextColumn Header="Site" Binding="{Binding Site}" Width="Auto"/>
+						<DataGridTextColumn Header="BinType" Binding="{Binding BinType}" Width="Auto"/>
+					</DataGrid.Columns>
+				</DataGrid>
+			</Border>
+		</Expander>
+
+		<!-- Footer actions -->
+		<Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,4">
+			<TextBlock Grid.Column="0" Text="{Binding Results.Count, StringFormat='{}{0} results'}"
+					   Opacity="0.7" VerticalAlignment="Center"/>
+			<Button Grid.Column="1" Command="{Binding LocationPickerDialog_Button_SelectCommand}" Margin="0,0,10,0">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:check" Width="16" Height="16"/>
+					<TextBlock Text="Select" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+			<Button Grid.Column="2" Command="{Binding LocationPickerDialog_Button_CancelCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:close" Width="16" Height="16"/>
+					<TextBlock Text="Cancel" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+		</Grid>
+	</Grid>
 </UserControl>

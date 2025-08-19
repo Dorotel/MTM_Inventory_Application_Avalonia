@@ -6,61 +6,107 @@
         xmlns:ia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         mc:Ignorable="d"
         x:Class="MTM_Inventory_Application_Avalonia.Views.Dialogs.LoginView"
-		        d:DesignWidth="500" d:DesignHeight="320"
-        x:DataType="vm:LoginViewModel">
-  <Design.DataContext>
-    <vm:LoginViewModel />
-  </Design.DataContext>
+        d:DesignWidth="500" d:DesignHeight="420"
+        x:DataType="vm:LoginViewModel"
+        VerticalAlignment="Top">
+	<Design.DataContext>
+		<vm:LoginViewModel />
+	</Design.DataContext>
 
-  <Grid Margin="20" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
-    <!-- Header -->
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
-      <Viewbox Grid.Column="0" Width="28" Height="28" Stretch="Uniform">
-        <ia:Icon Value="mdi:login"/>
-      </Viewbox>
-      <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2">
-        <TextBlock Text="Sign in" FontSize="20" FontWeight="SemiBold"/>
-        <TextBlock Text="Enter your Visual credentials" Opacity="0.8"/>
-      </StackPanel>
-    </Grid>
+	<!-- 4 rows: Header, Panel 1, Panel 2, Actions (below Optional panel) -->
+	<Grid Margin="20" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*">
+		<!-- Header -->
+		<Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+			<Viewbox Grid.Column="0" Width="28" Height="28" Stretch="Uniform">
+				<ia:Icon Value="mdi:login"/>
+			</Viewbox>
+			<StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2">
+				<TextBlock Text="Sign in" FontSize="20" FontWeight="SemiBold"/>
+				<TextBlock Text="Enter your Visual credentials" Opacity="0.8"/>
+			</StackPanel>
+		</Grid>
 
-    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="160,*" Margin="0,12,0,12">
-      <Grid.Styles>
-        <Style Selector="TextBox">
-          <Setter Property="Margin" Value="0,4"/>
-          <Setter Property="Padding" Value="8,6"/>
-          <Setter Property="MinWidth" Value="240"/>
-        </Style>
-        <Style Selector="TextBlock.header">
-          <Setter Property="VerticalAlignment" Value="Center"/>
-          <Setter Property="Opacity" Value="0.9"/>
-          <Setter Property="Margin" Value="0,8,16,8"/>
-        </Style>
-      </Grid.Styles>
+		<!-- Panel: Visual Log-In Information -->
+		<Expander Grid.Row="1" IsExpanded="True" HorizontalAlignment="Stretch" Margin="0,16,0,0">
+			<Expander.Header>
+				<StackPanel Orientation="Horizontal" Spacing="8">
+					<ia:Icon Value="mdi:account-key" Width="18" Height="18"/>
+					<TextBlock Text="Visual Log-In Information" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Expander.Header>
 
-      <TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Username"/>
-      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Username}"/>
+			<Border Margin="0,8,0,12" Padding="8" BorderBrush="{DynamicResource ThemeForegroundLowBrush}" BorderThickness="1" CornerRadius="6">
+				<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="160,*">
+					<Grid.Styles>
+						<Style Selector="TextBox">
+							<Setter Property="Margin" Value="0,4"/>
+							<Setter Property="Padding" Value="8,6"/>
+							<Setter Property="MinWidth" Value="240"/>
+							<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						</Style>
+						<Style Selector="TextBlock.header">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="Opacity" Value="0.9"/>
+							<Setter Property="Margin" Value="0,8,16,8"/>
+						</Style>
+					</Grid.Styles>
 
-      <TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="Password"/>
-      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Password}"/>
+					<TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Username"/>
+					<TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Username}"/>
 
-      <TextBlock Classes="header" Grid.Row="2" Grid.Column="0" Text="Site/Domain"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_SiteOrDomain}"/>
-    </Grid>
+					<TextBlock Classes="header" Grid.Row="1" Grid.Column="0" Text="Password"/>
+					<TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding LoginViewModel_TextBox_Password}"/>
+				</Grid>
+			</Border>
+		</Expander>
 
-    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-      <Button Command="{Binding LoginViewModel_Button_LoginCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <ia:Icon Value="mdi:login" Width="16" Height="16"/>
-          <TextBlock Text="Login" VerticalAlignment="Center"/>
-        </StackPanel>
-      </Button>
-      <Button Command="{Binding LoginViewModel_Button_CancelCommand}">
-        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <ia:Icon Value="mdi:close-circle-outline" Width="16" Height="16"/>
-          <TextBlock Text="Cancel" VerticalAlignment="Center"/>
-        </StackPanel>
-      </Button>
-    </StackPanel>
-  </Grid>
+		<!-- Panel: Optional (Site/Domain), collapsed by default -->
+		<Expander Grid.Row="2" IsExpanded="False" HorizontalAlignment="Stretch" Margin="0,16,0,0">
+			<Expander.Header>
+				<StackPanel Orientation="Horizontal" Spacing="8">
+					<ia:Icon Value="mdi:domain" Width="18" Height="18"/>
+					<TextBlock Text="Optional" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Expander.Header>
+
+			<Border Margin="0,8,0,0" Padding="8" BorderBrush="{DynamicResource ThemeForegroundLowBrush}" BorderThickness="1" CornerRadius="6">
+				<Grid RowDefinitions="Auto" ColumnDefinitions="160,*">
+					<Grid.Styles>
+						<Style Selector="TextBox">
+							<Setter Property="Margin" Value="0,4"/>
+							<Setter Property="Padding" Value="8,6"/>
+							<Setter Property="MinWidth" Value="240"/>
+							<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						</Style>
+						<Style Selector="TextBlock.header">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="Opacity" Value="0.9"/>
+							<Setter Property="Margin" Value="0,8,16,8"/>
+						</Style>
+					</Grid.Styles>
+
+					<TextBlock Classes="header" Grid.Row="0" Grid.Column="0" Text="Site/Domain"/>
+					<TextBox   Grid.Row="0" Grid.Column="1"
+							   Text="{Binding LoginViewModel_TextBox_SiteOrDomain}"
+							   Watermark="MTMFGPLAY"/>
+				</Grid>
+			</Border>
+		</Expander>
+
+		<!-- Actions below the Optional panel; they move up/down as it collapses/expands -->
+		<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,16,0,0">
+			<Button Command="{Binding LoginViewModel_Button_LoginCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:login" Width="16" Height="16"/>
+					<TextBlock Text="Login" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+			<Button Command="{Binding LoginViewModel_Button_CancelCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<ia:Icon Value="mdi:close-circle-outline" Width="16" Height="16"/>
+					<TextBlock Text="Cancel" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Button>
+		</StackPanel>
+	</Grid>
 </UserControl>

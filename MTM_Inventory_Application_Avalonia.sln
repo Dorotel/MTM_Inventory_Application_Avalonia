@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{02EA681E-C
 		docs\MVVM Definitions\WorkOrderTransaction.md = docs\MVVM Definitions\WorkOrderTransaction.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVVMDefinitions", "MVVMDefinitions", "{13A0B660-9FE9-4354-849E-278E1FD78F12}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MD-Files", "MD-Files", "{13A0B660-9FE9-4354-849E-278E1FD78F12}"
 	ProjectSection(SolutionItems) = preProject
 		docs\MVVM Definitions\App.md = docs\MVVM Definitions\App.md
 		docs\MVVM Definitions\ExceptionDialog.md = docs\MVVM Definitions\ExceptionDialog.md

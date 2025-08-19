@@ -1,9 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MTM_Inventory_Application_Avalonia.Services;
 using MTM_Inventory_Application_Avalonia.Views;
 using MTM_Inventory_Application_Avalonia.ViewModels.Dialogs;
+using MTM_Inventory_Application_Avalonia.Views.Dialogs;
 using System;
+using Avalonia.Controls;
 
 namespace MTM_Inventory_Application_Avalonia.ViewModels;
 
@@ -24,17 +26,14 @@ public partial class MainViewModel : ViewModelBase
         _navigationService = navigationService;
         _sessionContext = sessionContext;
 
-        // Initialize derived properties from session
         SessionUser = _sessionContext.UserId ?? "Unknown";
         SiteId = _sessionContext.SiteId ?? "";
         WarehouseId = _sessionContext.WarehouseId ?? "";
 
-        // Simple role-based capability (expand as needed)
         var role = _sessionContext.Role ?? "MaterialHandler";
         CanOpenInventoryTransfer = role is "MaterialHandler" or "InventorySpecialist" or "Lead" or "ReadOnly";
         CanOpenWorkOrderTransaction = role is "MaterialHandler" or "InventorySpecialist" or "Lead" or "ReadOnly";
 
-        // Default UI state: show login overlay until authenticated
         IsMenuOpen = true;
         IsLoginVisible = string.IsNullOrEmpty(_sessionContext.UserId);
     }
@@ -56,14 +55,12 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private bool canOpenWorkOrderTransaction;
 
-    // Side panel state and hosted content
     [ObservableProperty]
     private bool isMenuOpen;
 
     [ObservableProperty]
     private object? currentView;
 
-    // Login overlay flag and VM used as DataContext for LoginView
     [ObservableProperty]
     private bool isLoginVisible;
 
@@ -119,7 +116,6 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             _sessionContext.Logout();
-            // Show login overlay and request window shrink via nav service
             IsLoginVisible = true;
             _navigationService.NavigateToLogin();
         }
@@ -129,7 +125,26 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    // Called by NavigationService after successful login to hide overlay
+    [RelayCommand]
+    private void MainView_Button_TestExceptionDialog()
+    {
+        try
+        {
+            var win = new Window
+            {
+                Title = "Exception Dialog (Test)",
+                SizeToContent = SizeToContent.WidthAndHeight,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Content = new ExceptionDialog { DataContext = new ExceptionDialogViewModel() }
+            };
+            win.Show();
+        }
+        catch (Exception ex)
+        {
+            _exceptionHandler.Handle(ex, nameof(MainView_Button_TestExceptionDialog));
+        }
+    }
+
     public void OnAuthenticated()
     {
         IsLoginVisible = false;
@@ -137,7 +152,6 @@ public partial class MainViewModel : ViewModelBase
         SiteId = _sessionContext.SiteId ?? string.Empty;
         WarehouseId = _sessionContext.WarehouseId ?? string.Empty;
 
-        // Clear the login VM reference
         LoginVm = null;
     }
 }

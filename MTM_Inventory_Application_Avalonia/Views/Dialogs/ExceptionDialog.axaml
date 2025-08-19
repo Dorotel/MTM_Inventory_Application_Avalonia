@@ -11,8 +11,9 @@
 		<vm:ExceptionDialogViewModel />
 	</Design.DataContext>
 
-	<Grid Margin="16" RowDefinitions="Auto,*,Auto">
-		<!-- Header: severity icon + title. Use Viewbox to force icon scaling -->
+	<!-- Three rows: Header, Content (message + expander), Actions (below the panel) -->
+	<Grid Margin="16" RowDefinitions="Auto,Auto,Auto">
+		<!-- Header: severity icon + title -->
 		<Grid Grid.Row="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
 			<Viewbox Grid.Column="0" Width="40" Height="40" Stretch="Uniform">
 				<ia:Icon Value="{Binding IconKindName}" Foreground="{Binding IconBrush}"/>
@@ -20,17 +21,14 @@
 			<TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
 		</Grid>
 
-		<!-- Content area: message + details that stretch to fill available space -->
-		<Grid Grid.Row="1" RowDefinitions="Auto,*" Margin="0,8,0,12">
+		<!-- Content: message + collapsible details panel -->
+		<Grid Grid.Row="1" RowDefinitions="Auto,Auto" Margin="0,8,0,12">
 			<TextBlock Grid.Row="0" Text="{Binding Message}" TextWrapping="Wrap"/>
-
 			<Expander Grid.Row="1"
 					  Header="{Binding ShortTitle}"
 					  IsExpanded="{Binding IsDetailsOpen}"
 					  HorizontalAlignment="Stretch"
-					  VerticalAlignment="Stretch"
-					  HorizontalContentAlignment="Stretch"
-					  VerticalContentAlignment="Stretch">
+					  HorizontalContentAlignment="Stretch">
 				<TextBox Text="{Binding Details}"
 						 AcceptsReturn="True"
 						 IsReadOnly="True"
@@ -39,14 +37,19 @@
 						 HorizontalAlignment="Stretch"
 						 VerticalAlignment="Stretch"/>
 			</Expander>
-			<!-- Context grid placeholder -->
 		</Grid>
 
-		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-			<Button Content="Retry" Command="{Binding ExceptionDialog_Button_RetryCommand}"/>
-			<Button Content="Help" Command="{Binding ExceptionDialog_Button_HelpCommand}"/>
-			<Button Content="Copy Details" Command="{Binding ExceptionDialog_Button_CopyDetailsCommand}"/>
-			<Button Content="Close" Command="{Binding ExceptionDialog_Button_CancelCommand}"/>
-		</StackPanel>
+		<!-- Actions: docked below the collapsible panel -->
+		<Border Grid.Row="2"
+				Margin="0,0,0,0"
+				BorderThickness="0,1,0,0"
+				BorderBrush="{DynamicResource ThemeForegroundLowBrush}">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+				<Button Content="Retry" Command="{Binding ExceptionDialog_Button_RetryCommand}"/>
+				<Button Content="Help" Command="{Binding ExceptionDialog_Button_HelpCommand}"/>
+				<Button Content="Copy Details" Command="{Binding ExceptionDialog_Button_CopyDetailsCommand}"/>
+				<Button Content="Close" Command="{Binding ExceptionDialog_Button_CancelCommand}"/>
+			</StackPanel>
+		</Border>
 	</Grid>
 </UserControl>

@@ -4,6 +4,10 @@ using MTM_Inventory_Application_Avalonia.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using MTM_Inventory_Application_Avalonia.Views.Dialogs;
+using MTM_Inventory_Application_Avalonia.ViewModels.Dialogs;
 
 namespace MTM_Inventory_Application_Avalonia.ViewModels;
 
@@ -13,7 +17,7 @@ public partial class InventoryTransferViewModel : ObservableObject
 
     public IPartDialogService? PartDialog { get; set; }
 
-    public InventoryTransferViewModel() : this(new ExceptionHandler()) {}
+    public InventoryTransferViewModel() : this(new ExceptionHandler()) { }
 
     public InventoryTransferViewModel(IExceptionHandler exceptionHandler)
     {
@@ -45,7 +49,7 @@ public partial class InventoryTransferViewModel : ObservableObject
             _inventoryTransfer_DataGrid_Results.Add(r);
     }
 
-    // Commands (placeholders with centralized error handling)
+    // Commands
     [RelayCommand]
     private void InventoryTransfer_Button_ValidateItem()
     {
@@ -58,11 +62,6 @@ public partial class InventoryTransferViewModel : ObservableObject
     {
         try
         {
-            // TODO: Replace with service call; example usage:
-            // var rows = await _inventoryService.GetAvailabilityAsync(...);
-            // SetInventoryTransferResults(rows);
-
-            // For now, ensure previous results are cleared
             _inventoryTransfer_DataGrid_Results.Clear();
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_CheckAvailabilityFrom)); }
@@ -71,7 +70,17 @@ public partial class InventoryTransferViewModel : ObservableObject
     [RelayCommand]
     private void InventoryTransfer_Button_ShowLocationModal()
     {
-        try { /* TODO: open LocationPickerDialog */ }
+        try
+        {
+            var win = new Window
+            {
+                Title = "Location Picker",
+                SizeToContent = SizeToContent.WidthAndHeight,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Content = new LocationPickerDialog { DataContext = new LocationPickerDialogViewModel() }
+            };
+            win.Show();
+        }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_ShowLocationModal)); }
     }
 
@@ -103,12 +112,24 @@ public partial class InventoryTransferViewModel : ObservableObject
         try
         {
             var seed = InventoryTransfer_TextBox_ItemId;
-            if (PartDialog is null) return;
-            var picked = await PartDialog.PickPartAsync(seed);
-            if (!string.IsNullOrWhiteSpace(picked))
+            if (PartDialog is not null)
             {
-                InventoryTransfer_TextBox_ItemId = picked!;
+                var picked = await PartDialog.PickPartAsync(seed);
+                if (!string.IsNullOrWhiteSpace(picked))
+                {
+                    InventoryTransfer_TextBox_ItemId = picked!;
+                }
+                return;
             }
+
+            var win = new Window
+            {
+                Title = "Incomplete Part",
+                SizeToContent = SizeToContent.WidthAndHeight,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Content = new IncompletePartDialog { DataContext = new IncompletePartDialogViewModel() }
+            };
+            win.Show();
         }
         catch (Exception ex) { _exceptionHandler.Handle(ex, nameof(InventoryTransfer_Button_ResolveIncompletePartId)); }
     }

@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.VisualTree;
 
 namespace MTM_Inventory_Application_Avalonia.Views;
 
@@ -17,17 +16,24 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
         DataContextChanged += MainView_DataContextChanged;
-        this.AttachedToVisualTree += MainView_AttachedToVisualTree;
+        AttachedToVisualTree += MainView_AttachedToVisualTree;
+        DetachedFromVisualTree += MainView_DetachedFromVisualTree;
     }
 
     private void MainView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         AttachToVm(DataContext as INotifyPropertyChanged);
+
         // Apply sizing once on attach
         if (DataContext is MTM_Inventory_Application_Avalonia.ViewModels.MainViewModel vm)
         {
             ApplyLoginSizing(vm.IsLoginVisible);
         }
+    }
+
+    private void MainView_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        AttachToVm(null);
     }
 
     private void MainView_DataContextChanged(object? sender, EventArgs e)
@@ -65,7 +71,7 @@ public partial class MainView : UserControl
 
     private void ApplyLoginSizing(bool isLoginVisible)
     {
-        if (this.VisualRoot is not Window window)
+        if (VisualRoot is not Window window)
             return;
 
         if (isLoginVisible)
@@ -83,7 +89,7 @@ public partial class MainView : UserControl
         }
         else
         {
-            // When hiding login, prefer restoring prior Manual sizing if we have concrete dimensions.
+            // Restore prior Manual sizing if we have concrete dimensions.
             if (_hasSavedSize && !double.IsNaN(_savedWidth) && !double.IsNaN(_savedHeight))
             {
                 window.SizeToContent = _savedSizeToContent;
@@ -92,8 +98,7 @@ public partial class MainView : UserControl
             }
             else
             {
-                // If we don't have concrete saved dimensions (initial Width/Height were NaN),
-                // allow the window to size to the main content's desired size.
+                // Size to the main content's desired size.
                 window.SizeToContent = SizeToContent.WidthAndHeight;
             }
         }

@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
@@ -26,8 +26,15 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var nav = new NavigationService();
-            var host = new Window { Title = "MTM Inventory Application" };
+            var host = new Window
+            {
+                Title = "MTM Inventory Application",
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+            };
+
             desktop.MainWindow = host;
+
             nav.Configure(host);
             nav.NavigateToLogin();
         }
