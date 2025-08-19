@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Incomplete Part Dialog (HTML Image)</title>
+    <style>
+        :root {
+            --fg: #222;
+            --fg-low: #666;
+            --bg: #fff;
+            --bg-panel: #f6f6f6;
+            --border: #ddd;
+            --accent: #2563eb;
+        }
+
+        body {
+            margin: 16px;
+            font: 14px/1.4 Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+        }
+
+        .window {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+            max-width: 1100px;
+        }
+
+        .titlebar {
+            padding: 10px 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: auto repeat(6,auto) 1fr repeat(3,auto);
+            gap: 8px;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .toolbtn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 4px 6px;
+            cursor: default;
+        }
+
+            .toolbtn span {
+                font-size: 16px;
+                opacity: .8;
+            }
+
+        .search {
+            min-width: 260px;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .check {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .combo {
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 150px;
+        }
+
+        .expander {
+            border-top: 1px solid var(--border);
+        }
+
+        .expander-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            cursor: default;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin-left: 6px;
+        }
+
+        .panel {
+            margin: 0 12px 12px 12px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-panel);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        thead th {
+            text-align: left;
+            font-weight: 600;
+            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        tbody tr:nth-child(even) td {
+            background: #fcfcfc;
+        }
+
+        tbody tr:hover td {
+            background: #e8f4fd;
+        }
+
+        .footer {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+        }
+
+        .muted {
+            color: var(--fg-low);
+        }
+
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 6px 12px;
+        }
+
+            .btn.primary {
+                background: var(--accent);
+                color: #fff;
+                border-color: var(--accent);
+            }
+
+            .btn[disabled] {
+                opacity: .6;
+            }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="titlebar">Find Parts</div>
+
+        <div class="toolbar">
+            <div style="font-weight:600; margin-right:6px;">Parts</div>
+            <button class="toolbtn" title="Accept"><span class="icon">✔</span></button>
+            <button class="toolbtn" title="Cancel"><span class="icon">✖</span></button>
+            <button class="toolbtn" title="Refresh"><span class="icon">⟳</span></button>
+            <button class="toolbtn" title="Search"><span class="icon">🔎</span></button>
+            <button class="toolbtn" title="Filter"><span class="icon">⧉</span></button>
+            <button class="toolbtn" title="Clear Filter"><span class="icon">🧹</span></button>
+
+            <input class="search" placeholder="Part contains..." value="PART-123" />
+            <label class="check"><input type="checkbox" checked /> Active only</label>
+            <label class="check"><input type="checkbox" /> Search in description</label>
+            <div style="display:flex; align-items:center; gap:6px;">
+                <div>Match:</div>
+                <select class="combo">
+                    <option>Contains (%seed%)</option>
+                    <option>Starts with (seed%)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="expander">
+            <div class="expander-header">
+                <span class="icon">≣</span>
+                <div>Results</div>
+                <span class="badge">8</span>
+            </div>
+
+            <div class="panel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Part Number</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>UOM</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e8f4fd;">
+                            <td><strong>PART-12345</strong></td>
+                            <td>Steel Bracket Assembly</td>
+                            <td>Active</td>
+                            <td>EA</td>
+                            <td>Manufactured</td>
+                            <td>Hardware</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12367</td>
+                            <td>Aluminum Housing Component</td>
+                            <td>Active</td>
+                            <td>EA</td>
+                            <td>Purchased</td>
+                            <td>Components</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12389</td>
+                            <td>Fastener Kit</td>
+                            <td>Active</td>
+                            <td>KIT</td>
+                            <td>Purchased</td>
+                            <td>Hardware</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12301</td>
+                            <td>Control Circuit Board</td>
+                            <td>Active</td>
+                            <td>EA</td>
+                            <td>Purchased</td>
+                            <td>Electronics</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12356</td>
+                            <td>Motor Mount Bracket</td>
+                            <td>Active</td>
+                            <td>EA</td>
+                            <td>Manufactured</td>
+                            <td>Hardware</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12378</td>
+                            <td>Wire Harness Assembly</td>
+                            <td>Active</td>
+                            <td>EA</td>
+                            <td>Manufactured</td>
+                            <td>Electronics</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12334</td>
+                            <td>Sensor Module</td>
+                            <td>Active</td>
+                            <td>EA</td>
+                            <td>Purchased</td>
+                            <td>Electronics</td>
+                        </tr>
+                        <tr>
+                            <td>PART-12390</td>
+                            <td>Gasket Set</td>
+                            <td>Active</td>
+                            <td>SET</td>
+                            <td>Purchased</td>
+                            <td>Consumables</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="muted">8 results</div>
+            <button class="btn primary">✔ Select</button>
+            <button class="btn">✖ Cancel</button>
+        </div>
+    </div>
+</body>
+</html>

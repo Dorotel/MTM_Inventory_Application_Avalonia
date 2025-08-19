@@ -37,27 +37,275 @@
     <article id="top" class="wrapper style1"><div class="container"><header><h1>Work Order Transactions (Issue/Receipt)</h1></header></div></article>
     <main class="container">
       <section class="panel" id="workorder">
-        <p>Purpose: issue material to a Work Order or receive completed quantity to stock.</p>
-        <div class="fig-grid"><figure><img src="./Images/WorkOrderTransactionView.png" alt="Work Order Transaction View mockup" /><figcaption>WorkOrderTransactionView.png</figcaption></figure></div>
-        <h3>What the user does</h3>
+        <h2>Purpose and Overview</h2>
+        <p>Work Order Transactions enable issuing materials to work orders and receiving completed items back to stock. This feature supports both Issue (consuming materials) and Receipt (returning finished goods) operations with comprehensive validation and error handling.</p>
+
+        <div class="fig-grid">
+          <figure>
+            <iframe src="./workorder-image.html" width="100%" height="600" frameborder="0" style="border: 1px solid #ddd; border-radius: 8px;"></iframe>
+            <figcaption>Work Order Transaction View - Handle issue and receipt operations</figcaption>
+          </figure>
+        </div>
+
+        <h2>How to Use</h2>
+        <h3>Issue Transaction (Material to Work Order)</h3>
+        <ol>
+          <li>Access Work Order Transactions from MainView</li>
+          <li>Select <strong>Issue</strong> as the transaction type</li>
+          <li>Enter the <strong>Work Order ID</strong></li>
+          <li>Click <strong>Validate Work Order</strong> to verify status and eligibility</li>
+          <li>Enter the <strong>Quantity</strong> to issue</li>
+          <li>Enter the <strong>From Location</strong> (where material currently resides)</li>
+          <li>Click <strong>Check Availability</strong> to verify sufficient stock</li>
+          <li>Review information and click <strong>Post Transaction</strong></li>
+        </ol>
+
+        <h3>Receipt Transaction (Finished Goods to Stock)</h3>
+        <ol>
+          <li>Select <strong>Receipt</strong> as the transaction type</li>
+          <li>Enter the <strong>Work Order ID</strong></li>
+          <li>Validate the work order is eligible for receipts</li>
+          <li>Enter the <strong>Quantity</strong> to receive</li>
+          <li>Enter the <strong>To Location</strong> (destination for finished goods)</li>
+          <li>Post the transaction to update inventory</li>
+        </ol>
+
+        <h2>Field and Control Descriptions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Required</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Work Order ID</td>
+              <td>Text Input</td>
+              <td>Work order number for the transaction</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Transaction Type</td>
+              <td>Dropdown</td>
+              <td>Issue (0) or Receipt (1)</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Quantity</td>
+              <td>Numeric Input</td>
+              <td>Amount to issue or receive (must be > 0)</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>From Location</td>
+              <td>Text Input</td>
+              <td>Source location for Issue transactions</td>
+              <td>Issue only</td>
+            </tr>
+            <tr>
+              <td>To Location</td>
+              <td>Text Input</td>
+              <td>Destination location for Receipt transactions</td>
+              <td>Receipt only</td>
+            </tr>
+            <tr>
+              <td>Warehouse ID</td>
+              <td>Read-Only Label</td>
+              <td>Current warehouse (typically "002")</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Site ID</td>
+              <td>Read-Only Label</td>
+              <td>Current site identifier</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Transaction Types</h2>
+        <h3>Issue Transactions</h3>
         <ul>
-          <li>Choose a transaction type: Issue to WO or Receipt by WO.</li>
-          <li>Enter the Work Order ID, Quantity, and Location (From for Issue, To for Receipt).</li>
-          <li>Post the transaction.</li>
+          <li><strong>Purpose</strong>: Consume raw materials or components for work order production</li>
+          <li><strong>Direction</strong>: From inventory location to work order</li>
+          <li><strong>Validation</strong>: Requires sufficient available inventory at From Location</li>
+          <li><strong>Impact</strong>: Reduces inventory quantity, charges work order</li>
         </ul>
-        <h3>What the app does</h3>
+
+        <h3>Receipt Transactions</h3>
         <ul>
-          <li>Validates the Work Order (status open/eligible, remaining qty, etc.).</li>
-          <li>Checks inventory availability for Issue, detects over-receipts for Receipt.</li>
-          <li>Posts the transaction via service adapters (VISUAL in production) and writes local exception/audit entries when applicable.</li>
-          <li>On errors (Closed WO, Not Enough @ From, Over Receipt), prompts via the Exception Dialog and logs to the app DB when appropriate.</li>
+          <li><strong>Purpose</strong>: Receive finished goods from work order completion</li>
+          <li><strong>Direction</strong>: From work order to inventory location</li>
+          <li><strong>Validation</strong>: Checks for over-receipt conditions</li>
+          <li><strong>Impact</strong>: Increases inventory quantity, credits work order</li>
         </ul>
-        <h3>Commands</h3>
+
+        <h2>Validation and Error Handling</h2>
+        <h3>Work Order Validation</h3>
         <ul>
-          <li><strong>Validate Work Order</strong></li>
-          <li><strong>Check Availability</strong></li>
-          <li><strong>Post Transaction</strong></li>
-          <li><strong>Reset</strong></li>
+          <li><strong>Status Check</strong>: Work order must be open and eligible for transactions</li>
+          <li><strong>Closed Work Orders</strong>: Cannot issue to or receive from closed work orders</li>
+          <li><strong>Remaining Quantity</strong>: Issues cannot exceed work order requirements</li>
+          <li><strong>Receipt Limits</strong>: Receipts may be subject to over-receipt controls</li>
+        </ul>
+
+        <h3>Inventory Validation</h3>
+        <ul>
+          <li><strong>Availability (Issue)</strong>: Sufficient inventory must exist at From Location</li>
+          <li><strong>Location Validity</strong>: All locations must exist and be active</li>
+          <li><strong>Warehouse Consistency</strong>: Locations must belong to current warehouse</li>
+        </ul>
+
+        <h3>Common Error Scenarios</h3>
+        <ul>
+          <li><strong>Closed Work Order</strong>: Attempting transactions on closed/completed work orders</li>
+          <li><strong>Insufficient Inventory</strong>: Not enough available quantity for issue</li>
+          <li><strong>Over Receipt</strong>: Receiving more than work order allows</li>
+          <li><strong>Invalid Location</strong>: Location doesn't exist or is inactive</li>
+          <li><strong>Negative Quantity</strong>: Quantity must be positive value</li>
+        </ul>
+
+        <h2>Command Descriptions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Function</th>
+              <th>When to Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Validate Work Order</td>
+              <td>Verifies work order exists and is eligible</td>
+              <td>After entering Work Order ID</td>
+            </tr>
+            <tr>
+              <td>Check Availability</td>
+              <td>Displays available inventory for Issue transactions</td>
+              <td>Before posting Issue transactions</td>
+            </tr>
+            <tr>
+              <td>Resolve Incomplete Part</td>
+              <td>Opens Part search dialog (placeholder)</td>
+              <td>When part information is needed</td>
+            </tr>
+            <tr>
+              <td>Post Transaction</td>
+              <td>Executes the Issue or Receipt operation</td>
+              <td>After all validation passes</td>
+            </tr>
+            <tr>
+              <td>Reset</td>
+              <td>Clears all fields</td>
+              <td>To start a new transaction</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Business Rules and Constraints</h2>
+        <h3>Work Order Status Requirements</h3>
+        <ul>
+          <li><strong>Open Status</strong>: Work orders must be in "Released" or "Open" status</li>
+          <li><strong>Closed Restrictions</strong>: No transactions allowed on closed/complete work orders</li>
+          <li><strong>Future Status</strong>: May support work orders in "Future" status with appropriate controls</li>
+        </ul>
+
+        <h3>TRACE Requirements</h3>
+        <ul>
+          <li>Lot-controlled items require lot number capture during transactions</li>
+          <li>Serial-controlled items require individual serial number tracking</li>
+          <li>TRACE data must be maintained throughout the transaction process</li>
+        </ul>
+
+        <h3>Posting and Audit Trail</h3>
+        <ul>
+          <li>All transactions create entries in VISUAL InventoryTransaction table</li>
+          <li>Local audit entries record transaction details for reporting</li>
+          <li>Exception conditions are logged to app database for analysis</li>
+        </ul>
+
+        <h2>Keyboard and Scanner Support</h2>
+        <h3>Barcode Scanner Integration</h3>
+        <ul>
+          <li>Work Order ID field supports barcode input</li>
+          <li>Location fields accept scanned location barcodes</li>
+          <li>Scanner input automatically advances focus</li>
+        </ul>
+
+        <h3>Keyboard Navigation</h3>
+        <ul>
+          <li><span class="kbd">Tab</span>: Move between fields</li>
+          <li><span class="kbd">Enter</span>: Activate focused button</li>
+          <li><span class="kbd">Esc</span>: Cancel operations or clear fields</li>
+        </ul>
+
+        <h2>Dialog Integration</h2>
+        <h3>Exception Handling</h3>
+        <ul>
+          <li>Closed work order errors display specific messages and suggested actions</li>
+          <li>Insufficient inventory errors show available quantities</li>
+          <li>Over-receipt warnings provide options to proceed or cancel</li>
+        </ul>
+
+        <h3>Part Dialog Integration</h3>
+        <ul>
+          <li>Resolve Incomplete Part button opens part search dialog</li>
+          <li>Currently seeds search with Work Order ID (placeholder implementation)</li>
+          <li>Future enhancement will provide part-specific search capabilities</li>
+        </ul>
+
+        <h2>Technical Implementation</h2>
+        <h3>Key Components</h3>
+        <ul>
+          <li><strong>View</strong>: <code>Views/WorkOrderTransactionView.axaml</code></li>
+          <li><strong>ViewModel</strong>: <code>ViewModels/WorkOrderTransactionViewModel.cs</code></li>
+          <li><strong>Service Integration</strong>: <code>IShopFloorService</code> (planned)</li>
+          <li><strong>Dialog Services</strong>: <code>IPartDialogService</code></li>
+        </ul>
+
+        <h3>VISUAL Integration</h3>
+        <ul>
+          <li>Uses GetWorkOrderSummary service for work order validation</li>
+          <li>Posts transactions via InventoryTransaction with work order links</li>
+          <li>Integrates with ChangeWorkOrderStatus for status management</li>
+          <li>Maintains labor ticket associations when applicable</li>
+        </ul>
+
+        <h2>Exception Logging and Reporting</h2>
+        <h3>Logged Exception Types</h3>
+        <ul>
+          <li><strong>Closed Work Order</strong>: Attempts to transact against closed work orders</li>
+          <li><strong>Over Receipt</strong>: Receipt quantities exceeding work order limits</li>
+          <li><strong>Insufficient Inventory</strong>: Issue attempts with inadequate stock</li>
+        </ul>
+
+        <h3>Local Database Entries</h3>
+        <ul>
+          <li>Exception details stored in app database for analysis</li>
+          <li>Audit trail maintained for all successful transactions</li>
+          <li>User context and timestamp recorded for compliance</li>
+        </ul>
+
+        <h2>Troubleshooting</h2>
+        <h3>Common Issues</h3>
+        <ul>
+          <li><strong>Work order validation fails</strong>: Check work order status and existence</li>
+          <li><strong>Cannot issue materials</strong>: Verify inventory availability and location</li>
+          <li><strong>Receipt blocked</strong>: Check for over-receipt controls and work order limits</li>
+          <li><strong>Transaction posting fails</strong>: Verify VISUAL connection and user permissions</li>
+        </ul>
+
+        <h2>References</h2>
+        <ul>
+          <li><a href="mainview.html">Main View</a> - Navigation to Work Order Transactions</li>
+          <li><a href="inventory-transfer.html">Inventory Transfer</a> - Related inventory operations</li>
+          <li><a href="dialogs.html">Supporting Dialogs</a> - Part search and location picker</li>
+          <li><a href="errors.html">Exception Handling</a> - Error display and logging</li>
+          <li><a href="mamp.html">App Database</a> - Local exception and audit logging</li>
         </ul>
       </section>
     </main>
