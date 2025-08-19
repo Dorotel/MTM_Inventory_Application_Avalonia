@@ -1,124 +1,229 @@
 # Login Screen - Functional and Technical Specification
+_Functional and Technical Specification_
 
-Reevaluation (latest)
-- Changes from previous version:
-  - Clarified authentication using Dbms.OpenLocal and OpenLocalSSO with exact source citations.
-  - Added session context hydration from ApplGlobal (SiteID, MultiSite, currency) with citations.
-  - Documented required DLL references and Database.config placement with citations.
-  - Linked centralized Exception Handling Form for all error flows.
-  - Linked centralized MAMPDatabase.md for app-owned storage policy.
-  - Updated navigation to reflect Login overlay hosted inside MainView (no window swap after login).
-  - Updated error handling note to reflect current IExceptionHandler.Handle(ex, context) dialog behavior.
+---
 
-Purpose
-- Define the startup login experience for authenticating a user with Infor Visual credentials before opening the main application UI.
+**Metadata**  
+- **View:** `Views/Dialogs/LoginView.axaml`
+- **ViewModel:** `ViewModels/Dialogs/LoginViewModel.cs`
+- **Primary Commands:** Login, Cancel
+- **Related Services:** IAuthenticationService, ISessionContext, INavigationService
+- **Last Updated:** 2024-12-19
+- **Copilot Template Version:** 1.1
 
-Global Rule - Visual license lifecycle
+---
+
+## Purpose
+
+Authentication overlay for validating Infor Visual credentials before accessing the main application functionality. Appears as a centered overlay within MainView on startup.
+
+---
+
+## Global Rules
+
 - Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short-lived, per-request scope to acquire and dispose the license.
+- ALL methods implement try/catch and route errors through IExceptionHandler with the same normalization routine
 
-Screenshot highlighting (reference only)
-- Any colors shown in screenshots are illustrative callouts to indicate field roles/sections; they do not define application theming. Implement standard app styling.
+---
 
-Scope
-- Show the Login screen at application startup as an overlay inside MainView.
-- Collect Visual Username and Password (and optional Domain/Site if required by environment).
-- Verify credentials against the Visual server using approved APIs or stored procedures.
-- On success, persist a signed session token (not the raw password) in memory for the runtime session, then hide the Login overlay and remain in MainView.
-- On failure, display an error and remain on the Login screen (all errors are routed to the Exception Handling Form). See ../MVVMDefinitions/ExceptionHandling.md.
+## Scope
 
-Platform
-- Avalonia 11 on .NET 8; MVVM pattern (View, ViewModel, Services).
-- Hosting: MainWindow hosts MainView at startup; MainView displays a centered Login overlay (Views/Dialogs/LoginView) until authentication succeeds.
+- Show Login overlay at application startup inside MainView
+- Collect Visual Username, Password, and optional Site/Domain
+- Verify credentials against Visual server using AuthenticationService
+- On success: hide overlay, populate session context, remain in MainView
+- On failure: show error via Exception Handling Form, remain on Login
 
-Security and Storage
-- Do not store plain passwords on disk.
-- Keep only an in?memory session context for the running process; clear it on logout/exit.
-- Use secure string handling and zeroing where practical.
-- For any app-owned data storage, see ../MVVMDefinitions/MAMPDatabase.md.
+---
 
-User Interface (implemented as overlay)
-- Fields: Username, Password (masked), optional Site/Domain selector, Login button, Cancel/Exit.
-- Validation: required fields, debounced login attempt; disable Login button while authenticating.
-- Errors: show Visual server messages when available, otherwise a generic message (via the Exception Handling Form).
+## Platform and Shell Wiring
 
-Authentication Flow
-1) App starts ? MainWindow hosts MainView ? Login overlay shown.
-2) User enters credentials ? clicks Login.
-3) Client calls AuthenticationService.AuthenticateAsync(username, password, site?)
-   - Acquire Visual license for the authentication call.
-   - Perform server verification (assemblies or stored procedures per environment policy).
-   - Always release/close the license in a finally block.
-   - Implementation note (assemblies): establish a short?lived VISUAL connection using Dbms.OpenLocal(instance, user, pass) or OpenLocalSSO(instance, userName, userSID, domain, domainSID), then immediately close after verification. [Intro - Development Guide.txt, p.13 (OpenLocal/Database.config); p.14 (OpenLocalSSO); Reference - Core.txt, p.33-37 (OpenLocal overloads)]
-4) If success ? store session context ? hide Login overlay and remain in MainView.
-5) If failure ? route the error and context to the Exception Handling Form; after user choice, either retry or stay on Login.
+- **View:** `Views/Dialogs/LoginView.axaml` (UserControl overlay)
+- **Host:** Centered inside MainView with white background Border
+- **Navigation:** NavigationService.NavigateToLogin() shows overlay, NavigateToMain() hides it
+- **Window Sizing:** MainView adjusts window size to fit login overlay, restores on hide
 
-Implementation Notes
-- Required references: LsaCore.dll, LsaShared.dll and appropriate Vmfg*.dll by domain. [Intro - Development Guide.txt, p.11-12]
-- Database.config must be co?located with the app and API DLLs at runtime. [Intro - Development Guide.txt, p.15]
-- Dbms.UserID(instance) can be used to confirm the connected VISUAL user. [Reference - Core.txt, p.48]
+---
 
-Integration Options
-- Assemblies: wrap VmfgShared/VmfgInventory/VmfgShopFloor (if licensed) behind an adapter that exposes AuthenticateAsync and manages license acquire/close per call.
-- Database: if using a stored procedure for validation, call via a minimal DAL; still acquire/close license if procedure requires one.
+## Current Implementation Details
 
-Session Context
-- Expose ISessionContext with properties: UserId, DisplayName, Roles, SiteId, WarehouseId, AuthTimeUtc, and a method LogoutAsync() that clears credentials and returns to Login.
-- Populate environment/site defaults after auth using ApplGlobal where available:
-  - SiteID (current): ApplGlobal.SiteID. [Reference - VMFG Shared Library.txt, p.84]
-  - MultiSite flag: ApplGlobal.MultiSite. [Reference - VMFG Shared Library.txt, p.78]
-  - System currency: ApplGlobal.SystemCurrencyID. [Reference - VMFG Shared Library.txt, p.86]
+**LoginView.axaml Structure:**
+- Header with login icon and "Sign in" title
+- **Visual Log-In Information** panel (expanded by default):
+  - Username TextBox
+  - Password TextBox (masked)
+- **Optional** panel (collapsed by default):
+  - Site/Domain TextBox with "MTMFGPLAY" watermark
+- Action buttons: Login and Cancel
 
-Navigation
-- On successful authentication, INavigationService.NavigateToMain() invokes MainViewModel.OnAuthenticated() to hide the overlay; MainView remains loaded in MainWindow. See ../../App.axaml.cs and ../../Services/Services.cs.
+**LoginViewModel Properties:**
+- `LoginViewModel_TextBox_Username` (string)
+- `LoginViewModel_TextBox_Password` (string) 
+- `LoginViewModel_TextBox_SiteOrDomain` (string?)
+- `IsBusy` (bool) - disables UI during authentication
 
-Error Handling
-- All errors (configuration, connection/auth, environment, and API/business) are routed to the Exception Handling Form. Current implementation calls IExceptionHandler.Handle(ex, context) which opens a modal ExceptionDialog with details. See ../MVVMDefinitions/ExceptionHandling.md.
+**Commands:**
+- `LoginViewModel_Button_LoginCommand` - async authentication
+- `LoginViewModel_Button_CancelCommand` - exits application
 
-UI Scaffolding (Avalonia 11)
-- Views
-  - Views/Dialogs/LoginView.axaml: username, password, optional site/domain selector, Login/Cancel.
-- ViewModels
-  - ViewModels/Dialogs/LoginViewModel.cs: Username, Password, SiteOrDomain, IsBusy; AuthenticateCommand, CancelCommand; INotifyDataErrorInfo.
-- Commands and Shortcuts
-  - Enter triggers AuthenticateCommand when fields valid; Esc cancels.
-- Services and DI
-  - IAuthenticationService, IExceptionHandler, ISettings, ISessionContext.
-- DataTemplates and Navigation
-  - NavigationService.NavigateToLogin() shows the overlay inside MainView; NavigateToMain() calls MainViewModel.OnAuthenticated().
+---
 
-Citations (page and line)
-- Visual shared settings and site context: Reference - VMFG Shared Library.txt, p.55 - ApplGlobal properties list (see also p.78 MultiSite; p.84 SiteID; p.86 SystemCurrencyID).
-- Authentication connection behaviors: Intro - Development Guide.txt, p.13 - "Connection information is obtained from the Database.Config file." (OpenLocal); p.14 - OpenLocalSSO with user/domain SIDs; Reference - Core.txt, p.33-37 - Dbms.OpenLocal overloads; p.48 - Dbms.UserID.
-- Work order/shop-floor login relevance: Reference - Shop Floor.txt, p.98-100 - GetWorkOrderSummary service (post-login usage scenario).
+## Fields and Validation Rules
 
-References
+**Required Fields:**
+- Username: Cannot be empty/whitespace
+- Password: Cannot be empty/whitespace
+
+**Optional Fields:**
+- Site/Domain: Used for specific environments, defaults to null
+
+**UI States:**
+- `IsBusy` = true during authentication (disables form)
+- Invalid operations throw with appropriate error messages
+
+---
+
+## Visual API Commands (by scenario)
+
+**Authentication Flow:**
+1. `AuthenticationService.AuthenticateAsync(username, password, siteOrDomain)`
+2. Implementation uses `Dbms.OpenLocal` or `OpenLocalSSO` for validation
+3. Session context populated from `ApplGlobal` properties
+4. License explicitly closed after verification
+
+**Required DLL References:**
+- LsaCore.dll, LsaShared.dll
+- Appropriate Vmfg*.dll assemblies by domain
+- Database.config co-located with application
+
+---
+
+## Business Rules and Exceptions
+
+**Development Environment:**
+- Username="Admin", Password="Admin" accepted when Environment=Development
+- Bypasses Visual server authentication for testing
+
+**Production Environment:**
+- Full Visual server validation required
+- Session context populated from server response
+
+**Error Handling:**
+- All authentication failures route through IExceptionHandler.Handle(ex, context)
+- User sees Exception Dialog with retry/cancel options
+
+---
+
+## Workflows
+
+1. **App Start:** MainView loads → Login overlay appears → window sizes to overlay
+2. **Authentication:** Enter credentials → click Login → validate → populate session
+3. **Success:** Hide overlay → MainView.OnAuthenticated() → window resizes to content
+4. **Failure:** Show Exception Dialog → user choice → retry or remain on login
+5. **Cancel:** Exit application via NavigationService.Exit()
+
+---
+
+## ViewModel/Command Conventions
+
+**LoginViewModel Constructor:**
+- Default: Creates service instances for testing
+- Injected: Accepts IExceptionHandler, INavigationService, ISettings, ISessionContext, IAuthenticationService
+
+**Authentication Process:**
+1. Set `IsBusy = true`
+2. Validate required fields (throw if invalid)
+3. Call `_auth.AuthenticateAsync(username, password, siteOrDomain)`
+4. If successful: `_navigationService.NavigateToMain()`
+5. If failed: throw with login failure message
+6. All exceptions caught and routed through IExceptionHandler
+7. Set `IsBusy = false` in finally block
+
+---
+
+## Integration & Storage
+
+**Services Used:**
+- IAuthenticationService: credential validation
+- INavigationService: overlay show/hide and application exit
+- ISessionContext: user state persistence
+- ISettings: environment configuration
+- IExceptionHandler: error display
+
+**Session Context Population:**
+- UserId, SiteId, WarehouseId from authentication response
+- ApplGlobal properties for environment defaults
+- In-memory only, cleared on logout
+
+---
+
+## Keyboard/Scanner UX
+
+**Current Implementation:**
+- No explicit keyboard shortcuts defined
+- Standard tab navigation between fields
+- Enter/Return likely submits form (framework default)
+
+**Planned Enhancements:**
+- Enter triggers Login command when fields valid
+- Esc triggers Cancel command
+
+---
+
+## UI Scaffold
+
+**Views:**
+- `Views/Dialogs/LoginView.axaml` - authentication form overlay
+- Uses Expander controls for collapsible sections
+- MaterialDesign icons for visual enhancement
+
+**ViewModels:**
+- `ViewModels/Dialogs/LoginViewModel.cs` - authentication logic
+- Inherits from ObservableObject (CommunityToolkit.Mvvm)
+- Implements async command pattern
+
+**Services:**
+- AuthenticationService for credential validation
+- NavigationService for application flow control
+- SessionContext for user state management
+
+---
+
+## Testing & Acceptance
+
+- Login overlay appears on startup and sizes window appropriately
+- Required field validation prevents submission with empty credentials
+- Development bypass (Admin/Admin) works when Environment=Development
+- Authentication success hides overlay and populates session context
+- Authentication failure shows Exception Dialog with clear error message
+- Cancel button exits application cleanly
+- All errors route through centralized exception handling
+
+---
+
+## References
+
+- ../../Views/Dialogs/LoginView.axaml (UI implementation)
+- ../../ViewModels/Dialogs/LoginViewModel.cs (authentication logic)
+- ../../Services/Service_Authentication.cs (credential validation)
 - ../../References/Visual DLL & Config Files/Database.config
-- ../../References/Visual PDF Files/Text Conversion/Reference - Core.txt
-- ../../References/Visual PDF Files/Text Conversion/Intro - Development Guide.txt
-- ../../References/Visual PDF Files/Text Conversion/Reference - VMFG Shared Library.txt
-- ../../References/Visual PDF Files/Text Conversion/Reference - Shop Floor.txt
-- ./ExceptionHandling.md
-- ./MAMPDatabase.md
+- ./ExceptionHandling.md (error handling flow)
+- ./MAMPDatabase.md (local data storage)
 
-## Implementation status (scaffold)
-- View created: ../../Views/Dialogs/LoginView.axaml (UserControl)
-- ViewModel created: ../../ViewModels/Dialogs/LoginViewModel.cs
-- Navigation: App starts at Login overlay via NavigationService.NavigateToLogin(); on success, NavigateToMain() hides the overlay and keeps MainView active.
-- Development login: Username=Admin, Password=Admin accepted when Environment=Development (see README.md).
+---
 
-# Login Screen - Planning Specification [Ref: ../UIX Presentation/login.html]
+## Implementation Status
 
-Purpose: authenticate then hide overlay and continue in MainView.
+- **Current:** Fully implemented with development bypass and production authentication
+- **UI:** Complete with expandable sections and proper validation
+- **Navigation:** Working overlay show/hide with window resize
+- **Error Handling:** Integrated with centralized exception handling
 
-Global Rule - Visual license lifecycle
-- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes.
+---
 
-Shell wiring
-- LoginView is shown as an overlay inside MainView. MainView sizes the Window to fit the overlay while visible and restores previous Manual size when hidden.
+## TODOs / Copilot Agent Notes
 
-UX rules
-- Minimal form: Username, Password, Site/Domain; Enter to submit; Esc cancels/clears in dev.
-- Buttons keep text within their bounds; use icon+text stacks when applicable.
-
-Error handling
-- All UI methods use try/catch and route through IExceptionHandler.
+- [ ] Add keyboard shortcuts (Enter for login, Esc for cancel)
+- [ ] Consider adding "Remember Site/Domain" functionality
+- [ ] Verify Visual server authentication works in production environment
+- [ ] Add loading indicator during authentication process
