@@ -29,6 +29,10 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.4" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
     <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.6.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -52,5 +56,22 @@
       <Link>docs\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="..\docs\CodeMap_CS_Files.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\App.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\ExceptionDialog.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\ExceptionHandling.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\Icons.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\IncompletePartDialog.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\InventoryTransfer.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\LocationPickerDialog.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\LoginScreen.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\MainView.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\MAMPDatabase.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\Settings.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\SettingsView.md.bak" />
+    <None Remove="..\docs\MVVM Definitions\WorkOrderTransaction.md.bak" />
+    <None Remove="..\docs\Planned_Implementations.md.bak" />
   </ItemGroup>
 </Project>

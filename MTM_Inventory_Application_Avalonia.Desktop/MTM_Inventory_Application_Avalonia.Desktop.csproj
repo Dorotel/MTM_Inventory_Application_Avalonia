@@ -12,6 +12,10 @@
   <ItemGroup>
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.25547.20250602" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.4" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
