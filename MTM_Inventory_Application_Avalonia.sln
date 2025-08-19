@@ -61,16 +61,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{4AECAA
 		docs\Images\WorkOrderTransactionView.png = docs\Images\WorkOrderTransactionView.png
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{5302BE56-EFD8-4C50-AA06-AAFBC68C69D1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1F94CD1A-3F3C-42E9-B44F-F7C6032EB51A}"
 	ProjectSection(SolutionItems) = preProject
-		.git\COMMIT_EDITMSG = .git\COMMIT_EDITMSG
-		.git\config = .git\config
-		.git\description = .git\description
-		.git\FETCH_HEAD = .git\FETCH_HEAD
-		.git\HEAD = .git\HEAD
-		.git\index = .git\index
-		.git\ms-persist.xml = .git\ms-persist.xml
-		.git\ORIG_HEAD = .git\ORIG_HEAD
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D114F23C-9796-4676-82AF-65A67BDDE4AD}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\jekyll-docker.yml = .github\workflows\jekyll-docker.yml
 	EndProjectSection
 EndProject
 Global
@@ -94,6 +92,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{13A0B660-9FE9-4354-849E-278E1FD78F12} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{4AECAA9A-8C18-47DE-B57E-BAB0E4BFFD33} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D114F23C-9796-4676-82AF-65A67BDDE4AD} = {1F94CD1A-3F3C-42E9-B44F-F7C6032EB51A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E31D73E4-6C62-4103-B369-43DB8EF8D447}

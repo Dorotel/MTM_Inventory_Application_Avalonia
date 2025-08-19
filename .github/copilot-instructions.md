@@ -216,6 +216,14 @@ When updating or generating a help HTML file in `Copilot Files/`, always follow 
     - Do not invent or hallucinate facts—only include information that is present or implied in these sources
     - Reference and embed any images/screenshots or key artifacts from `References` as appropriate
 
+- **For Views (HTML “Image” requirement):**  
+    - If the request targets a View (`*.axaml`), generate a static HTML “Image” (visual mock) of the control that mirrors the layout and major controls (e.g., toolbars, filters, expanders, DataGrids).  
+    - Use `References/View-To-HTML-Example.html` as the canonical reference for structure and styling.  
+    - Produce a standalone HTML file that opens in a browser (no build steps). Link it from the related help page.  
+    - When adding any tables, borders must be visible. Include CSS such as:  
+      - `table { border-collapse: collapse; border: 1px solid #ddd; }`  
+      - `th, td { border: 1px solid #ddd; }`
+
 - **Structure and Layout:**  
     - Use a consistent structure for all help files:
         1. **Title/Header:** Feature or view name
