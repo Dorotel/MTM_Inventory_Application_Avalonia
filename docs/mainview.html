@@ -37,25 +37,165 @@
     <article id="top" class="wrapper style1"><div class="container"><header><h1>Main View (Home)</h1></header></div></article>
     <main class="container">
       <section class="panel" id="mainview">
-        <p>Purpose: a simple home hub with session info and navigation to features.</p>
-        <div class="fig-grid"><figure><img src="./Images/MainView Collapsed Menu.png" alt="Main View with collapsed menu" /><figcaption>MainView Collapsed Menu.png</figcaption></figure></div>
-        <h3>What the user sees</h3>
+        <h2>Purpose and Overview</h2>
+        <p>MainView serves as the central hub after successful login, providing navigation to all inventory features. It hosts feature views in a content region and manages the Login overlay during startup. The view automatically adjusts window sizing for smooth transitions between login and main content.</p>
+
+        <div class="fig-grid">
+          <figure>
+            <img src="./Images/MainView Collapsed Menu.png" alt="Main View with collapsed menu" />
+            <figcaption>MainView with navigation menu - shows session information and feature access</figcaption>
+          </figure>
+        </div>
+
+        <h2>How to Use</h2>
+        <h3>Initial Startup</h3>
+        <ol>
+          <li>Application starts showing Login overlay in MainView</li>
+          <li>After successful authentication, overlay disappears</li>
+          <li>MainView displays with session information and navigation options</li>
+        </ol>
+
+        <h3>Feature Navigation</h3>
+        <ol>
+          <li>Click on a feature button (Inventory Transfer, Work Order Transactions, etc.)</li>
+          <li>Feature view loads in the main content area</li>
+          <li>Use feature-specific controls to complete tasks</li>
+          <li>Return to main hub or navigate to other features as needed</li>
+        </ol>
+
+        <h2>Session Information Display</h2>
+        <h3>Read-Only Session Labels</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Label</th>
+              <th>Description</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>User</td>
+              <td>Currently logged-in username</td>
+              <td>ISessionContext.UserId</td>
+            </tr>
+            <tr>
+              <td>Site</td>
+              <td>Current site identifier</td>
+              <td>ISessionContext.SiteId</td>
+            </tr>
+            <tr>
+              <td>Warehouse</td>
+              <td>Current warehouse identifier</td>
+              <td>ISessionContext.WarehouseId</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Navigation Commands</h2>
+        <h3>Feature Access Buttons</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Description</th>
+              <th>Access Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Open Inventory Transfer</td>
+              <td>Loads inventory transfer form for location-to-location transfers</td>
+              <td>MaterialHandler, InventorySpecialist, Lead, ReadOnly</td>
+            </tr>
+            <tr>
+              <td>Open Work Order Transaction</td>
+              <td>Loads work order transaction form for issue/receipt operations</td>
+              <td>MaterialHandler, InventorySpecialist, Lead, ReadOnly</td>
+            </tr>
+            <tr>
+              <td>Open Settings</td>
+              <td>Loads application settings and configuration</td>
+              <td>All users</td>
+            </tr>
+            <tr>
+              <td>Logout</td>
+              <td>Clears session and returns to Login overlay</td>
+              <td>All users</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Roles and Permissions</h2>
+        <h3>User Roles</h3>
         <ul>
-          <li>Session summary labels (User, Site, Warehouse).</li>
-          <li>Buttons or menu entries for Inventory Transfer, Work Order Transactions, and Settings.</li>
+          <li><strong>MaterialHandler</strong>: Full access to inventory transfers and work order transactions</li>
+          <li><strong>InventorySpecialist</strong>: Full access to all inventory features</li>
+          <li><strong>Lead</strong>: Full access to all features with oversight capabilities</li>
+          <li><strong>ReadOnly</strong>: Can view features but posting operations may be restricted</li>
         </ul>
-        <h3>What the app does</h3>
+
+        <h3>Role-Based Feature Access</h3>
         <ul>
-          <li>Hosts feature screens in a content region.</li>
-          <li>Shows the Login overlay until the user is authenticated.</li>
-          <li>Adjusts window size when the overlay is visible/hidden for a smooth transition.</li>
+          <li>Feature buttons are enabled/disabled based on user role</li>
+          <li>ReadOnly users can access features but posting is disabled within feature flows</li>
+          <li>Unauthorized access attempts are handled by the centralized exception system</li>
         </ul>
-        <h3>Commands</h3>
+
+        <h2>Window and Layout Management</h2>
+        <h3>Login Overlay Behavior</h3>
         <ul>
-          <li><strong>Open Inventory Transfer</strong></li>
-          <li><strong>Open Work Order Transaction</strong></li>
-          <li><strong>Open Settings</strong></li>
-          <li><strong>Logout</strong></li>
+          <li><strong>During Login</strong>: Window sizes to fit the Login overlay</li>
+          <li><strong>After Login</strong>: Window restores previous size or sizes to MainView content</li>
+          <li><strong>Logout</strong>: Returns to Login overlay and adjusts window size accordingly</li>
+        </ul>
+
+        <h3>Content Hosting</h3>
+        <ul>
+          <li>Feature views load in the main content region</li>
+          <li>Only one feature view is active at a time</li>
+          <li>Navigation between features replaces the current content</li>
+        </ul>
+
+        <h2>Keyboard Shortcuts</h2>
+        <ul>
+          <li><span class="kbd">Alt + I</span>: Open Inventory Transfer</li>
+          <li><span class="kbd">Alt + W</span>: Open Work Order Transaction</li>
+          <li><span class="kbd">Alt + L</span>: Logout</li>
+        </ul>
+
+        <h2>Error Handling</h2>
+        <ul>
+          <li>All navigation operations use try/catch blocks</li>
+          <li>Errors are routed through IExceptionHandler for consistent display</li>
+          <li>Session issues automatically return to Login overlay</li>
+          <li>Feature loading errors display in the centralized exception dialog</li>
+        </ul>
+
+        <h2>Technical Implementation</h2>
+        <h3>Key Components</h3>
+        <ul>
+          <li><strong>View</strong>: <code>Views/MainView.axaml</code></li>
+          <li><strong>ViewModel</strong>: <code>ViewModels/MainViewModel.cs</code></li>
+          <li><strong>Navigation Service</strong>: <code>INavigationService</code></li>
+          <li><strong>Session Context</strong>: <code>ISessionContext</code></li>
+        </ul>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>Single MainView instance hosted in MainWindow</li>
+          <li>Login overlay managed via IsLoginVisible property</li>
+          <li>Feature views injected into CurrentView property</li>
+          <li>Session context propagated to all child features</li>
+        </ul>
+
+        <h2>References</h2>
+        <ul>
+          <li><a href="login.html">Login</a> - Authentication before MainView access</li>
+          <li><a href="inventory-transfer.html">Inventory Transfer</a> - Location-to-location transfers</li>
+          <li><a href="workorder.html">Work Order Transactions</a> - Issue/receipt operations</li>
+          <li><a href="settings.html">Settings</a> - Application configuration</li>
+          <li><a href="errors.html">Exception Handling</a> - Centralized error management</li>
         </ul>
       </section>
     </main>
