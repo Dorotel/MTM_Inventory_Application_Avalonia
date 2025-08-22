@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical documentation for MTM Inventory Application - Avalonia .NET 8 desktop application for inventory management and work order transactions">
+    <meta name="keywords" content="MTM, Inventory, Application, Avalonia, .NET, Documentation, Technical, MVVM, Visual ERP">
+    <meta name="author" content="MTM Development Team">
+    <title>Technical Documentation - MTM Inventory Application</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/modern-styles.css">
+    <link rel="stylesheet" href="../assets/css/mtm-theme.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="header mtm-header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/MTM_Logo.png" alt="MTM Logo" height="40">
+                <span>MTM Inventory App</span>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Primary Navigation -->
+            <nav class="nav-primary" role="navigation">
+                <ul>
+                    <li><a href="index.html" class="active">Overview</a></li>
+                    <li><a href="coding-conventions.html">Development</a></li>
+                    <li><a href="database-development.html">Database</a></li>
+                    <li><a href="ui-generation.html">UI Guide</a></li>
+                    <li><a href="../PlainEnglish/index.html">Plain English</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Layout -->
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <aside class="sidebar mtm-sidebar" role="navigation" aria-label="Documentation navigation">
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="search" class="search-input" placeholder="Search documentation..." aria-label="Search documentation">
+            </div>
+            
+            <nav>
+                <h3>Technical Documentation</h3>
+                <ul>
+                    <li><a href="index.html" class="active">Overview</a></li>
+                    <li><a href="coding-conventions.html">Coding Conventions</a></li>
+                    <li><a href="database-development.html">Database Development</a></li>
+                    <li><a href="ui-generation.html">UI Generation</a></li>
+                    <li><a href="error-handling.html">Error Handling</a></li>
+                    <li><a href="github-workflow.html">GitHub Workflow</a></li>
+                    <li><a href="naming-conventions.html">Naming Conventions</a></li>
+                    <li><a href="custom-prompts.html">Custom Prompts</a></li>
+                    <li><a href="personas.html">Personas</a></li>
+                    <li><a href="needs-repair.html">Needs Repair</a></li>
+                    <li><a href="missing-systems.html">Missing Systems</a></li>
+                </ul>
+                
+                <h3>Components</h3>
+                <ul>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="viewmodels.html">ViewModels</a></li>
+                    <li><a href="views.html">Views</a></li>
+                    <li><a href="models.html">Models</a></li>
+                </ul>
+                
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../PlainEnglish/index.html">Plain English Docs</a></li>
+                    <li><a href="../../ReadmeFiles/Development/README_Code_Map.md">Code Map</a></li>
+                    <li><a href="../../../README.md">Project README</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Page Progress Indicator -->
+            <div class="page-progress">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-label="Reading progress"></div>
+                </div>
+                <div class="page-progress-text">Reading Progress</div>
+            </div>
+            
+            <!-- Content Area -->
+            <article class="content-wrapper">
+                <!-- Page Header -->
+                <header class="page-header">
+                    <h1>MTM Inventory Application - Technical Documentation</h1>
+                    <p class="lead">Comprehensive technical documentation for the Avalonia .NET 8 desktop inventory management application with Infor VISUAL ERP integration.</p>
+                    
+                    <!-- Metadata -->
+                    <div class="page-meta">
+                        <span class="status-badge status-badge-success">Active Development</span>
+                        <span class="text-muted">Last updated: December 22, 2024</span>
+                        <span class="text-muted">Version: 2.0</span>
+                    </div>
+                </header>
+                
+                <!-- Alert for Important Information -->
+                <div class="alert alert-primary" role="alert">
+                    <strong>Documentation Modernization Complete!</strong> This documentation has been reorganized and modernized for improved navigation and accessibility. <a href="../PlainEnglish/index.html">Plain English versions</a> are now available for non-technical stakeholders.
+                </div>
+                
+                <!-- Main Content -->
+                <div class="content-body">
+                    
+                    <!-- Overview Section -->
+                    <section class="documentation-section">
+                        <h2>Application Overview</h2>
+                        <div class="card mtm-card mtm-card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">MTM Inventory Application</h3>
+                            </div>
+                            <p><strong>Platform:</strong> Avalonia 11 on .NET 8 Desktop</p>
+                            <p><strong>Architecture:</strong> MVVM with Service Layer and Dependency Injection</p>
+                            <p><strong>Integration:</strong> Infor VISUAL ERP System</p>
+                            <p><strong>Features:</strong> Login Authentication, Inventory Transfer, Work Order Transactions, Exception Handling, Settings Management, App-owned Database (MAMP)</p>
+                        </div>
+                    </section>
+                    
+                    <!-- Quick Start Section -->
+                    <section class="documentation-section">
+                        <h2>Quick Start for Developers</h2>
+                        <div class="process-steps">
+                            <div class="card mtm-card">
+                                <h4>1. Environment Setup</h4>
+                                <ul>
+                                    <li>.NET SDK 8.0+</li>
+                                    <li>Avalonia Templates: <code>dotnet new install Avalonia.Templates</code></li>
+                                    <li>Visual Studio 2022 or VS Code with C# extension</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="card mtm-card">
+                                <h4>2. Build and Run</h4>
+                                <pre><code>dotnet restore
+dotnet build --configuration Release
+dotnet run --project MTM_Inventory_Application_Avalonia.Desktop</code></pre>
+                            </div>
+                            
+                            <div class="card mtm-card">
+                                <h4>3. Key Documentation</h4>
+                                <ul>
+                                    <li><a href="coding-conventions.html">Coding Conventions</a> - Development standards</li>
+                                    <li><a href="../../ReadmeFiles/Development/README_Code_Map.md">Code Map</a> - File organization</li>
+                                    <li><a href="error-handling.html">Error Handling</a> - Exception management</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Architecture Section -->
+                    <section class="documentation-section">
+                        <h2>System Architecture</h2>
+                        <div class="comparison-table">
+                            <table class="mtm-table">
+                                <thead>
+                                    <tr>
+                                        <th>Layer</th>
+                                        <th>Components</th>
+                                        <th>Responsibilities</th>
+                                        <th>Key Patterns</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Presentation</strong></td>
+                                        <td>Views, UserControls</td>
+                                        <td>UI rendering, user interaction</td>
+                                        <td>XAML data binding, DataTemplates</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ViewModel</strong></td>
+                                        <td>ViewModels, Commands</td>
+                                        <td>UI logic, state management</td>
+                                        <td>MVVM, ObservableProperty, RelayCommand</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Service</strong></td>
+                                        <td>Business services, interfaces</td>
+                                        <td>Business logic, external integration</td>
+                                        <td>Dependency injection, interface segregation</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Data</strong></td>
+                                        <td>Models, DTOs, Database</td>
+                                        <td>Data persistence, entity management</td>
+                                        <td>Repository pattern, VISUAL API integration</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    
+                    <!-- Development Resources -->
+                    <section class="documentation-section">
+                        <h2>Development Resources</h2>
+                        <div class="related-grid">
+                            <div class="concept-card">
+                                <div class="concept-icon">⚙️</div>
+                                <div class="concept-content">
+                                    <h4><a href="coding-conventions.html">Coding Conventions</a></h4>
+                                    <p>File naming, code standards, error handling patterns, and development guidelines.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="concept-card">
+                                <div class="concept-icon">🗄️</div>
+                                <div class="concept-content">
+                                    <h4><a href="database-development.html">Database Development</a></h4>
+                                    <p>VISUAL ERP integration, MAMP database schema, and data management patterns.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="concept-card">
+                                <div class="concept-icon">🎨</div>
+                                <div class="concept-content">
+                                    <h4><a href="ui-generation.html">UI Generation</a></h4>
+                                    <p>Avalonia XAML patterns, view generation, and user interface guidelines.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="concept-card">
+                                <div class="concept-icon">🚨</div>
+                                <div class="concept-content">
+                                    <h4><a href="error-handling.html">Error Handling</a></h4>
+                                    <p>Centralized exception handling, IExceptionHandler service, and error recovery.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="concept-card">
+                                <div class="concept-icon">🔄</div>
+                                <div class="concept-content">
+                                    <h4><a href="github-workflow.html">GitHub Workflow</a></h4>
+                                    <p>Development workflow, CI/CD, documentation maintenance, and collaboration.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="concept-card">
+                                <div class="concept-icon">🤖</div>
+                                <div class="concept-content">
+                                    <h4><a href="custom-prompts.html">Custom Prompts</a></h4>
+                                    <p>GitHub Copilot prompts, automation rules, and AI-assisted development.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Component Documentation -->
+                    <section class="documentation-section">
+                        <h2>Component Documentation</h2>
+                        <div class="card mtm-card">
+                            <h3>Core Components</h3>
+                            <ul>
+                                <li><a href="services.html"><strong>Services</strong></a> - Business logic interfaces and implementations</li>
+                                <li><a href="viewmodels.html"><strong>ViewModels</strong></a> - MVVM presentation layer with commands and properties</li>
+                                <li><a href="views.html"><strong>Views</strong></a> - Avalonia UserControls and XAML layouts</li>
+                                <li><a href="models.html"><strong>Models</strong></a> - Data models, DTOs, and entity definitions</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>Feature Documentation</h3>
+                            <ul>
+                                <li><a href="../../ReadmeFiles/Components/README_Login.md"><strong>Login System</strong></a> - Authentication and session management</li>
+                                <li><a href="../../ReadmeFiles/Components/README_Inventory_Transfer.md"><strong>Inventory Transfer</strong></a> - Inventory movement workflows</li>
+                                <li><a href="../../ReadmeFiles/Components/README_Work_Order_Transaction.md"><strong>Work Order Transactions</strong></a> - Manufacturing work order processing</li>
+                                <li><a href="../../ReadmeFiles/Components/README_MainView.md"><strong>Main View</strong></a> - Primary application interface</li>
+                            </ul>
+                        </div>
+                    </section>
+                    
+                    <!-- Quality and Maintenance -->
+                    <section class="documentation-section">
+                        <h2>Quality Assurance</h2>
+                        <div class="important-note">
+                            <h4>Critical Development Rules</h4>
+                            <ul>
+                                <li><strong>Visual License Lifecycle:</strong> Always explicitly close/release VISUAL licenses after each operation</li>
+                                <li><strong>Error Handling:</strong> All UI-invoked methods must use centralized IExceptionHandler</li>
+                                <li><strong>Documentation Sync:</strong> Update CodeMap_CS_Files.md when modifying any .cs file</li>
+                                <li><strong>Interface Pattern:</strong> Depend on interfaces, not concrete implementations for services</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>Maintenance Resources</h3>
+                            <ul>
+                                <li><a href="needs-repair.html">Needs Repair</a> - Known issues and technical debt</li>
+                                <li><a href="missing-systems.html">Missing Systems</a> - Planned features and components</li>
+                                <li><a href="../../ReadmeFiles/Development/README_Planned_Implementations.md">Implementation Roadmap</a> - Development timeline and priorities</li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Page Navigation -->
+                <nav class="page-navigation" aria-label="Next steps">
+                    <a href="coding-conventions.html" class="btn btn-mtm-primary" rel="next">
+                        Get Started with Coding Conventions →
+                    </a>
+                    <a href="../PlainEnglish/index.html" class="btn btn-mtm-outline">
+                        Switch to Plain English Guide
+                    </a>
+                </nav>
+            </article>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mtm-footer" role="contentinfo">
+        <div class="container">
+            <h4>MTM Inventory Application</h4>
+            <p>Built with Avalonia 11 and .NET 8</p>
+            <p>&copy; 2024 MTM Development Team. All rights reserved.</p>
+            <p>
+                <a href="../../ReadmeFiles/README.md">Documentation Index</a> |
+                <a href="../PlainEnglish/index.html">Plain English Docs</a> |
+                <a href="mailto:support@mtm.com">Support</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Language Toggle for Technical/Plain English -->
+    <button class="language-toggle" data-mode="technical" aria-label="Switch to Plain English version">
+        Plain English
+    </button>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/modern-features.js"></script>
+</body>
+</html>

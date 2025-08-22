@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{page.description}}">
+    <meta name="keywords" content="MTM, Inventory, Application, Avalonia, .NET, Documentation">
+    <meta name="author" content="MTM Development Team">
+    <title>{{page.title}} - MTM Inventory Application Documentation</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/modern-styles.css">
+    <link rel="stylesheet" href="../assets/css/mtm-theme.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{page.url}}">
+    <meta property="og:title" content="{{page.title}} - MTM Inventory Application">
+    <meta property="og:description" content="{{page.description}}">
+    <meta property="og:image" content="../assets/images/mtm-social-preview.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{page.url}}">
+    <meta property="twitter:title" content="{{page.title}} - MTM Inventory Application">
+    <meta property="twitter:description" content="{{page.description}}">
+    <meta property="twitter:image" content="../assets/images/mtm-social-preview.png">
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="header mtm-header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/MTM_Logo.png" alt="MTM Logo" height="40">
+                <span>MTM Inventory App</span>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Primary Navigation -->
+            <nav class="nav-primary" role="navigation">
+                <ul>
+                    <li><a href="index.html">Overview</a></li>
+                    <li><a href="coding-conventions.html">Development</a></li>
+                    <li><a href="database-development.html">Database</a></li>
+                    <li><a href="ui-generation.html">UI Guide</a></li>
+                    <li><a href="../PlainEnglish/index.html">Plain English</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Theme Toggle -->
+            <button class="theme-toggle btn btn-mtm-outline" aria-label="Toggle dark mode">
+                🌙
+            </button>
+        </div>
+    </header>
+    
+    <!-- Main Layout -->
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <aside class="sidebar mtm-sidebar" role="navigation" aria-label="Documentation navigation">
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="search" class="search-input" placeholder="Search documentation..." aria-label="Search documentation">
+            </div>
+            
+            <nav>
+                <h3>Technical Documentation</h3>
+                <ul>
+                    <li><a href="index.html">Overview</a></li>
+                    <li><a href="coding-conventions.html">Coding Conventions</a></li>
+                    <li><a href="database-development.html">Database Development</a></li>
+                    <li><a href="ui-generation.html">UI Generation</a></li>
+                    <li><a href="error-handling.html">Error Handling</a></li>
+                    <li><a href="github-workflow.html">GitHub Workflow</a></li>
+                    <li><a href="naming-conventions.html">Naming Conventions</a></li>
+                    <li><a href="custom-prompts.html">Custom Prompts</a></li>
+                    <li><a href="personas.html">Personas</a></li>
+                    <li><a href="needs-repair.html">Needs Repair</a></li>
+                    <li><a href="missing-systems.html">Missing Systems</a></li>
+                </ul>
+                
+                <h3>Components</h3>
+                <ul>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="viewmodels.html">ViewModels</a></li>
+                    <li><a href="views.html">Views</a></li>
+                    <li><a href="models.html">Models</a></li>
+                </ul>
+                
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../PlainEnglish/index.html">Plain English Docs</a></li>
+                    <li><a href="../../Copilot Files/MD-Files/CodeMap_CS_Files.md">Code Map</a></li>
+                    <li><a href="../../README.md">Project README</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <ul>
+                    <li><a href="index.html">Documentation</a></li>
+                    <li><a href="{{section.url}}">{{section.title}}</a></li>
+                    <li>{{page.title}}</li>
+                </ul>
+            </nav>
+            
+            <!-- Page Progress Indicator -->
+            <div class="page-progress">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-label="Reading progress"></div>
+                </div>
+                <div class="page-progress-text">Reading Progress</div>
+            </div>
+            
+            <!-- Content Area -->
+            <article class="content-wrapper">
+                <!-- Page Header -->
+                <header class="page-header">
+                    <h1>{{page.title}}</h1>
+                    <p class="lead">{{page.description}}</p>
+                    
+                    <!-- Metadata -->
+                    <div class="page-meta">
+                        <span class="status-badge status-badge-{{page.status}}">{{page.status}}</span>
+                        <span class="text-muted">Last updated: {{page.last_updated}}</span>
+                        <span class="text-muted">Reading time: {{page.reading_time}} min</span>
+                    </div>
+                </header>
+                
+                <!-- Alert for Important Information -->
+                {{#if page.alert}}
+                <div class="alert alert-{{page.alert.type}}" role="alert">
+                    <strong>{{page.alert.title}}</strong> {{page.alert.message}}
+                </div>
+                {{/if}}
+                
+                <!-- Main Content -->
+                <div class="content-body">
+                    {{content}}
+                </div>
+                
+                <!-- Page Navigation -->
+                <nav class="page-navigation" aria-label="Page navigation">
+                    {{#if page.previous}}
+                    <a href="{{page.previous.url}}" class="btn btn-mtm-outline" rel="prev">
+                        ← {{page.previous.title}}
+                    </a>
+                    {{/if}}
+                    
+                    {{#if page.next}}
+                    <a href="{{page.next.url}}" class="btn btn-mtm-primary" rel="next">
+                        {{page.next.title}} →
+                    </a>
+                    {{/if}}
+                </nav>
+            </article>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mtm-footer" role="contentinfo">
+        <div class="container">
+            <h4>MTM Inventory Application</h4>
+            <p>Built with Avalonia 11 and .NET 8</p>
+            <p>&copy; 2024 MTM Development Team. All rights reserved.</p>
+            <p>
+                <a href="../../README.md">Project Overview</a> |
+                <a href="../PlainEnglish/index.html">Plain English Docs</a> |
+                <a href="mailto:support@mtm.com">Support</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Language Toggle for Technical/Plain English -->
+    <button class="language-toggle" data-mode="technical" aria-label="Switch to Plain English version">
+        Plain English
+    </button>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/modern-features.js"></script>
+    
+    <!-- Analytics (if needed) -->
+    {{#if analytics.enabled}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{analytics.tracking_id}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{analytics.tracking_id}}');
+    </script>
+    {{/if}}
+</body>
+</html>

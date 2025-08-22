@@ -1,0 +1,366 @@
+/* MTM Inventory Application - Brand Theme */
+
+/* Extended MTM Color Palette */
+:root {
+  --mtm-gradient-primary: linear-gradient(135deg, #4B45ED 0%, #8345ED 100%);
+  --mtm-gradient-secondary: linear-gradient(135deg, #BA45ED 0%, #ED45E7 100%);
+  --mtm-gradient-accent: linear-gradient(135deg, #4574ED 0%, #B594ED 100%);
+  
+  /* Status Colors */
+  --mtm-success: #28a745;
+  --mtm-warning: #ffc107;
+  --mtm-danger: #dc3545;
+  --mtm-info: var(--mtm-blue);
+}
+
+/* MTM Brand Header */
+.mtm-header {
+  background: var(--mtm-gradient-primary);
+  color: var(--text-light);
+  border-bottom: none;
+}
+
+.mtm-header .logo {
+  color: var(--text-light);
+}
+
+.mtm-header .nav-primary a {
+  color: var(--text-light);
+}
+
+.mtm-header .nav-primary a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+}
+
+/* MTM Sidebar Theme */
+.mtm-sidebar {
+  background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+  border-right: 2px solid var(--mtm-primary);
+}
+
+.mtm-sidebar h3 {
+  color: var(--mtm-primary);
+  border-bottom: 2px solid var(--mtm-light);
+  padding-bottom: var(--spacing-sm);
+}
+
+/* MTM Cards */
+.mtm-card {
+  border-left: 4px solid var(--mtm-primary);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mtm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(75, 69, 237, 0.15);
+}
+
+.mtm-card-primary {
+  border-left-color: var(--mtm-primary);
+}
+
+.mtm-card-secondary {
+  border-left-color: var(--mtm-secondary);
+}
+
+.mtm-card-accent {
+  border-left-color: var(--mtm-magenta);
+}
+
+/* MTM Buttons */
+.btn-mtm-primary {
+  background: var(--mtm-gradient-primary);
+  color: var(--text-light);
+  border: none;
+  box-shadow: 0 2px 4px rgba(75, 69, 237, 0.3);
+}
+
+.btn-mtm-primary:hover {
+  background: var(--mtm-gradient-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(75, 69, 237, 0.4);
+}
+
+.btn-mtm-secondary {
+  background: var(--mtm-gradient-secondary);
+  color: var(--text-light);
+  border: none;
+  box-shadow: 0 2px 4px rgba(186, 69, 237, 0.3);
+}
+
+.btn-mtm-secondary:hover {
+  background: var(--mtm-gradient-accent);
+  transform: translateY(-1px);
+}
+
+.btn-mtm-outline {
+  background: transparent;
+  color: var(--mtm-primary);
+  border: 2px solid var(--mtm-primary);
+}
+
+.btn-mtm-outline:hover {
+  background: var(--mtm-primary);
+  color: var(--text-light);
+}
+
+/* MTM Status Indicators */
+.status-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge-success {
+  background-color: var(--mtm-success);
+  color: var(--text-light);
+}
+
+.status-badge-warning {
+  background-color: var(--mtm-warning);
+  color: var(--text-primary);
+}
+
+.status-badge-danger {
+  background-color: var(--mtm-danger);
+  color: var(--text-light);
+}
+
+.status-badge-info {
+  background-color: var(--mtm-info);
+  color: var(--text-light);
+}
+
+/* MTM Tables */
+.mtm-table th {
+  background: var(--mtm-gradient-primary);
+  color: var(--text-light);
+  border-color: var(--mtm-primary);
+}
+
+.mtm-table tr:hover {
+  background-color: rgba(75, 69, 237, 0.05);
+}
+
+/* MTM Navigation Breadcrumbs */
+.breadcrumb {
+  display: flex;
+  list-style: none;
+  background-color: var(--bg-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+}
+
+.breadcrumb li {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: '/';
+  margin: 0 var(--spacing-sm);
+  color: var(--mtm-primary);
+}
+
+.breadcrumb a {
+  color: var(--mtm-primary);
+}
+
+.breadcrumb li:last-child {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* MTM Progress Indicators */
+.progress {
+  height: 8px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--mtm-gradient-primary);
+  transition: width 0.3s ease;
+}
+
+/* MTM Alert Components */
+.alert {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+  border-left: 4px solid;
+}
+
+.alert-primary {
+  background-color: rgba(75, 69, 237, 0.1);
+  border-left-color: var(--mtm-primary);
+  color: var(--mtm-primary);
+}
+
+.alert-success {
+  background-color: rgba(40, 167, 69, 0.1);
+  border-left-color: var(--mtm-success);
+  color: var(--mtm-success);
+}
+
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left-color: var(--mtm-warning);
+  color: #856404;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-left-color: var(--mtm-danger);
+  color: var(--mtm-danger);
+}
+
+/* MTM Code Blocks */
+.mtm-code {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  color: #f8f8f2;
+  border: 1px solid var(--mtm-primary);
+}
+
+.mtm-code .line-numbers {
+  color: var(--mtm-light);
+  background-color: rgba(75, 69, 237, 0.1);
+  padding: var(--spacing-md);
+  border-right: 1px solid var(--mtm-primary);
+}
+
+/* MTM Search Component */
+.search-container {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) 40px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--mtm-primary);
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mtm-primary);
+}
+
+/* MTM Footer */
+.mtm-footer {
+  background: var(--bg-secondary);
+  border-top: 2px solid var(--mtm-primary);
+  padding: var(--spacing-xl) 0;
+  margin-top: var(--spacing-xxl);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.mtm-footer h4 {
+  color: var(--mtm-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* MTM Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* MTM Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  .mtm-card {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    border-left-color: var(--mtm-light);
+  }
+  
+  .mtm-sidebar {
+    background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+    border-right-color: var(--mtm-light);
+  }
+  
+  .breadcrumb {
+    background-color: #2d2d2d;
+  }
+}
+
+/* MTM Responsive Enhancements */
+@media (max-width: 768px) {
+  .mtm-header {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .breadcrumb {
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: var(--spacing-sm);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sidebar,
+  .header,
+  .mtm-footer {
+    display: none !important;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .mtm-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+    background: #fff !important;
+  }
+}

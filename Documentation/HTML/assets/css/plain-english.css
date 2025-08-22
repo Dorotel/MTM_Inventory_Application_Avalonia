@@ -1,0 +1,377 @@
+/* Plain English Documentation Styles */
+
+/* Enhanced readability for non-technical users */
+:root {
+  --plain-font-size: 18px;
+  --plain-line-height: 1.8;
+  --plain-paragraph-spacing: 1.5rem;
+  --plain-section-spacing: 2.5rem;
+}
+
+/* Typography Overrides for Plain English */
+.plain-english {
+  font-size: var(--plain-font-size);
+  line-height: var(--plain-line-height);
+}
+
+.plain-english h1 {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  color: var(--mtm-primary);
+  border-bottom: 3px solid var(--mtm-light);
+  padding-bottom: 0.5rem;
+}
+
+.plain-english h2 {
+  font-size: 1.875rem;
+  margin-top: var(--plain-section-spacing);
+  margin-bottom: 1rem;
+  color: var(--mtm-secondary);
+}
+
+.plain-english h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--mtm-blue);
+}
+
+.plain-english p {
+  margin-bottom: var(--plain-paragraph-spacing);
+  max-width: 65ch; /* Optimal reading width */
+}
+
+/* Enhanced Lists for Better Scanning */
+.plain-english ul,
+.plain-english ol {
+  margin-bottom: var(--plain-paragraph-spacing);
+  padding-left: 2rem;
+}
+
+.plain-english li {
+  margin-bottom: 0.75rem;
+  line-height: var(--plain-line-height);
+}
+
+.plain-english li::marker {
+  color: var(--mtm-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Definition Lists for Glossary Terms */
+.glossary-term {
+  font-weight: var(--font-weight-bold);
+  color: var(--mtm-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.glossary-definition {
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--mtm-light);
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Highlighted Important Information */
+.important-note {
+  background: linear-gradient(135deg, rgba(75, 69, 237, 0.1) 0%, rgba(181, 148, 237, 0.1) 100%);
+  border: 2px solid var(--mtm-light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.important-note::before {
+  content: "💡";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: var(--bg-primary);
+  padding: 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+.important-note h4 {
+  color: var(--mtm-primary);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* Step-by-Step Process Styling */
+.process-steps {
+  counter-reset: step-counter;
+  list-style: none;
+  padding-left: 0;
+}
+
+.process-steps li {
+  counter-increment: step-counter;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--mtm-primary);
+  position: relative;
+}
+
+.process-steps li::before {
+  content: "Step " counter(step-counter);
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: var(--mtm-primary);
+  color: var(--text-light);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-bold);
+}
+
+/* FAQ Styling */
+.faq-item {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.faq-question {
+  background: var(--mtm-primary);
+  color: var(--text-light);
+  padding: 1rem 1.5rem;
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.faq-question::after {
+  content: "+";
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.faq-question.active::after {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.faq-answer {
+  padding: 1.5rem;
+  background: var(--bg-primary);
+  display: none;
+}
+
+.faq-answer.active {
+  display: block;
+}
+
+/* Visual Metaphors and Icons */
+.concept-card {
+  display: flex;
+  align-items: flex-start;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--mtm-secondary);
+}
+
+.concept-icon {
+  font-size: 3rem;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+}
+
+.concept-content h4 {
+  margin-top: 0;
+  color: var(--mtm-secondary);
+}
+
+/* Progress Indicators for Multi-page Content */
+.page-progress {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.page-progress .progress {
+  height: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.page-progress-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Simplified Navigation for Plain English */
+.plain-nav {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+}
+
+.plain-nav h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--mtm-primary);
+}
+
+.plain-nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.plain-nav li {
+  margin-bottom: 0.5rem;
+}
+
+.plain-nav a {
+  display: block;
+  padding: 0.5rem 1rem;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.plain-nav a:hover {
+  background: var(--mtm-light);
+  color: var(--text-light);
+  text-decoration: none;
+}
+
+/* Comparison Tables for Plain English */
+.comparison-table {
+  margin: 2rem 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.comparison-table th {
+  background: var(--mtm-gradient-primary);
+  color: var(--text-light);
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.125rem;
+}
+
+.comparison-table td {
+  padding: 1rem;
+  text-align: center;
+  vertical-align: top;
+}
+
+.comparison-table .pro {
+  color: var(--mtm-success);
+  font-weight: var(--font-weight-medium);
+}
+
+.comparison-table .con {
+  color: var(--mtm-danger);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Language Toggle Switch */
+.language-toggle {
+  position: fixed;
+  top: 100px;
+  right: 2rem;
+  z-index: 99;
+  background: var(--mtm-primary);
+  color: var(--text-light);
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.language-toggle:hover {
+  background: var(--mtm-secondary);
+}
+
+/* Simplified Footer for Plain English */
+.plain-footer {
+  background: var(--bg-secondary);
+  padding: 2rem 0;
+  margin-top: 3rem;
+  text-align: center;
+  border-top: 2px solid var(--mtm-light);
+}
+
+.plain-footer p {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+/* Mobile Responsiveness for Plain English */
+@media (max-width: 768px) {
+  .plain-english {
+    font-size: 16px;
+  }
+  
+  .concept-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .concept-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .language-toggle {
+    position: static;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .comparison-table {
+    font-size: 0.875rem;
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+/* Print Styles for Plain English */
+@media print {
+  .plain-english {
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+  
+  .language-toggle,
+  .plain-nav {
+    display: none !important;
+  }
+  
+  .important-note {
+    border: 2px solid #000;
+    background: #f0f0f0 !important;
+  }
+  
+  .process-steps li {
+    page-break-inside: avoid;
+    border: 1px solid #000;
+    background: #f9f9f9 !important;
+  }
+}
