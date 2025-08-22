@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{page.description}}">
+    <meta name="keywords" content="MTM, Inventory, Application, User Guide, Business, Documentation">
+    <meta name="author" content="MTM Development Team">
+    <title>{{page.title}} - MTM Inventory Application Guide</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/modern-styles.css">
+    <link rel="stylesheet" href="../assets/css/mtm-theme.css">
+    <link rel="stylesheet" href="../assets/css/plain-english.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+</head>
+<body class="plain-english">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="header mtm-header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/MTM_Logo.png" alt="MTM Logo" height="40">
+                <span>MTM Inventory Guide</span>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Primary Navigation -->
+            <nav class="nav-primary" role="navigation">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="getting-started.html">Getting Started</a></li>
+                    <li><a href="user-interface.html">Using the App</a></li>
+                    <li><a href="troubleshooting.html">Help</a></li>
+                    <li><a href="../Technical/index.html">Technical Docs</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Layout -->
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <aside class="sidebar mtm-sidebar" role="navigation" aria-label="User guide navigation">
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="search" class="search-input" placeholder="Search help topics..." aria-label="Search help topics">
+            </div>
+            
+            <!-- Plain English Navigation -->
+            <div class="plain-nav">
+                <h4>Quick Start</h4>
+                <ul>
+                    <li><a href="index.html">📖 Overview</a></li>
+                    <li><a href="getting-started.html">🚀 Getting Started</a></li>
+                    <li><a href="project-overview.html">📋 What This App Does</a></li>
+                </ul>
+            </div>
+            
+            <div class="plain-nav">
+                <h4>Using the Application</h4>
+                <ul>
+                    <li><a href="user-interface.html">🖥️ User Interface</a></li>
+                    <li><a href="development-process.html">🔄 Work Process</a></li>
+                    <li><a href="database-basics.html">📊 Data Management</a></li>
+                </ul>
+            </div>
+            
+            <div class="plain-nav">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="troubleshooting.html">🔧 Troubleshooting</a></li>
+                    <li><a href="quality-assurance.html">✅ Quality Checks</a></li>
+                    <li><a href="../Technical/index.html">👨‍💻 Technical Details</a></li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="You are here" class="breadcrumb">
+                <ul>
+                    <li><a href="index.html">User Guide</a></li>
+                    <li><a href="{{section.url}}">{{section.title}}</a></li>
+                    <li>{{page.title}}</li>
+                </ul>
+            </nav>
+            
+            <!-- Content Area -->
+            <article class="content-wrapper">
+                <!-- Page Header -->
+                <header class="page-header">
+                    <h1>{{page.title}}</h1>
+                    <p class="lead">{{page.description}}</p>
+                    
+                    <!-- Reading Information -->
+                    <div class="page-meta">
+                        <span class="text-muted">📖 {{page.reading_time}} minute read</span>
+                        <span class="text-muted">📅 Updated: {{page.last_updated}}</span>
+                        {{#if page.difficulty}}
+                        <span class="status-badge status-badge-{{page.difficulty}}">{{page.difficulty}} level</span>
+                        {{/if}}
+                    </div>
+                </header>
+                
+                <!-- Important Information Alert -->
+                {{#if page.important_note}}
+                <div class="important-note">
+                    <h4>Important to Know</h4>
+                    <p>{{page.important_note}}</p>
+                </div>
+                {{/if}}
+                
+                <!-- Table of Contents for Longer Pages -->
+                {{#if page.sections}}
+                <div class="plain-nav">
+                    <h4>What's on This Page</h4>
+                    <ul>
+                        {{#each page.sections}}
+                        <li><a href="#{{this.id}}">{{this.title}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+                
+                <!-- Main Content -->
+                <div class="content-body">
+                    {{content}}
+                </div>
+                
+                <!-- FAQ Section (if applicable) -->
+                {{#if page.faq}}
+                <section class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    {{#each page.faq}}
+                    <div class="faq-item">
+                        <h3 class="faq-question">{{this.question}}</h3>
+                        <div class="faq-answer">
+                            <p>{{this.answer}}</p>
+                        </div>
+                    </div>
+                    {{/each}}
+                </section>
+                {{/if}}
+                
+                <!-- Related Topics -->
+                {{#if page.related}}
+                <section class="related-topics">
+                    <h3>Related Topics</h3>
+                    <div class="related-grid">
+                        {{#each page.related}}
+                        <div class="concept-card">
+                            <div class="concept-icon">{{this.icon}}</div>
+                            <div class="concept-content">
+                                <h4><a href="{{this.url}}">{{this.title}}</a></h4>
+                                <p>{{this.description}}</p>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </section>
+                {{/if}}
+                
+                <!-- Page Navigation -->
+                <nav class="page-navigation" aria-label="Next and previous pages">
+                    {{#if page.previous}}
+                    <a href="{{page.previous.url}}" class="btn btn-mtm-outline" rel="prev">
+                        ← {{page.previous.title}}
+                    </a>
+                    {{/if}}
+                    
+                    {{#if page.next}}
+                    <a href="{{page.next.url}}" class="btn btn-mtm-primary" rel="next">
+                        {{page.next.title}} →
+                    </a>
+                    {{/if}}
+                </nav>
+                
+                <!-- Feedback Section -->
+                <section class="feedback-section">
+                    <div class="card mtm-card">
+                        <h4>Was this helpful?</h4>
+                        <p>Let us know if this page answered your questions or if you need more help.</p>
+                        <div class="feedback-buttons">
+                            <button class="btn btn-mtm-primary" onclick="sendFeedback('helpful')">👍 Yes, this helped</button>
+                            <button class="btn btn-mtm-secondary" onclick="sendFeedback('needs-improvement')">👎 Needs improvement</button>
+                            <a href="mailto:support@mtm.com?subject=Documentation Feedback: {{page.title}}" class="btn btn-mtm-outline">📧 Contact Support</a>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="plain-footer" role="contentinfo">
+        <div class="container">
+            <p><strong>MTM Inventory Application User Guide</strong></p>
+            <p>Need technical details? <a href="../Technical/index.html">Visit the Technical Documentation</a></p>
+            <p>Questions or problems? <a href="mailto:support@mtm.com">Contact our support team</a></p>
+            <p>&copy; 2024 MTM Development Team</p>
+        </div>
+    </footer>
+    
+    <!-- Language Toggle for Plain English/Technical -->
+    <button class="language-toggle" data-mode="plain" aria-label="Switch to Technical documentation">
+        Technical Version
+    </button>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/modern-features.js"></script>
+    
+    <!-- Feedback Script -->
+    <script>
+        function sendFeedback(type) {
+            // Simple feedback tracking
+            console.log(`Feedback: ${type} for page: {{page.title}}`);
+            
+            // You could send this to an analytics service
+            if (window.MTMDocs && window.MTMDocs.trackEvent) {
+                window.MTMDocs.trackEvent('Documentation', 'Feedback', `${type}-${window.location.pathname}`);
+            }
+            
+            // Show thank you message
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '✓ Thanks for your feedback!';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

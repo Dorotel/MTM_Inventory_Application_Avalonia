@@ -1,0 +1,114 @@
+# Planned Implementations - Consolidated Plan
+
+Purpose: single place to track all upcoming implementation work across features. Source of truth compiled from the planning docs in Copilot Files/MVVMDefinitions and current code in the solution.
+
+Global Rule - Visual license lifecycle
+- Any time the app performs an operation against the Visual server that requires a license, the license MUST be explicitly closed/released immediately after the request completes (success or failure). Always use a short?lived, per?request scope to acquire and dispose the license.
+
+Scope
+- Cross-feature backlog with priorities, dependencies, and acceptance checks. Links to detailed specs for API calls and UI.
+
+References (planning docs index)
+- MVVMDefinitions/LoginScreen.md
+- MVVMDefinitions/MainView.md
+- MVVMDefinitions/InventoryTransfer.md
+- MVVMDefinitions/WorkOrderTransaction.md
+- MVVMDefinitions/LocationPickerDialog.md
+- MVVMDefinitions/IncompletePartDialog.md
+- MVVMDefinitions/ExceptionHandling.md
+- MVVMDefinitions/ExceptionDialog.md
+- MVVMDefinitions/MAMPDatabase.md
+- MVVMDefinitions/Settings.md
+- MVVMDefinitions/MainWindow.md
+- MVVMDefinitions/App.md
+- README.md
+
+Cross-cutting backlog
+- Centralized Exception Handling
+  - Implement full normalization in IExceptionHandler (categorize, title/message/details; context enrichment).
+  - Wire keyboard shortcuts: Enter, Esc, Ctrl+C, F1.
+  - Implement Copy Details (full model to clipboard) and optional Help link action.
+  - Acceptance: any thrown exception from UI commands shows modal dialog with details expander; shortcuts work; Copy copies.
+  - References: ExceptionHandling.md, ExceptionDialog.md.
+- Services and DI seams
+  - Define and register service interfaces: IVisualConnectionService, IAuthenticationService (prod), IInventoryService, IShopFloorService, IPartService, ILocationService, ISettingsStore, IAppDb, IPartDialogService.
+  - Move VISUAL-specific logic to service adapters; keep ViewModels UI-only.
+  - Acceptance: ViewModels depend only on interfaces; service adapters stubbed for dev; production TODO markers present.
+  - References: README.md (New Rule - VISUAL business logic placeholders).
+- Settings and Environment
+  - Implement Settings persistence via MAMP DB; environment toggle (Development/Production); WarehouseId default.
+  - Implement "Test App DB" command to verify connectivity and schema.
+  - Acceptance: changing settings persists; app reads on start; test shows success/failure.
+  - References: Settings.md, MAMPDatabase.md, README.md (Configuration).
+- App-owned Database (MAMP)
+  - Create schema/migrations and a lightweight data access (AOT-friendly) layer.
+  - Tables: settings, audits, exception logs per MAMPDatabase.md.
+  - Acceptance: migration or ensure-created runs; exception logs write entries from IExceptionHandler.
+  - References: MAMPDatabase.md.
+- Navigation and Shell
+  - Keep single MainView instance; ensure overlay sizing transitions are smooth.
+  - Ensure feature views load via NavigationService; add back/close patterns if needed.
+  - Acceptance: Login overlay -> MainView swap; features navigate and return with state preserved as spec'd.
+  - References: App.md, MainWindow.md, MainView.md, Services.cs notes in README CodeMap.
+- Documentation maintenance
+  - Enforce CodeMap sync for .cs files and "Update All .md Files" rule.
+  - Acceptance: PRs include CodeMap_CS_Files.md updates and affected planning docs.
+  - References: README.md (rules), CodeMap_CS_Files.md.
+
+Feature backlogs
+- Login
+  - Replace dev stub with VISUAL-backed auth (OpenLocal/OpenLocalSSO) via IAuthenticationService; error routing via IExceptionHandler.
+  - Add site/domain handling per spec; remember last site from settings.
+  - Acceptance: Admin/Admin still works in Development; Production requires VISUAL auth.
+  - References: LoginScreen.md, README.md (Development login, Connection behavior).
+- Exception Dialog
+  - Complete bindings: Details expander state, button enable/disable per model.
+  - Implement commands: Retry, Cancel, Help, Copy Details; return result to caller.
+  - Acceptance: Actions return a result; Copy copies fields; Help opens reference URL if configured.
+  - References: ExceptionDialog.md.
+- Inventory Transfer
+  - Validate fields per spec; integrate Location picker; non-negative quantities; warehouse/site constraints.
+  - Implement PostTransfer via IInventoryService calling VISUAL InventoryTransaction in service layer.
+  - Acceptance: Validations trigger toasts/dialog; successful transfers reflect completion; errors route to dialog.
+  - References: InventoryTransfer.md.
+- Work Order Transaction (Issue/Receipt)
+  - Validate WO state; implement Issue and Receipt via IShopFloorService/IInventoryService; TRACE requirements where applicable.
+  - Acceptance: Closed/released rules enforced; successful post updates UI; errors route to dialog.
+  - References: WorkOrderTransaction.md.
+- Location Picker Dialog
+  - Implement filters (NonZeroOnly, CurrentWarehouseOnly, CurrentSiteOnly) and search.
+  - Load balances via ILocationService; return selected location.
+  - Acceptance: Grid loads, filters work, selection returns to caller.
+  - References: LocationPickerDialog.md.
+- Incomplete Part Dialog
+  - Implement part search (by ID/description) via IPartService; selection returns Part.
+  - Current dev wiring uses IPartDialogService with seed text and a placeholder suggestion list.
+  - Acceptance: Result list populates; Enter/double-click selects; Esc cancels; Inventory Transfer/WO views receive the selected PartId and update their textbox.
+  - References: IncompletePartDialog.md.
+- Settings View
+  - Bind and validate fields; implement Save/Cancel/Test; role gating if needed.
+  - Acceptance: Save persists; Cancel reverts; Test indicates DB connectivity.
+  - References: Settings.md.
+
+Technical tasks
+- Remove duplicate Service_ExceptionHandler.cs or merge into Services.cs IExceptionHandler implementation.
+- Introduce a small clipboard helper for cross-platform copy.
+- Add simple logging pipeline (Debug + optional file log) for non-VISUAL paths.
+- Consider adding a test project for services (mock VISUAL adapters) and ViewModel command behavior.
+
+Phased delivery plan (order and dependencies)
+- Phase 1: Exception handling completion (IExceptionHandler + ExceptionDialog commands); Shell and Navigation polish.
+- Phase 2: Settings + MAMP DB (schema, persistence, Test App DB command); service abstractions defined.
+- Phase 3: Dialogs enabling flows (LocationPickerDialog, IncompletePartDialog) including IPartDialogService.
+- Phase 4: Inventory Transfer implementation via service layer.
+- Phase 5: Work Order Issue/Receipt implementation via service layer.
+- Phase 6: Production authentication via VISUAL.
+
+Acceptance checklist (global)
+- All UI-invoked methods wrap with try/catch and route to IExceptionHandler.
+- VISUAL license lifecycle honored in all service adapters.
+- Keyboard shortcuts implemented where specified.
+- CodeMap_CS_Files.md and relevant planning docs updated with each change.
+
+Notes
+- API call specifics and citations live in the feature planning docs; this file tracks the what/when, not the how.
