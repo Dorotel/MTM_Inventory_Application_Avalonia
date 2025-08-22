@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Coding conventions and development standards for MTM Inventory Application - File naming, error handling, and code quality guidelines">
+    <meta name="keywords" content="MTM, Coding Standards, Development Guidelines, C#, Avalonia, .NET">
+    <meta name="author" content="MTM Development Team">
+    <title>Coding Conventions - MTM Inventory Application</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/modern-styles.css">
+    <link rel="stylesheet" href="../assets/css/mtm-theme.css">
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="header mtm-header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/MTM_Logo.png" alt="MTM Logo" height="40">
+                <span>MTM Inventory App</span>
+            </a>
+            
+            <!-- Primary Navigation -->
+            <nav class="nav-primary" role="navigation">
+                <ul>
+                    <li><a href="index.html">Overview</a></li>
+                    <li><a href="coding-conventions.html" class="active">Development</a></li>
+                    <li><a href="database-development.html">Database</a></li>
+                    <li><a href="ui-generation.html">UI Guide</a></li>
+                    <li><a href="../PlainEnglish/index.html">Plain English</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Layout -->
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <aside class="sidebar mtm-sidebar" role="navigation">
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="search" class="search-input" placeholder="Search documentation..." aria-label="Search documentation">
+            </div>
+            
+            <nav>
+                <h3>Technical Documentation</h3>
+                <ul>
+                    <li><a href="index.html">Overview</a></li>
+                    <li><a href="coding-conventions.html" class="active">Coding Conventions</a></li>
+                    <li><a href="database-development.html">Database Development</a></li>
+                    <li><a href="ui-generation.html">UI Generation</a></li>
+                    <li><a href="error-handling.html">Error Handling</a></li>
+                    <li><a href="github-workflow.html">GitHub Workflow</a></li>
+                    <li><a href="naming-conventions.html">Naming Conventions</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <ul>
+                    <li><a href="index.html">Documentation</a></li>
+                    <li><a href="index.html">Technical</a></li>
+                    <li>Coding Conventions</li>
+                </ul>
+            </nav>
+            
+            <!-- Content Area -->
+            <article class="content-wrapper">
+                <!-- Page Header -->
+                <header class="page-header">
+                    <h1>Coding Conventions & Development Standards</h1>
+                    <p class="lead">Comprehensive guidelines for code quality, naming conventions, error handling, and development practices in the MTM Inventory Application.</p>
+                    
+                    <div class="page-meta">
+                        <span class="status-badge status-badge-info">Required Reading</span>
+                        <span class="text-muted">Last updated: December 22, 2024</span>
+                        <span class="text-muted">Reading time: 15 min</span>
+                    </div>
+                </header>
+                
+                <!-- Critical Rules Alert -->
+                <div class="alert alert-danger" role="alert">
+                    <strong>Critical Development Rules:</strong> All developers must follow these conventions for code consistency, maintainability, and integration with Infor VISUAL ERP system.
+                </div>
+                
+                <!-- Main Content -->
+                <div class="content-body">
+                    
+                    <!-- File Naming Conventions -->
+                    <section id="file-naming" class="documentation-section">
+                        <h2>File Naming Conventions</h2>
+                        
+                        <div class="card mtm-card">
+                            <h3>Standard Pattern: {Type}_{Parent}_{Name}</h3>
+                            <p>All files should follow this hierarchical naming pattern to ensure clarity and organization.</p>
+                            
+                            <table class="mtm-table">
+                                <thead>
+                                    <tr>
+                                        <th>File Type</th>
+                                        <th>Naming Pattern</th>
+                                        <th>Examples</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Views</strong></td>
+                                        <td>{Feature}View.axaml</td>
+                                        <td>InventoryTransferView.axaml<br>WorkOrderTransactionView.axaml</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ViewModels</strong></td>
+                                        <td>{Feature}ViewModel.cs</td>
+                                        <td>InventoryTransferViewModel.cs<br>LoginViewModel.cs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Services</strong></td>
+                                        <td>I{Name}Service.cs / {Name}Service.cs</td>
+                                        <td>IAuthenticationService.cs<br>AuthenticationService.cs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Models</strong></td>
+                                        <td>{Entity}{Purpose}.cs</td>
+                                        <td>InventoryItem.cs<br>WorkOrderResultRow.cs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Dialogs</strong></td>
+                                        <td>{Purpose}Dialog{Type}.cs</td>
+                                        <td>LocationPickerDialogViewModel.cs<br>ExceptionDialogView.axaml</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    
+                    <!-- Method Naming -->
+                    <section id="method-naming" class="documentation-section">
+                        <h2>Method & Member Naming</h2>
+                        
+                        <div class="card mtm-card">
+                            <h3>Pattern: {Class}_{ControlType}_{Name}</h3>
+                            <p>Method names should clearly indicate their purpose and the UI element they're associated with.</p>
+                            
+                            <pre><code>// Command methods for UI interactions
+public void InventoryTransfer_Button_Transfer()
+public void WorkOrder_Button_ResolveIncompletePartId()
+public void Login_Button_Authenticate()
+
+// Property naming for UI binding
+public string InventoryTransfer_TextBox_ItemId { get; set; }
+public ObservableCollection&lt;WorkOrderResultRow&gt; WorkOrder_DataGrid_Items { get; set; }
+
+// Event handlers
+private void MainView_Loaded(object sender, RoutedEventArgs e)
+private void InventoryTransfer_TextBox_ItemId_LostFocus(object sender, RoutedEventArgs e)</code></pre>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>Variable Naming: {Method}_{Type}_{Name}</h3>
+                            <pre><code>// Local variables in methods
+string validateInput_string_partId = textBox.Text;
+int calculateQuantity_int_totalAmount = 0;
+Exception handleError_exc_validationFailure = new ValidationException();</code></pre>
+                        </div>
+                    </section>
+                    
+                    <!-- Error Handling -->
+                    <section id="error-handling" class="documentation-section">
+                        <h2>Error Handling Requirements</h2>
+                        
+                        <div class="important-note">
+                            <h4>Mandatory Error Handling</h4>
+                            <p>ALL methods invoked from UI interactions MUST implement error handling using the centralized IExceptionHandler service. No exceptions.</p>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>Standard Error Handling Pattern</h3>
+                            <pre><code>// Required pattern for all UI-invoked methods
+[RelayCommand]
+private async Task InventoryTransfer_Button_Transfer()
+{
+    try
+    {
+        // Business logic here
+        await inventoryService.TransferAsync(itemId, fromLocation, toLocation, quantity);
+        
+        // Success feedback
+        StatusMessage = "Transfer completed successfully";
+    }
+    catch (Exception handleTransfer_exc_error)
+    {
+        // MANDATORY: Route all exceptions through centralized handler
+        exceptionHandler.Handle(handleTransfer_exc_error, "Inventory Transfer");
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>IExceptionHandler Service</h3>
+                            <p>All exceptions must be routed through the centralized exception handling service:</p>
+                            <ul>
+                                <li>Normalizes error presentation to users</li>
+                                <li>Provides consistent error categorization</li>
+                                <li>Maintains audit trails for debugging</li>
+                                <li>Handles VISUAL API connection errors appropriately</li>
+                            </ul>
+                        </div>
+                    </section>
+                    
+                    <!-- Visual API Guidelines -->
+                    <section id="visual-api" class="documentation-section">
+                        <h2>Visual API Integration Rules</h2>
+                        
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Critical:</strong> Visual API license lifecycle must be strictly followed to prevent connection leaks and system instability.
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>License Lifecycle Pattern</h3>
+                            <pre><code>// MANDATORY pattern for all VISUAL operations
+public async Task&lt;InventoryData&gt; GetInventoryAsync(string partId)
+{
+    // 1. Acquire license per request
+    using var connection = await visualConnectionService.AcquireLicenseAsync();
+    
+    try
+    {
+        // 2. Perform operation
+        var result = await connection.QueryInventoryAsync(partId);
+        return result;
+    }
+    finally
+    {
+        // 3. License automatically released by using statement
+        // NEVER skip this step - use short-lived, per-request scope only
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>Service Abstraction</h3>
+                            <p>ViewModels should NOT directly call VISUAL APIs. Use service interfaces:</p>
+                            <ul>
+                                <li><code>IVisualConnectionService</code> - Connection management</li>
+                                <li><code>IAuthenticationService</code> - Login/SSO handling</li>
+                                <li><code>IInventoryService</code> - Inventory operations</li>
+                                <li><code>IShopFloorService</code> - Work order processing</li>
+                            </ul>
+                        </div>
+                    </section>
+                    
+                    <!-- MVVM Implementation -->
+                    <section id="mvvm-patterns" class="documentation-section">
+                        <h2>MVVM Implementation Standards</h2>
+                        
+                        <div class="card mtm-card">
+                            <h3>CommunityToolkit.Mvvm Usage</h3>
+                            <p>Use the CommunityToolkit.Mvvm for consistent MVVM implementation:</p>
+                            
+                            <pre><code>using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+public partial class InventoryTransferViewModel : ObservableObject
+{
+    // Observable properties
+    [ObservableProperty]
+    private string itemId = string.Empty;
+    
+    [ObservableProperty]
+    private string fromLocation = string.Empty;
+    
+    [ObservableProperty]
+    private ObservableCollection&lt;InventoryResultRow&gt; searchResults = new();
+    
+    // Relay commands
+    [RelayCommand]
+    private async Task Transfer()
+    {
+        try
+        {
+            // Implementation with error handling
+        }
+        catch (Exception ex)
+        {
+            exceptionHandler.Handle(ex, "Transfer Operation");
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>Data Binding Conventions</h3>
+                            <ul>
+                                <li>Use <code>ObservableProperty</code> for all bindable properties</li>
+                                <li>Use <code>RelayCommand</code> for all UI command bindings</li>
+                                <li>Implement <code>INotifyPropertyChanged</code> via <code>ObservableObject</code></li>
+                                <li>Use <code>ObservableCollection&lt;T&gt;</code> for data grid bindings</li>
+                            </ul>
+                        </div>
+                    </section>
+                    
+                    <!-- Code Documentation -->
+                    <section id="documentation" class="documentation-section">
+                        <h2>Documentation Standards</h2>
+                        
+                        <div class="card mtm-card">
+                            <h3>CodeMap Synchronization Rule</h3>
+                            <p><strong>MANDATORY:</strong> When any .cs file is added, modified, or removed, the corresponding section in <code>CodeMap_CS_Files.md</code> must be updated in the same changeset.</p>
+                            
+                            <div class="process-steps">
+                                <div class="step">
+                                    <h5>For New Files:</h5>
+                                    <p>Add complete section with path, types, responsibilities, and dependencies</p>
+                                </div>
+                                <div class="step">
+                                    <h5>For Modified Files:</h5>
+                                    <p>Update affected sections to reflect current implementation</p>
+                                </div>
+                                <div class="step">
+                                    <h5>For Removed Files:</h5>
+                                    <p>Move to "Removed Files" appendix with date and replacement information</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mtm-card">
+                            <h3>File Encoding Standards</h3>
+                            <ul>
+                                <li><strong>UTF-8 encoding</strong> for all documentation files (.md, .html)</li>
+                                <li><strong>ASCII punctuation only</strong> - avoid typographic quotes and special characters</li>
+                                <li><strong>CRLF line endings</strong> on Windows, LF on Unix</li>
+                                <li>Use repository <code>.editorconfig</code> settings</li>
+                            </ul>
+                        </div>
+                    </section>
+                    
+                    <!-- Quality Assurance -->
+                    <section id="quality-assurance" class="documentation-section">
+                        <h2>Quality Assurance Checklist</h2>
+                        
+                        <div class="card mtm-card">
+                            <h3>Before Committing Code</h3>
+                            <div class="checklist">
+                                <label><input type="checkbox"> All methods have try/catch error handling</label>
+                                <label><input type="checkbox"> IExceptionHandler used for all UI-invoked methods</label>
+                                <label><input type="checkbox"> File naming follows established conventions</label>
+                                <label><input type="checkbox"> VISUAL license lifecycle properly implemented</label>
+                                <label><input type="checkbox"> CodeMap_CS_Files.md updated for any .cs changes</label>
+                                <label><input type="checkbox"> Code builds without errors</label>
+                                <label><input type="checkbox"> StyleCop warnings addressed or documented</label>
+                                <label><input type="checkbox"> Service interfaces used instead of direct VISUAL calls</label>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Page Navigation -->
+                <nav class="page-navigation" aria-label="Page navigation">
+                    <a href="index.html" class="btn btn-mtm-outline" rel="prev">
+                        ← Technical Overview
+                    </a>
+                    <a href="error-handling.html" class="btn btn-mtm-primary" rel="next">
+                        Error Handling Guide →
+                    </a>
+                </nav>
+            </article>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mtm-footer" role="contentinfo">
+        <div class="container">
+            <h4>MTM Inventory Application</h4>
+            <p>Built with Avalonia 11 and .NET 8</p>
+            <p>&copy; 2024 MTM Development Team. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Language Toggle -->
+    <button class="language-toggle" data-mode="technical" aria-label="Switch to Plain English version">
+        Plain English
+    </button>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/modern-features.js"></script>
+</body>
+</html>
